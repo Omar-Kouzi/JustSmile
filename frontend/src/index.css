@@ -1,0 +1,13 @@
+grammarly-desktop-integration {
+  display: none;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  /* color: white; */
+  /* border: 1px solid; */
+}
+*::-webkit-scrollbar {
+  display: none;
+}

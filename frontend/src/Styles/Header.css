@@ -1,0 +1,47 @@
+.Header {
+  height: 70px;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.logo {
+  color: white;
+}
+.headerNavlinks {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
+.headersNavlink {
+  display: flex;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  text-decoration: none;
+  padding: 2px;
+}
+
+.headersNavlink::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 3px;
+  background-color: #fff;
+  transition-duration: 500ms;
+}
+
+.headersNavlink:hover::before {
+  width: 100%;
+  cursor: pointer;
+
+}
+.headerCartIcon {
+  color: white;
+}
+
+

@@ -1,0 +1,24 @@
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 59vh;
+}
+.item img {
+  height: 100%;
+}
+.itemContent {
+  width: 40%;
+  margin-right: 10vw;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.itemContent div {
+  display: flex;
+  gap: 10px;
+}
+.itemContent div button,
+.itemContent div input {
+  padding: 5px 10px;
+}

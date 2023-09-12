@@ -1,0 +1,45 @@
+.carousel {
+  height: 70vh;
+}
+.about {
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.aboutContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 30%;
+  width: 40%;
+}
+.aboutImage {
+  width: 30%;
+  height: 80%;
+}
+.mostOrdered,
+.recommended,
+.sales {
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mostOrderedCarousel,
+.mostRecommended,
+.mostSales {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 90%;
+  width: 60%;
+}
+
+.mostOrderedCarousel div,
+.mostSales div,
+.mostRecommended div {
+  width: 200px;
+  height: 90%;
+}
