@@ -9,8 +9,9 @@ router
   .route("/:id")
   .post(protect, upload.single("image"), ItemController.postItem);
 
-  router.route("/").get(ItemController.getAllItems);
-  router.route("/:id").get(ItemController.getAllItemByid);
+router.route("/").get(ItemController.getAllItems);
+
+router.route("/:id").get(ItemController.getAllItemByid);
 
 router
   .route("/:id")

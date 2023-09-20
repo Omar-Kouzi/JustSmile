@@ -11,7 +11,7 @@ router.route("/login").post(UsersController.login);
 
 router.route("/").get(UsersController.getAllUsers);
 
-router.route("/user").get(UsersController.getUserById);
+router.route("/:id").get(UsersController.getUserById);
 
 router.route("/:id").patch(protect, upload.single("image"), UsersController.updateUserProfile);
 

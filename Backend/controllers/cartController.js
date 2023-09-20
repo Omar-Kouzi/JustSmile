@@ -33,6 +33,7 @@ const addToCart = async (req, res) => {
         user: userId,
         items: [
           {
+            _id: item._id,
             image: item.image,
             title: item.title,
             price: item.price,
@@ -54,6 +55,7 @@ const addToCart = async (req, res) => {
       cart.items[existingItemIndex].totalPrice += totalPrice;
     } else {
       cart.items.push({
+        _id: item._id,
         image: item.image,
         title: item.title,
         price: item.price,
@@ -67,7 +69,7 @@ const addToCart = async (req, res) => {
     cart.totalQuantity = (cart.totalQuantity || 0) + quantityNum; // add the new quantity to the existing totalQuantity of the cart
     await cart.save();
 
-    return res.status(200).json(cart);
+    return res.status(200).json({ cart, success: true });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });

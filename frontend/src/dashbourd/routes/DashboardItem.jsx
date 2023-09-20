@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import "../Styles/Item.css";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import "../../Styles/Item.css";
 
-const Item = () => {
+const DashboardItem = () => {
   const [item, setItem] = useState("");
   const [quantity, setQuantity] = useState("");
   const [alert, setAlert] = useState("");
@@ -126,4 +126,4 @@ const Item = () => {
   );
 };
 
-export default Item;
+export default DashboardItem;

@@ -1,5 +1,7 @@
 .Cart {
-  margin: 20px;
+  padding: 20px;
+  min-height: 70vh;
+  display: grid;
 }
 .cartHeader {
   display: flex;
@@ -8,6 +10,7 @@
   justify-content: space-between;
   border-bottom: solid 1px;
   padding: 5px;
+  height: 40px;
 }
 .cartItem {
   display: flex;
@@ -16,7 +19,6 @@
   align-items: center;
   border-bottom: solid 1px;
   padding: 3px;
-
 }
 .cartItemDescription {
   width: 35vw;
@@ -64,5 +66,6 @@
   padding: 5px 5px;
   width: 25vw;
 }
-.cartInfo button{
-padding: 10px 5px;}
+.cartInfo button {
+  padding: 10px 5px;
+}

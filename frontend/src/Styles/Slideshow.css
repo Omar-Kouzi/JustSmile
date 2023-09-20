@@ -1,0 +1,55 @@
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .carousel-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.969);
+    width: 100%;
+    height: 100%;
+    object-fit:cover !important;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .carousel-image.active {
+    opacity: 1;
+  }
+  .NoSlide{
+  background-color: rgba(0, 0, 0, 0.852);
+  height: 50vh;
+  display: flex;
+  margin: 50px auto;
+  padding: 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: rgb(255, 255, 255);
+  border-radius: 25px;
+  width: 50vw;
+  }
+  .NoSlide h1{
+    font-size: 1.5rem;
+    text-align: center;
+  }
+   /* Styles for smaller devices */
+  @media only screen and (max-width: 768px) {
+    .carousel-container {
+      height: 50vh;
+    
+    }
+  
+    .carousel-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover !important;
+    }
+  
+    .NoSlide{
+      height: 36.3vh;
+  
+  }
+  }

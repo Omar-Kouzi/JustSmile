@@ -1,11 +1,11 @@
+import Offers from "../models/offersModel.js";
 import asyncHandler from "express-async-handler";
-import Item from "../models/itemModel.js";
 import User from "../models/userModel.js";
 import cloudinary from "cloudinary";
 //============
 
-const postItem = asyncHandler(async (req, res) => {
-  const  id  = req.user.id;
+const postOffers = asyncHandler(async (req, res) => {
+  const id = req.user.id;
   const user = await User.findById(id);
   if (!user) {
     return res.status(200).json({ message: "User not found", success: false });
@@ -15,15 +15,9 @@ const postItem = asyncHandler(async (req, res) => {
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  const { title, description, ingredients, flavor, price, category } = req.body;
-  if (
-    !title ||
-    !description ||
-    !ingredients ||
-    !price ||
-    !category ||
-    !flavor
-  ) {
+  console.log(req.body);
+  const { title, description, price } = req.body;
+  if (!title || !description || !price) {
     return res
       .status(200)
       .json({ message: "Missing required fields", success: false });
@@ -43,21 +37,16 @@ const postItem = asyncHandler(async (req, res) => {
     });
 
     const result = await cloudinary.v2.uploader.upload(req.file.path);
-
-    const parsedIngredients = ingredients.split(/;|,/).map((i) => i.trim());
-    const item = new Item({
+    const offer = new Offers({
       title,
       description,
-      ingredients: parsedIngredients,
       price,
-      flavor,
       image: result.secure_url,
-      category,
     });
 
-    await item.save();
+    await offer.save();
     return res.status(200).json({
-      item,
+      offer,
       success: true,
     });
   } catch (error) {
@@ -67,35 +56,35 @@ const postItem = asyncHandler(async (req, res) => {
 
 //============
 
-const getAllItems = asyncHandler(async (req, res) => {
-  const item = await Item.find();
-  res.json(item);
+const getOffers = asyncHandler(async (req, res) => {
+  const offers = await Offers.find();
+  res.json(offers);
 });
 
 //============
 
-const getAllItemByid = asyncHandler(async (req, res) => {
+const getOfferById = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const item = await Item.findById(id);
-  console.log(item);
-  res.json(item);
+  const offer = await Offers.findById(id);
+  res.json(offer);
 });
 
 //============
 
-const updateItem = asyncHandler(async (req, res) => {
-  const  id  = req.user.id;
+const updateOffer = asyncHandler(async (req, res) => {
+  const id = req.user.id;
   const user = await User.findById(id);
 
   if (!user) {
     return res.status(200).json({ message: "User not found", success: false });
   }
-  if (user.role != "admin") {
+  if (user.role !== "admin") {
     return res
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  const { title, description, ingredients, flavor, price, category } = req.body;
+
+  const { id: offerId, title, description, price } = req.body;
 
   // Check if there is a new image
   let imageUrl;
@@ -115,30 +104,31 @@ const updateItem = asyncHandler(async (req, res) => {
     }
   }
 
+  const options = { new: true };
+
   const updates = {
     title,
     description,
-    flavor,
     price,
-    category,
-    ingredients: ingredients,
     ...(imageUrl && { image: imageUrl }),
   };
 
-  const options = { new: true };
-  const item = await Item.findByIdAndUpdate(req.body.id, updates, options);
-  if (!item) {
-    return res.status(404).json({ message: "Item not found" });
+  const updatedOffer = await Offers.findByIdAndUpdate(
+    offerId,
+    updates,
+    options
+  );
+
+  if (!updatedOffer) {
+    return res.status(200).json({ message: "Supplier not found",success:true });
   }
 
-  return res.json({ item });
+  return res.status(200).json({ updatedOffer, success: true });
 });
 
-//=============
-
-const deleteItem = asyncHandler(async (req, res) => {
+const deleteOffer = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const item = await Item.findByIdAndDelete(id);
+  const item = await Offers.findByIdAndDelete(id);
   console.log(id);
   if (item) {
     return res.status(200).json({
@@ -150,9 +140,9 @@ const deleteItem = asyncHandler(async (req, res) => {
 });
 
 export default {
-  postItem,
-  getAllItems,
-  getAllItemByid,
-  updateItem,
-  deleteItem,
+  postOffers,
+  getOffers,
+  getOfferById,
+  updateOffer,
+  deleteOffer,
 };

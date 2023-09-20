@@ -5,8 +5,13 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import UserRoutes from "./routes/userRout.js";
 import ItemRoutes from "./routes/itemRout.js";
-import CategoryRoutes from "./routes/categoryRout.js"
-import CartRoutes from "./routes/cartRout.js"
+import CategoryRoutes from "./routes/categoryRout.js";
+import CartRoutes from "./routes/cartRout.js";
+import AboutRoutes from "./routes/aboutRout.js";
+import Slideshow from "./routes/slideShowRout.js";
+import BarJuiceSuppliers from "./routes/barJuiceSuppliersRout.js";
+import Offers from "./routes/offerRout.js";
+import Recommended from "./routes/recommendedRout.js";
 dotenv.config();
 
 connectDB();
@@ -19,8 +24,14 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static("public"));
 
-app.use("/user", UserRoutes);
-app.use("/items", ItemRoutes);
-app.use("/category", CategoryRoutes);
+app.use("/about", AboutRoutes);
+app.use("/barSuppliers", BarJuiceSuppliers);
 app.use("/cart", CartRoutes);
+app.use("/category", CategoryRoutes);
+app.use("/items", ItemRoutes);
+app.use("/offer", Offers);
+app.use("/recommended", Recommended);
+app.use("/slideShow", Slideshow);
+app.use("/user", UserRoutes);
+
 app.listen(port, () => console.log(`Server is tunning on PORT: ${port}`));

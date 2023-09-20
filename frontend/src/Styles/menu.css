@@ -1,0 +1,65 @@
+.hamburger {
+  width: 40px;
+  margin-right: 5px;
+  color: #fff;
+}
+#dashmoardMenu {
+  margin-right: 15px;
+}
+
+.hamburger:hover {
+  opacity: 75%;
+}
+.sm-menu-container {
+  position: relative;
+  z-index: 1;
+}
+
+.hamburger {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.menu {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  right: -32px;
+  top: 44px;
+  width: 100vw;
+  height: 47svh;
+  background-color: rgb(15, 12, 12);
+  border: 2px solid #45090998;
+  border-radius: 5px;
+  z-index: 1;
+  transition: max-height 0.5s ease-in-out;
+}
+
+#menuDashboard {
+  right: 0;
+  margin-top: 0px;
+}
+
+.menu ul{
+  width: 100px;
+}
+.menu ul li a {
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.menu ul li {
+  margin-top: 25px;
+  text-align: center;
+  padding: 7px;
+}
+
+.menu ul li a:hover {
+  position: relative;
+  opacity: 0.6;
+  font-weight: bolder;
+}

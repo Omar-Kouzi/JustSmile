@@ -1,4 +1,4 @@
-.Header {
+.Header .Header1 {
   height: 70px;
   background-color: black;
   display: flex;
@@ -38,10 +38,50 @@
 .headersNavlink:hover::before {
   width: 100%;
   cursor: pointer;
-
 }
 .headerCartIcon {
   color: white;
 }
 
+.sm-menu-container {
+  display: none;
+}
 
+/* .Nav-Links {
+  width: 82%;
+  margin-left: 2%;
+  justify-content: space-around;
+  display: flex;
+  align-items: center;
+} */
+
+@media screen and (max-width: 768px) {
+  .Header .Header1 {
+    display: none;
+  }
+  .nav-card {
+    display: none;
+  }
+  .sm-links {
+    height: 70px;
+    width: 100%;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  .sm-links a {
+    text-decoration: none;
+  }
+  .sm-menu-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+  .Nav-Logo {
+    width: 6rem;
+    margin-left: 15px;
+  }
+}

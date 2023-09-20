@@ -1,7 +1,7 @@
 import Category from "../models/categoryModel.js";
 import asyncHandler from "express-async-handler";
 
-const CreatCategory = asyncHandler(async (req, res) => {
+const PostCategory = asyncHandler(async (req, res) => {
   const { title } = req.body;
   if (!title) {
     return res.status(400).json({
@@ -30,4 +30,4 @@ const deleteCategory = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: "category not found" });
   }
 });
-export default { getAllCategories, CreatCategory, deleteCategory };
+export default { getAllCategories, PostCategory, deleteCategory };

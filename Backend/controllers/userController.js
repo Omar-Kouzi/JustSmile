@@ -102,7 +102,7 @@ const  login = asyncHandler(async (req, res) => {
 //============
 
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const  id = req.user.id;
   const user = await User.findById(id);
 
   if (!user) {
@@ -147,7 +147,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
 //============
 
 const getUserById = asyncHandler(async (req, res) => {
-  const id = req.body;
+  const {id} = req.params;
   const users = await User.findById(id);
   res.json(users);
 });

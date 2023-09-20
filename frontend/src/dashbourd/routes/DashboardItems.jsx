@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 import { Blurhash } from "react-blurhash";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import "../Styles/Items.css";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import "../../Styles/Items.css";
 import { useNavigate } from "react-router";
-const Items = () => {
+const DashboardItems = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [loadedImages, setLoadedImages] = useState([]);
   const [expandedItems, setExpandedItems] = useState([]);
@@ -155,4 +155,4 @@ const Items = () => {
   );
 };
 
-export default Items;
+export default DashboardItems;
