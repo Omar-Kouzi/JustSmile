@@ -20,7 +20,7 @@ const Header = () => {
     secureLocalStorage.removeItem("token");
     secureLocalStorage.removeItem("id");
     secureLocalStorage.setItem("loggedIn", false);
-    window.location.reload()
+    window.location.reload();
     setIsLoggedIn(false);
   };
 
@@ -35,16 +35,19 @@ const Header = () => {
   useEffect(() => {
     const id = secureLocalStorage.getItem("id");
     setUserId(id);
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(`https://justsmilebackend.onrender.com/user/${id}`);
-        setIsAdmin(response.data.role);
-      } catch (error) {
-        console.log("Error fetching data:", error);
-      }
-    };
-
-    fetchUser();
+    if (id) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(
+            `https://justsmilebackend.onrender.com/user/${id}`
+          );
+          setIsAdmin(response.data.role);
+        } catch (error) {
+          console.log("Error fetching data:", error);
+        }
+      };
+      fetchUser();
+    }
   }, []);
 
   return (
