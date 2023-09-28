@@ -1,0 +1,347 @@
+.carousel {
+  height: 70vh;
+}
+
+.leaflet-container {
+  height: 300px;
+  width: 300px;
+}
+.about {
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.aboutContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 50%;
+  width: 40%;
+}
+.aboutdashboardtext,
+textarea {
+  white-space: break-spaces;
+  width: 100%;
+  height: inherit;
+}
+.aboutdashboardimage {
+  display: flex;
+  flex-direction: column;
+}
+.recommended {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mostRecommended {
+  gap: 5px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 90%;
+  width: 700px;
+}
+.recommendedCard {
+  width: 200px;
+  height: 93%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.recommendedImage {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+}
+.recommendedContent {
+  height: 2.5rem;
+  overflow: hidden;
+}
+
+.recommendedDashboardForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.recommendedDeleteButton {
+  background-color: #f14a4a6b;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.barJuiceSuppliers {
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background-image: linear-gradient(181deg, #fff 0%, #65ff6280 30%, #fff 100%); */
+}
+.barJuiceSuppliersCarousel {
+  gap: 5px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 90%;
+  width: 80%;
+}
+.barJuiceSuppliersContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 5px;
+  width: 55%;
+  height: 80%;
+}
+.barJuiceSuppliersContent p {
+  height: 2.4rem;
+  overflow: hidden;
+}
+.barJuiceSuppliersIcons {
+  display: flex;
+  flex-direction: column;
+  height: 50px;
+}
+.barJuiceSuppliersImage {
+  width: 150px;
+  object-fit: cover;
+  height: 150px;
+  border-radius: 50%;
+}
+.barJuiceSuppliersCard {
+  width: 50%;
+  height: 200px;
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid #0000001a;
+  align-items: center;
+  border-radius: 3px;
+  background: #ffffffa2;
+  box-shadow: 5px 2px 9px #0000001a;
+}
+.barJuiceSupplierForm {
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.barJuiceSupplierFormInputs {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.barJuiceSupplierFormInput-field input {
+  width: 95%;
+  padding: 5px;
+}
+.barJuiceSupplierFormInput-field textarea {
+  width: 95%;
+  padding: 5px;
+}
+.barJuiceSupplierFormExample {
+  height: 2.5rem;
+  overflow-y: scroll;
+  width: 326px;
+}
+.barJuiceSupplierFormExample::-webkit-scrollbar {
+  display: block;
+  width: 4px;
+  height: 8px;
+}
+.barJuiceSupplierFormExample::-webkit-scrollbar-thumb {
+  background: #65ff62;
+  border-radius: 10px;
+}
+.barJuiceSupplierFormExample::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 5px;
+}
+.barJuiceSupplierFormInput-Submitfield {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.offers {
+  height: 45vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mostOffers {
+  gap: 5px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 90%;
+  width: 75%;
+}
+
+.offerCard {
+  width: 80%;
+  height: 270px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #0000001a;
+  border-radius: 3px;
+  background: #ffffffa2;
+  box-shadow: 5px 2px 9px #0000001a;
+}
+
+.offerContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 5px;
+  width: 75%;
+  height: 100%;
+}
+
+.offerImage {
+  height: 100%;
+}
+.offerFormInputs {
+  height: 202px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+@media screen and (max-width: 1050px) {
+  .barJuiceSuppliersCard {
+    flex-direction: column-reverse;
+    width: 250px;
+    height: 300px;
+    justify-content: space-between;
+    padding-top: 5px;
+  }
+  .barJuiceSuppliers {
+    height: 61vh;
+  }
+  .barJuiceSuppliersContent {
+    width: 90%;
+    height: 120px;
+  }
+}
+@media screen and (max-width: 750px) {
+  .mostRecommended {
+    width: 650px;
+  }
+
+  .recommendedCard {
+    width: 190px;
+  }
+  .recommendedImage {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+  .offerDiscription {
+    height: 2.5rem;
+    overflow: hidden;
+  }
+  .offers {
+    height: 70vh;
+  }
+  .offerCard {
+    flex-direction: column-reverse;
+    height: 90%;
+    align-items: center;
+  }
+  .offerImage {
+    height: 68%;
+    object-fit: cover;
+  }
+  .offerContent {
+    width: 90%;
+  }
+}
+@media screen and (max-width: 650px) {
+  .aboutImage {
+    width: 300px;
+  }
+  .aboutContent {
+    height: 60%;
+  }
+  .mostRecommended {
+    width: 530px;
+  }
+
+  .recommendedCard {
+    width: 180px;
+  }
+}
+@media screen and (max-width: 550px) {
+  .mostRecommended {
+    width: 60vh;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+  }
+  .mostRecommended::-webkit-scrollbar {
+    display: block;
+    width: 4px;
+    height: 8px;
+  }
+  .mostRecommended::-webkit-scrollbar-thumb {
+    background: #65ff62;
+    border-radius: 10px;
+  }
+  .mostRecommended::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 5px;
+  }
+
+  .aboutImage {
+    width: 200px;
+  }
+  .aboutContent {
+    height: 70%;
+  }
+  .offerCard {
+    width: 90%;
+  }
+}
+@media screen and (max-width: 450px) {
+  .aboutImage {
+    display: none;
+  }
+  .aboutContent {
+    height: 50%;
+    width: 80%;
+  }
+  .about {
+    height: 50vh;
+  }
+  .mostRecommended {
+    width: 390px;
+  }
+  .recommendedCard {
+    width: 165px;
+  }
+  .recommendedImage {
+    height: 180px;
+  }
+  .mostOffers {
+    width: 350px;
+  }
+  .barJuiceSuppliersCarousel {
+    width: 98%;
+  }
+}
+@media screen and (max-width: 390px) {
+  .mostRecommended {
+    width: 330px;
+  }
+  .recommendedCard {
+    width: 149px;
+  }
+}

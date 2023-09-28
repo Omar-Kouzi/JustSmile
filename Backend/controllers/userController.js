@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import generateToken from "../utils/generateToken.js";
 import User from "../models/userModel.js";
 import cloudinary from "cloudinary";
+import bcrypt from "bcryptjs";
 
 //============
 const registerUser = asyncHandler(async (req, res, next) => {
@@ -12,11 +13,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
       .json({ message: "Missing required fields", success: false });
   }
 
-  if (!req.file) {
-    return res
-      .status(200)
-      .json({ message: "Required image missing", success: false });
-  }
   const existingUser = await User.findOne({ $or: [{ name }, { email }] });
   if (existingUser) {
     if (existingUser.email === email) {
@@ -36,31 +32,51 @@ const registerUser = asyncHandler(async (req, res, next) => {
     api_secret: process.env.API_SECRET,
   });
 
-  const result = (await cloudinary.uploader.upload(req.file.path)) || "";
+  if (req.file) {
+    const result = (await cloudinary.uploader.upload(req.file.path)) || "";
 
-  // Create user with uploaded image URL
-  const user = new User({
-    name,
-    email,
-    password,
-    address,
-    image: result.secure_url || "",
-    role: role || "user",
-    success: true,
-  });
-  console.log(user);
+    const user = new User({
+      name,
+      email,
+      password,
+      address,
+      image: result.secure_url || "",
+      role: role || "user",
+      success: true,
+    });
+    console.log(user);
 
-  await user.save();
-  res.status(200).json({
-    user: user,
-    message: "Account created successfully",
-    token: generateToken(user._id),
-  });
+    await user.save();
+    res.status(200).json({
+      user: user,
+      message: "Account created successfully",
+      token: generateToken(user._id),
+      success: true,
+    });
+  } else {
+    const user = new User({
+      name,
+      email,
+      password,
+      address,
+      role: role || "user",
+      success: true,
+    });
+    console.log(user);
+
+    await user.save();
+    res.status(200).json({
+      user: user,
+      message: "Account created successfully",
+      token: generateToken(user._id),
+      success: true,
+    });
+  }
 });
 
 //============
 
-const  login = asyncHandler(async (req, res) => {
+const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email) {
     return res.status(200).json({
@@ -102,11 +118,23 @@ const  login = asyncHandler(async (req, res) => {
 //============
 
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const  id = req.user.id;
+  const id = req.user.id;
   const user = await User.findById(id);
 
   if (!user) {
     return res.status(200).json({ message: "User not found", success: false });
+  }
+console.log(req.body)
+  if (req.body.oldPassword) {
+    const isPasswordMatch = await bcrypt.compare(
+      req.body.oldPassword,
+      user.password
+    );
+    if (!isPasswordMatch) {
+      return res
+        .status(200)
+        .json({ message: "Old password is incorrect", success: false });
+    }
   }
 
   user.name = req.body.name || user.name;
@@ -114,7 +142,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   user.role = req.body.role || user.role;
   user.address = req.body.address || user.address;
   user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
-
   if (req.file) {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
@@ -130,10 +157,11 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 
   const updatedUser = await user.save();
-
-  res.json({
+  console.log(updatedUser);
+  return res.status(200).json({
     updatedUser: updatedUser,
     token: generateToken(updatedUser._id),
+    success: true,
   });
 });
 
@@ -141,13 +169,13 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
 const getAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find();
-  res.json(users);
+  res.status(200).json(users);
 });
 
 //============
 
 const getUserById = asyncHandler(async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   const users = await User.findById(id);
   res.json(users);
 });

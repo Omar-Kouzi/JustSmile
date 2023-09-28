@@ -1,27 +1,27 @@
+// Header.js
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import secureLocalStorage from "react-secure-storage";
 import { NavLink } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { SlLogout } from "react-icons/sl";
 import { RiLoginBoxLine } from "react-icons/ri";
+import { CgProfile } from "react-icons/cg";
 import "../Styles/Header.css";
-import secureLocalStorage from "react-secure-storage";
 import SmMenu from "./menu";
-import axios from "axios";
+
 const Header = () => {
   const [activeClass, setActiveClass] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState("");
-
-  const handleToggleClass = () => {
-    setActiveClass((prevActiveClass) => !prevActiveClass);
-  };
+  const [userId, setUserId] = useState("");
 
   const handleLogout = () => {
     secureLocalStorage.removeItem("token");
     secureLocalStorage.removeItem("id");
     secureLocalStorage.setItem("loggedIn", false);
+    window.location.reload()
     setIsLoggedIn(false);
-    setActiveClass(false);
   };
 
   useEffect(() => {
@@ -34,6 +34,7 @@ const Header = () => {
 
   useEffect(() => {
     const id = secureLocalStorage.getItem("id");
+    setUserId(id);
     const fetchUser = async () => {
       try {
         const response = await axios.get(`http://localhost:1111/user/${id}`);
@@ -50,45 +51,53 @@ const Header = () => {
     <>
       <section className={`Header ${activeClass ? "anotherClass" : ""}`}>
         <div className="Header1">
-          {" "}
           <h1 className="logo">Just Smile</h1>
-          <h1 onClick={handleToggleClass}>click</h1>
+          <h1 onClick={() => setActiveClass(!activeClass)}></h1>
           <div
-            className={` links ${
+            className={`links ${
               activeClass ? "active" : "notactive"
             } headerNavlinks`}
           >
-             {isAdmin ? (
-              <NavLink className="headersNavlink" to="/Dashboard">
+            {isAdmin === "admin" ? (
+              <NavLink
+                to="/dashboard/home"
+                className={`headersNavlink ${
+                  activeClass ? "active" : "notactive"
+                }`}
+              >
                 Dashboard
               </NavLink>
             ) : (
               ""
             )}
-            <NavLink className="headersNavlink" to="/">
+            <NavLink to="/" className="headersNavlink">
               Home
             </NavLink>
-            <NavLink className="headersNavlink" to="/items">
+            <NavLink to="/items" className="headersNavlink">
               Items
             </NavLink>
-            {/* <NavLink className="headersNavlink" to="/contact">Contact</NavLink> */}
             {isLoggedIn ? (
-              <p className="headersNavlink" onClick={handleLogout}>
+              <p onClick={handleLogout} className="headersNavlink">
                 Logout <SlLogout />
               </p>
             ) : (
-              <NavLink className="headersNavlink" to="/login">
+              <NavLink to="/login" className="headersNavlink">
                 Login <RiLoginBoxLine />
               </NavLink>
             )}
             {isLoggedIn ? (
-              <NavLink className="headersNavlink" to="/cart">
-                <AiOutlineShoppingCart className="headerCartIcon" />
-              </NavLink>
+              <>
+                {" "}
+                <NavLink to="/cart" className="headersNavlink">
+                  <AiOutlineShoppingCart className="headerCartIcon" />
+                </NavLink>
+                <NavLink to={`/profile/${userId}`} className="headersNavlink">
+                  <CgProfile className="headerIcon" />
+                </NavLink>
+              </>
             ) : (
               ""
             )}
-           
           </div>
         </div>
         <div className="sm-menu-container">
@@ -97,8 +106,18 @@ const Header = () => {
               <h1 className="logo">Just Smile</h1>
             </NavLink>
 
-            <div>
-              <SmMenu />
+            <div className="respociveNavIcons">
+              {/* {isLoggedIn ? (
+                <>
+                  <NavLink to={`/profile/${userId}`} className="">
+                    <CgProfile className="headerIcon" />
+                  </NavLink>
+                
+                </>
+              ) : (
+                ""
+              )} */}
+              <SmMenu className="headerIcon" />
             </div>
           </div>
         </div>

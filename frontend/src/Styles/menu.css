@@ -42,8 +42,11 @@
   margin-top: 0px;
 }
 
-.menu ul{
-  width: 100px;
+.menu ul {
+  width: 110px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 .menu ul li a {
   color: #fff;
@@ -62,4 +65,7 @@
   position: relative;
   opacity: 0.6;
   font-weight: bolder;
+}
+.menuul{
+  list-style: none;
 }

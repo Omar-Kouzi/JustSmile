@@ -3,6 +3,7 @@ import useToken from "../components/useToken";
 import { NavLink, useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
+import { AiOutlineHome } from "react-icons/ai";
 import "../Styles/Login.css";
 
 function Login() {
@@ -73,8 +74,8 @@ function Login() {
 
   return (
     <div className="Login">
-      <NavLink className="goback" to="/">
-        {"<------"}
+      <NavLink to="/" className="goback">
+        <AiOutlineHome />{" "}
       </NavLink>
       <div className="Loginbox">
         <div className="Logotitle">
@@ -108,8 +109,8 @@ function Login() {
               <input
                 type="password"
                 placeholder="password"
-                className="Logininput"
                 onChange={(e) => setPassword(e.target.value)}
+                className="Logininput"
               />
             </div>
           </div>
@@ -117,12 +118,12 @@ function Login() {
             <input
               type="submit"
               value="Login"
-              className="btn solid LoginButton"
               onClick={handleSubmit}
+              className="btn solid LoginButton"
             />
             <p>
               Create a new account?
-              <NavLink to="/Signup" className="signupInLoginTxt">
+              <NavLink to="/signup" className="signupInLoginTxt">
                 {" "}
                 Signup.
               </NavLink>

@@ -13,7 +13,7 @@ router.route("/").get(UsersController.getAllUsers);
 
 router.route("/:id").get(UsersController.getUserById);
 
-router.route("/:id").patch(protect, upload.single("image"), UsersController.updateUserProfile);
+router.route("/").patch(protect, upload.single("image"), UsersController.updateUserProfile);
 
 router.route("/:id").delete(protect,UsersController.deleteUser);
 

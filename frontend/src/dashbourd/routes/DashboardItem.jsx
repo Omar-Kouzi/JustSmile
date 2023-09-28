@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 import Header from "../../components/Header";
@@ -8,65 +7,48 @@ import Footer from "../../components/Footer";
 import "../../Styles/Item.css";
 
 const DashboardItem = () => {
-  const [item, setItem] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [item, setItem] = useState(null);
+  const [categories, setCategories] = useState([]); // State for categories
   const [alert, setAlert] = useState("");
   const [valid, setValid] = useState(false);
-  const [addedToCart, setAddedToCart] = useState("");
-
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [newItem, setNewItem] = useState({
+    title: "",
+    description: "",
+    flavor: "",
+    price: "",
+    category: "", // Use a select input for category
+    ingredients: "",
+    image: null,
+    available: true, // Use a select input for available
+  });
   const itemID = useParams();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchItem = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:1111/items/${itemID.id}`
-        );
-        setItem(response.data);
-      } catch (error) {
-        console.log("Error fetching data:", error);
-      }
-    };
-
-    fetchItem();
-  }, [itemID.id]);
-
-  const handleAddToCart = async () => {
-    if (!secureLocalStorage.getItem("token")) {
-      console.log(!secureLocalStorage.getItem("token"));
-      navigate("/login");
-    }
+  const fetchItem = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:1111/cart",
-        {
-          id: itemID.id, // Use itemID.id instead of an object
-          quantity: quantity,
-          userId: secureLocalStorage.getItem("id"),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await axios.get(
+        `http://localhost:1111/items/${itemID.id}`
       );
-      if (res.data.message) {
-        setAddedToCart(res.data.success);
-        setValid(true);
-        setAlert(res.data.message);
-      } else {
-        setAddedToCart(res.data.success);
-        setValid(true);
-        setAlert("Item added to cart successfully");
-      }
-    } catch (err) {
-      console.error(err);
+      setItem(response.data);
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  };
+
+  // Fetch Categories function
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`http://localhost:1111/category`);
+      setCategories(response.data.categories);
+    } catch (error) {
+      console.log("Error fetching categories:", error);
     }
   };
 
   useEffect(() => {
+    fetchItem();
+    fetchCategories(); 
+
     let timer;
     if (valid) {
       timer = setTimeout(() => {
@@ -74,7 +56,60 @@ const DashboardItem = () => {
       }, 4000);
     }
     return () => clearTimeout(timer);
-  }, [valid]);
+  }, [valid, itemID.id]);
+
+  const handleItemChange = (e) => {
+    if (e.target.name === "image" && e.target.files.length > 0) {
+      setNewItem({
+        ...newItem,
+        [e.target.name]: e.target.files[0],
+      });
+    } else {
+      setNewItem({
+        ...newItem,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+
+  const handlePatchItem = async () => {
+    const formData = new FormData();
+    formData.append("image", newItem.image || item.image);
+    formData.append("title", newItem.title || item.title);
+    formData.append("description", newItem.description || item.description);
+    formData.append("flavor", newItem.flavor || item.flavor);
+    formData.append("price", newItem.price || item.price);
+    formData.append("category", newItem.category || item.category);
+    formData.append(
+      "ingredients",
+      newItem.ingredients || item.ingredients.join(", ")
+    );
+    formData.append("available", newItem.available || item.available);
+    formData.append("id", itemID.id);
+
+    try {
+      const res = await axios.patch(`http://localhost:1111/items/`, formData, {
+        headers: {
+          Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      fetchItem();
+
+      if (res.data.message) {
+        setUpdateSuccess(true);
+        setValid(true);
+        setAlert(res.data.message);
+      } else {
+        setUpdateSuccess(true);
+        setValid(true);
+        setAlert("Item updated successfully");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <>
@@ -82,39 +117,93 @@ const DashboardItem = () => {
 
       <div>
         {item ? (
-          <div className="item">
-            <img src={item.image} alt="item" />
-
-            <div className="itemContent">
+          <div className="item dashbaordItem">
+            <div>
+               <img src={item.image} alt="item" />
+            <input
+              type="file"
+              name="image"
+              onChange={handleItemChange}
+              accept="image/*"
+            />
+            </div>
+           
+            <div className="itemContent dashboardItemContent">
               {valid && (
                 <i
                   className={
-                    addedToCart ? "SuccessMessageLogin" : "ErrorMessageLogin"
+                    updateSuccess ? "SuccessMessageItemUpdate" : "ErrorMessageItemUpdate"
                   }
                 >
                   {alert}
                 </i>
               )}
-              <h2>{item.title}</h2>
-              <p>{item.description}</p>
+              <div>
+                <h3>Title</h3>
+                <textarea
+                  name="title"
+                  value={newItem.title || item.title}
+                  onChange={handleItemChange}
+                />
+              </div>
+              <div>
+                <h3>Description</h3>
+                <textarea
+                  name="description"
+                  value={newItem.description || item.description}
+                  onChange={handleItemChange}
+                />
+              </div>
+              <div>
+                <h3>Flavor</h3>
+                <textarea
+                  name="flavor"
+                  value={newItem.flavor || item.flavor}
+                  onChange={handleItemChange}
+                />
+              </div>
+              <div>
+                <h3>Price</h3>
+                <textarea
+                  name="price"
+                  value={newItem.price || item.price}
+                  onChange={handleItemChange}
+                />
+              </div>
+              <div>
+                <h3>Category</h3>
+                <select
+                  name="category"
+                  value={newItem.category || item.category}
+                  onChange={handleItemChange}
+                >
+                  {categories.map((category, index) => (
+                    <option key={index} value={category._id}>
+                      {category.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div className="ingredientsContainer">
                 <h3>Ingredients:</h3>
-                <ul>
-                  {item.ingredients.map((ingredient, index) => (
-                    <li key={index}>{ingredient}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <p>Price: {item.price}$</p>
-              <div className="quantityAddToCartButtonContainer">
-                <input
-                  type="number"
-                  placeholder="Quantity"
-                  onChange={(value) => setQuantity(value.target.value)}
+                <textarea
+                  name="ingredients"
+                  value={newItem.ingredients || item.ingredients.join(", ")}
+                  onChange={handleItemChange}
                 />
-                <button onClick={() => handleAddToCart()}> Add To cart</button>
               </div>
+              <div>
+                <h3>Available</h3>
+                <select
+                  name="available"
+                  value={newItem.available || item.available}
+                  onChange={handleItemChange}
+                >
+                  <option value={true}>True</option>
+                  <option value={false}>False</option>
+                </select>
+              </div>
+              <button onClick={() => handlePatchItem()}>Update Item</button>
             </div>
           </div>
         ) : (

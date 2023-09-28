@@ -57,17 +57,29 @@ const getRecommended = asyncHandler(async (req, res) => {
 
 const deleteRecommended = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const recommended = await Recommended.findByIdAndDelete(id);
-  console.log(id);
-  if (recommended) {
-    return res.status(200).json({
-      message: `${id} had been deleted successfully`,
-      success: true,
+  try {
+    const recommended = await Recommended.findByIdAndDelete(id);
+    if (recommended) {
+      // Document was found and deleted
+      return res.status(200).json({
+        message: `${id} had been deleted successfully`,
+        success: true,
+      });
+    } else {
+      // Document with the specified ID was not found
+      return res.status(200).json({
+        message: `${id} not found`,
+        success: false,
+      });
+    }
+  } catch (error) {
+    // Handle the error, e.g., log it and return an error response
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
     });
-  } else
-    return res
-      .status(200)
-      .json({ message: `${recommended} not found`, success: false });
+  }
 });
 
 export default {

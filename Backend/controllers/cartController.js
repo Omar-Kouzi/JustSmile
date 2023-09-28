@@ -1,6 +1,7 @@
 import CartModel from "../models/cartModel.js";
 import Item from "../models/itemModel.js";
 import User from "../models/userModel.js";
+import Offer from "../models/offersModel.js";
 
 const addToCart = async (req, res) => {
   try {
@@ -8,15 +9,13 @@ const addToCart = async (req, res) => {
     const { userId } = req.body;
     const user = await User.findById(userId);
 
-    console.log(req.body);
-
     if (!user) {
       return res.status(200).json({ message: "user not found" });
     }
     if (!userId) {
       return res.status(200).json({ message: "Unauthorized" });
     }
-    const item = await Item.findById(id);
+    const item = (await Offer.findById(id)) || (await Item.findById(id));
     if (!item) {
       return res.status(200).json({ message: "item not found" });
     }

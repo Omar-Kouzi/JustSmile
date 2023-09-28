@@ -6,6 +6,8 @@
 }
 .item img {
   height: 100%;
+  width: 400px;
+  object-fit: contain;
 }
 .itemContent {
   width: 40%;

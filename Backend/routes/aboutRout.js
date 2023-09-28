@@ -9,7 +9,7 @@ router
   .route("/")
   .post(protect, upload.single("image"), aboutController.postAbout);
 
-router.route("/").get(aboutController.getAbout);
+router.route("/:id").get(aboutController.getAbout);
 
 router
   .route("/:id")

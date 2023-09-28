@@ -18,9 +18,8 @@
   display: flex;
   gap:20px
 }
-.socialMedia img{
-  height: 50px;
-  width: 50px;
-  border: 1px solid;
-  background-color: white;
+.footerIcon{
+  height: 40px;
+  width: 40px;
+  color: black;
 }

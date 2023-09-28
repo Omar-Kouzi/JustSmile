@@ -25,6 +25,11 @@ const itemSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  available: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",

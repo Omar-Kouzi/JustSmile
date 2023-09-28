@@ -69,3 +69,101 @@
 .cartInfo button {
   padding: 10px 5px;
 }
+.clearCartButton {
+  background-color: rgb(170, 0, 0);
+  color: white;
+}
+.cartButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.deletePopup {
+  background-color: white;
+  position: absolute;
+  height: 199px;
+  width: 70vw;
+  margin-top: 10vh;
+  margin-left: 10vw;
+  border: solid;
+}
+
+.deletePopupContent {
+  display: flex;
+  flex-direction: column;
+  height: 178px;
+  padding: 10px;
+  justify-content: space-between;
+}
+.deletePopupButtonsContainer {
+  display: flex;
+  align-self: flex-end;
+  width: 111px;
+  justify-content: space-between;
+  gap: 5px;
+  margin-right: 5px;
+}
+.deletePopupButtons {
+  font-size: large;
+  font-weight: 600;
+  padding: 5px 10px;
+}
+.deletePopupButtons.yes {
+  background-color:#65ff62;
+  color: black;
+}
+.deletePopupButtons.no {
+  background-color: rgb(170, 0, 0);
+  color: white;
+}
+.orderPopup {
+  background-color: white;
+  position: absolute;
+  height: 199px;
+  width: 70vw;
+  margin-top: 10vh;
+  margin-left: 10vw;
+  border: solid;
+}
+
+.orderPopupContent {
+  display: flex;
+  flex-direction: column;
+  height: 178px;
+  padding: 10px;
+  justify-content: space-between;
+}
+.orderPopupButtonsContainer {
+  display: flex;
+  align-self: flex-end;
+  width: 200px;
+  justify-content: space-between;
+  gap: 5px;
+}
+.orderPopupButtons {
+  font-size: large;
+  font-weight: 600;
+  background-color: white;
+}
+.orderPopupButtons.yes {
+  color: green;
+  border: 2px green solid;
+}
+.orderPopupButtons.no {
+  color: rgb(170, 0, 0);
+  border: 2px rgb(170, 0, 0) solid;
+}
+@media screen and (max-width: 650px) {
+  .cartInfo {
+    flex-direction: column;
+    height: 230px;
+  }
+  .orderPopup {
+    height: 230px;
+  }
+
+  .orderPopupContent {
+    height: 210px;
+  }
+}

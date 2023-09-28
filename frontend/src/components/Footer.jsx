@@ -1,4 +1,7 @@
 import "../Styles/Footer.css";
+import { BiLogoWhatsapp } from "react-icons/bi";
+import { BiLogoInstagram } from "react-icons/bi";
+import { MdLocationPin } from "react-icons/md";
 const Footer = () => {
   return (
     <section className="Footer">
@@ -10,9 +13,17 @@ const Footer = () => {
       <p>© 2023. Just Smile. All Rights Reserved.</p>
       <hr className="hr" />
       <div className="socialMedia">
-        <img src="" alt="Insta" />
-        <img src="" alt="Tiktok" />
-        <img src="" alt="Whatsapp" />
+        <a href="https://maps.app.goo.gl/9c4HfQJ8VaDQD6rT8">
+          {" "}
+          <MdLocationPin className="footerIcon locationIcon" />
+        </a>
+        <a href="https://www.instagram.com/justsmile20222023/">
+          {" "}
+          <BiLogoInstagram className="footerIcon instaIcon" />
+        </a>
+        <a href="https://wa.me/70503796">
+          <BiLogoWhatsapp className="footerIcon whatsAppIcon" />
+        </a>
       </div>
     </section>
   );

@@ -85,22 +85,22 @@ const Items = () => {
         <section className="CategoriesBar">
           <div className="CategoriesContainer">
             <p
+              onClick={() => handleCategoryChange("all")}
               className={
                 selectedCategory === "all" ? "Category active" : "Category"
               }
-              onClick={() => handleCategoryChange("all")}
             >
               All
             </p>
             {categories.map((category, key) => (
               <p
                 key={key}
+                onClick={() => handleCategoryChange(category._id)}
                 className={
                   selectedCategory === category._id
                     ? "Category active"
                     : "Category"
                 }
-                onClick={() => handleCategoryChange(category._id)}
               >
                 {category.title}
               </p>
@@ -109,7 +109,7 @@ const Items = () => {
         </section>
         <section className="Items">
           {filteredItems.map((item, index) => (
-            <div className="itemCard" key={index}>
+            <div key={index} className="itemCard">
               {!loadedImages.includes(index) && (
                 <Blurhash
                   hash={"LEHV6nWB2yk8pyo0adR*.7kCMdnj"}
@@ -124,10 +124,10 @@ const Items = () => {
               <img
                 src={item.image}
                 alt={item.title}
-                className="itemImage"
                 onLoad={() => handleImageLoad(index)}
+                className="itemImage"
               />
-              <p className="itemName">{item.title}</p>
+              <h3 className="itemName">{item.title}</h3>
 
               <div>
                 <div
@@ -140,12 +140,16 @@ const Items = () => {
                 </div>
               </div>
               <p>Price: {item.price}$</p>
-              <button
-                className="orderButton"
-                onClick={() => handleItemClick(index)}
-              >
-                Show more
-              </button>
+              {item.available ? (
+                <button
+                  onClick={() => handleItemClick(index)}
+                  className="orderButton"
+                >
+                  Show more
+                </button>
+              ) : (
+                <p className="orderButton-Unavailable">Item Unavailable</p>
+              )}
             </div>
           ))}
         </section>

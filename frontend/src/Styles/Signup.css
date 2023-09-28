@@ -1,0 +1,70 @@
+.Signup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #65ff62;
+}
+.goback {
+  position: absolute;
+  top: 0;
+  right:0;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.Signupbox {
+  height: 500px;
+  width: 351px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 20px;
+  background-color: #fff;
+  padding: 30px;
+}
+.SignupForm {
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.ErrorMessageSignup {
+  position: absolute;
+  background-color: rgb(210, 119, 119);
+  margin-bottom: 310px;
+  padding: 5px;
+  border-radius: 4px;
+}
+.SuccessMessageSignup {
+  position: absolute;
+  background-color: rgb(167, 252, 167);
+  margin-bottom: 310px;
+  padding: 5px;
+  border-radius: 4px;
+}
+.SignupInputs {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.Signupinput {
+  padding: 5px 10px;
+  width: 197px;
+  border-radius: 2px;
+  border: 1px solid grey;
+}
+.SignupButton-txt {
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.SignupButton {
+  padding: 5px;
+  border: 1px none;
+  border-radius: 2px;
+  background-color: #65ff62;
+}

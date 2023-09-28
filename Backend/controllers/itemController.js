@@ -5,7 +5,7 @@ import cloudinary from "cloudinary";
 //============
 
 const postItem = asyncHandler(async (req, res) => {
-  const  id  = req.user.id;
+  const id = req.user.id;
   const user = await User.findById(id);
   if (!user) {
     return res.status(200).json({ message: "User not found", success: false });
@@ -15,19 +15,29 @@ const postItem = asyncHandler(async (req, res) => {
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  const { title, description, ingredients, flavor, price, category } = req.body;
-  if (
-    !title ||
-    !description ||
-    !ingredients ||
-    !price ||
-    !category ||
-    !flavor
-  ) {
-    return res
-      .status(200)
-      .json({ message: "Missing required fields", success: false });
-  }
+  const {
+    title,
+    description,
+    ingredients,
+    flavor,
+    price,
+    category,
+    available,
+  } = req.body;
+  console.log(req.body)
+  // if (
+  //   !title ||
+  //   !description ||
+  //   !ingredients ||
+  //   !price ||
+  //   !category ||
+  //   !flavor ||
+  //   !available
+  // ) {
+  //   return res
+  //     .status(200)
+  //     .json({ message: "Missing required fields", success: false });
+  // }
 
   if (!req.file || req.file.length === 0) {
     return res
@@ -53,6 +63,7 @@ const postItem = asyncHandler(async (req, res) => {
       flavor,
       image: result.secure_url,
       category,
+      available: available || true,
     });
 
     await item.save();
@@ -77,14 +88,13 @@ const getAllItems = asyncHandler(async (req, res) => {
 const getAllItemByid = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const item = await Item.findById(id);
-  console.log(item);
   res.json(item);
 });
 
 //============
 
 const updateItem = asyncHandler(async (req, res) => {
-  const  id  = req.user.id;
+  const id = req.user.id;
   const user = await User.findById(id);
 
   if (!user) {
@@ -95,7 +105,7 @@ const updateItem = asyncHandler(async (req, res) => {
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  const { title, description, ingredients, flavor, price, category } = req.body;
+  const { title, description, ingredients, flavor, price, category,available } = req.body;
 
   // Check if there is a new image
   let imageUrl;
@@ -122,6 +132,7 @@ const updateItem = asyncHandler(async (req, res) => {
     price,
     category,
     ingredients: ingredients,
+    available,
     ...(imageUrl && { image: imageUrl }),
   };
 
@@ -139,7 +150,6 @@ const updateItem = asyncHandler(async (req, res) => {
 const deleteItem = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const item = await Item.findByIdAndDelete(id);
-  console.log(id);
   if (item) {
     return res.status(200).json({
       message: `${id} had been deleted successfully`,

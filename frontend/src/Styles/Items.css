@@ -53,9 +53,9 @@
   height: 200px;
   border-radius: 5px 5px 5px 0px;
 }
-.itemName {
+/* .itemName {
   font-size: 20px;
-}
+} */
 .content {
   overflow: hidden;
   line-height: 1.2em;
@@ -71,6 +71,12 @@
   color: #626265;
 }
 .orderButton {
+  padding: 5px;
+}
+.orderButton-Unavailable{
+  background-color: rgb(170, 0, 0);
+  color: white;
+  text-align: center;
   padding: 5px;
 }
 .orderButton:hover {

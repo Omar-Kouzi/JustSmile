@@ -36,8 +36,10 @@ const postBarJuiceSuppliers = asyncHandler(async (req, res) => {
       api_secret: process.env.API_SECRET,
     });
 
+    console.log(req.body.links);
     const result = await cloudinary.v2.uploader.upload(req.file.path);
     const links = JSON.parse(req.body.links);
+
     const barJuiceSuppliers = new BarJuiceSuppliers({
       title,
       description,
@@ -45,7 +47,7 @@ const postBarJuiceSuppliers = asyncHandler(async (req, res) => {
       image: result.secure_url,
       location,
     });
-
+    console.log(barJuiceSuppliers);
     await barJuiceSuppliers.save();
     return res.status(200).json({
       barJuiceSuppliers,

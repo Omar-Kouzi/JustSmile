@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import '../Styles/Slideshow.css';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import "../Styles/Slideshow.css";
+import axios from "axios";
 
 function Slideshow() {
   const [slides, setSlides] = useState([]);
@@ -10,7 +10,7 @@ function Slideshow() {
     async function fetchData() {
       try {
         const res = await axios.get("http://localhost:1111/slideshow");
-        setSlides(res.data.data);
+        setSlides(res.data.all_Slides);
       } catch (err) {
         console.error(err);
       }
@@ -27,7 +27,11 @@ function Slideshow() {
   }, [currentImageIndex, slides]);
 
   if (slides.length === 0) {
-    return <div className='NoSlide'><h1>No slide images available</h1></div>;
+    return (
+      <div className="NoSlide">
+        <h1>No slide images available</h1>
+      </div>
+    );
   }
 
   return (
@@ -38,7 +42,9 @@ function Slideshow() {
             <img
               src={slide.image}
               alt={`Slide ${index + 1}`}
-              className={`carousel-image ${index === currentImageIndex ? 'active' : ''}`}
+              className={`carousel-image ${
+                index === currentImageIndex ? "active" : ""
+              }`}
             />
           </div>
         );

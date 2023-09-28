@@ -1,8 +1,22 @@
 grammarly-desktop-integration {
   display: none;
 }
-
+button {
+  padding: 5px;
+  border: 1px none;
+  border-radius: 2px;
+  color: #000;
+  background-color: #65ff62;
+  transition-delay: 2ms;
+}
+button:hover {
+  cursor: pointer;
+  /* color: black;
+  background-color: #65ff62; */
+}
 * {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
   padding: 0;
   margin: 0;
   /* color: white; */

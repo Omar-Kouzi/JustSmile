@@ -1,0 +1,72 @@
+.ErrorMessageUserUpdate {
+    position: absolute;
+    background-color: rgb(167, 252, 167);
+    margin-bottom: 443px;
+    padding: 5px;
+    border-radius: 4px;
+}
+  
+  .SuccessMessageUserUpdate {
+    position: absolute;
+    background-color: rgb(167, 252, 167);
+    margin-bottom: 443px;
+    padding: 5px;
+    border-radius: 4px;
+}
+  .User {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 74vh;
+  }
+  .User img {
+    height: 100%;
+    width: 400px;
+    object-fit: contain;
+  }
+  .UserContent {
+    width: 40%;
+    margin-right: 10vw;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 63vh;
+    justify-content: flex-end;
+  }
+  .quantityAddToCartButtonContainer {
+    display: flex;
+    gap: 10px;
+  }
+  .quantityAddToCartButtonContainer button,
+  .quantityAddToCartButtonContainer input {
+    padding: 5px 10px;
+  }
+  .ingredientsContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .User {
+      flex-direction: column;
+      height: 100%;
+      gap: 40px;
+      padding-bottom: 20px;
+    }
+    .UserContent {
+      width: 80%;
+      margin-right: 0vw;
+      gap: 20px;
+    }
+    .User img {
+      width: 62%;
+      object-fit: contain;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    .User img {
+      width: 100%;
+      object-fit: contain;
+    }
+  }
+  
