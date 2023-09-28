@@ -9,7 +9,7 @@ function Slideshow() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get("http://localhost:1111/slideshow");
+        const res = await axios.get("https://justsmilebackend.onrender.com/slideshow");
         setSlides(res.data.all_Slides);
       } catch (err) {
         console.error(err);

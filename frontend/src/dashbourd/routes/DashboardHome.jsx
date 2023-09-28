@@ -39,7 +39,7 @@ const DashboardHome = () => {
   const fetchAbout = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:1111/about/650af04f7e27faca7127717b`
+        `https://justsmilebackend.onrender.com/about/650af04f7e27faca7127717b`
       );
       setAbout(response.data.about);
     } catch (error) {
@@ -50,7 +50,7 @@ const DashboardHome = () => {
     console.log(secureLocalStorage.getItem("token"));
     try {
       const res = await axios.patch(
-        "http://localhost:1111/about/650af04f7e27faca7127717b",
+        "https://justsmilebackend.onrender.com/about/650af04f7e27faca7127717b",
         { about: newAbout, image: aboutImg },
         {
           headers: {
@@ -75,7 +75,7 @@ const DashboardHome = () => {
   };
   const fetchRecommended = async () => {
     try {
-      const response = await axios.get(`http://localhost:1111/recommended`);
+      const response = await axios.get(`https://justsmilebackend.onrender.com/recommended`);
       setRecommended(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -89,7 +89,7 @@ const DashboardHome = () => {
   const deleteRecommended = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:1111/recommended/${id}`,
+        `https://justsmilebackend.onrender.com/recommended/${id}`,
         {
           headers: {
             Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
@@ -108,7 +108,7 @@ const DashboardHome = () => {
   const handlePostRecommended = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:1111/recommended",
+        "https://justsmilebackend.onrender.com/recommended",
         { id: selectedItem },
         {
           headers: {
@@ -123,7 +123,7 @@ const DashboardHome = () => {
   };
   const fetchItems = async () => {
     try {
-      const response = await axios.get("http://localhost:1111/items");
+      const response = await axios.get("https://justsmilebackend.onrender.com/items");
       setItems(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -132,7 +132,7 @@ const DashboardHome = () => {
 
   const fetchBarSupplier = async () => {
     try {
-      const response = await axios.get(`http://localhost:1111/barSuppliers`);
+      const response = await axios.get(`https://justsmilebackend.onrender.com/barSuppliers`);
       setBarSuppliers(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -142,7 +142,7 @@ const DashboardHome = () => {
   const handleDeleteSupplier = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:1111/barSuppliers/${id}`,
+        `https://justsmilebackend.onrender.com/barSuppliers/${id}`,
         {
           headers: {
             Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
@@ -183,7 +183,7 @@ const DashboardHome = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:1111/barSuppliers/",
+        "https://justsmilebackend.onrender.com/barSuppliers/",
         formData,
         {
           headers: {
@@ -201,7 +201,7 @@ const DashboardHome = () => {
 
   const fetchOffer = async () => {
     try {
-      const response = await axios.get(`http://localhost:1111/offer`);
+      const response = await axios.get(`https://justsmilebackend.onrender.com/offer`);
       setOffer(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -210,7 +210,7 @@ const DashboardHome = () => {
 
   const handleDeleteOffer = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:1111/offer/${id}`, {
+      const response = await axios.delete(`https://justsmilebackend.onrender.com/offer/${id}`, {
         headers: {
           Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
         },
@@ -246,7 +246,7 @@ const DashboardHome = () => {
     console.log(formData);
     try {
       const response = await axios.post(
-        "http://localhost:1111/offer/",
+        "https://justsmilebackend.onrender.com/offer/",
         formData,
         {
           headers: {

@@ -26,7 +26,7 @@ const DashboardItems = () => {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("http://localhost:1111/items");
+      const response = await axios.get("https://justsmilebackend.onrender.com/items");
       setItems(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -35,7 +35,7 @@ const DashboardItems = () => {
   const handledeleteItem = async (itemId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:1111/items/${itemId}`,
+        `https://justsmilebackend.onrender.com/items/${itemId}`,
         {
           headers: {
             Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
@@ -48,7 +48,7 @@ const DashboardItems = () => {
   };
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:1111/category");
+      const response = await axios.get("https://justsmilebackend.onrender.com/category");
       setCategories(response.data.categories);
     } catch (error) {
       console.log("Error fetching categories:", error);
@@ -100,7 +100,7 @@ const DashboardItems = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:1111/items/",
+        "https://justsmilebackend.onrender.com/items/",
         formData,
         {
           headers: {

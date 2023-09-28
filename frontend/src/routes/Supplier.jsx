@@ -14,7 +14,7 @@ const Supplier = () => {
   const fetchSupplier = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:1111/barSuppliers/${supplierId.id}`
+        `https://justsmilebackend.onrender.com/barSuppliers/${supplierId.id}`
       );
       setSupplier(response.data);
     } catch (error) {

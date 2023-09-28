@@ -88,7 +88,7 @@ function Signup() {
   const SignUpUser = async (credentials) => {
     try {
       const res = await axios.post(
-        `http://localhost:1111/user/`,
+        `https://justsmilebackend.onrender.com/user/`,
         JSON.stringify(credentials),
         {
           headers: {

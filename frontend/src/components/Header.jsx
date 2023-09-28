@@ -37,7 +37,7 @@ const Header = () => {
     setUserId(id);
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:1111/user/${id}`);
+        const response = await axios.get(`https://justsmilebackend.onrender.com/user/${id}`);
         setIsAdmin(response.data.role);
       } catch (error) {
         console.log("Error fetching data:", error);

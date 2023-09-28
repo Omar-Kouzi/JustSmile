@@ -18,7 +18,7 @@ const Items = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:1111/items");
+        const response = await axios.get("https://justsmilebackend.onrender.com/items");
         setItems(response.data);
       } catch (error) {
         console.log("Error fetching data:", error);
@@ -31,7 +31,7 @@ const Items = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:1111/category");
+        const response = await axios.get("https://justsmilebackend.onrender.com/category");
         setCategories(response.data.categories);
       } catch (error) {
         console.log("Error fetching categories:", error);

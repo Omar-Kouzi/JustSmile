@@ -21,7 +21,7 @@ const Item = () => {
     const fetchItem = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:1111/items/${itemID.id}`
+          `https://justsmilebackend.onrender.com/items/${itemID.id}`
         );
         setItem(response.data);
       } catch (error) {
@@ -39,7 +39,7 @@ const Item = () => {
     }
     try {
       const res = await axios.post(
-        "http://localhost:1111/cart",
+        "https://justsmilebackend.onrender.com/cart",
         {
           id: itemID.id, // Use itemID.id instead of an object
           quantity: quantity,

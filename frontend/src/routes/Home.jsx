@@ -17,7 +17,7 @@ const Home = () => {
   const fetchAbout = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:1111/about/650af04f7e27faca7127717b`
+        `https://justsmilebackend.onrender.com/about/650af04f7e27faca7127717b`
       );
       setAbout(response.data.about);
     } catch (error) {
@@ -27,7 +27,7 @@ const Home = () => {
 
   const fetchRecommended = async () => {
     try {
-      const response = await axios.get(`http://localhost:1111/recommended`);
+      const response = await axios.get(`https://justsmilebackend.onrender.com/recommended`);
       setRecommended(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -36,7 +36,7 @@ const Home = () => {
 
   const fetchBarSupplier = async () => {
     try {
-      const response = await axios.get(`http://localhost:1111/barSuppliers`);
+      const response = await axios.get(`https://justsmilebackend.onrender.com/barSuppliers`);
       setBarSuppliers(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -45,7 +45,7 @@ const Home = () => {
 
   const fetchOffer = async () => {
     try {
-      const response = await axios.get(`http://localhost:1111/offer`);
+      const response = await axios.get(`https://justsmilebackend.onrender.com/offer`);
       setOffer(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);

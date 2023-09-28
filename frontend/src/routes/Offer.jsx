@@ -19,7 +19,7 @@ const Offer = () => {
   const fetchOffer = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:1111/offer/${offerId.id}`
+        `https://justsmilebackend.onrender.com/offer/${offerId.id}`
       );
       setOffer(response.data);
     } catch (error) {
@@ -37,7 +37,7 @@ const Offer = () => {
     }
     try {
       const res = await axios.post(
-        "http://localhost:1111/cart",
+        "https://justsmilebackend.onrender.com/cart",
         {
           id: offerId.id,
           quantity: quantity,

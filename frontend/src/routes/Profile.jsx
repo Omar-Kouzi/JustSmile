@@ -32,7 +32,7 @@ const Profile = () => {
   const fetchUser = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:1111/user/${userId.id}`
+        `https://justsmilebackend.onrender.com/user/${userId.id}`
       );
       setUser(response.data);
     } catch (error) {
@@ -67,7 +67,7 @@ const Profile = () => {
     formData.append("id", userId.id);
 
     try {
-      const res = await axios.patch(`http://localhost:1111/user/`, formData, {
+      const res = await axios.patch(`https://justsmilebackend.onrender.com/user/`, formData, {
         headers: {
           Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",
@@ -92,7 +92,7 @@ const Profile = () => {
   const handleDeleteUser = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:1111/user/${userId.id}`,
+        `https://justsmilebackend.onrender.com/user/${userId.id}`,
         {
           headers: {
             Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,

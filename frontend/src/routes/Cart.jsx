@@ -22,7 +22,7 @@ const Cart = () => {
   const navigate = useNavigate();
   const fetchCart = async () => {
     try {
-      const response = await axios.get(`http://localhost:1111/cart/`, {
+      const response = await axios.get(`https://justsmilebackend.onrender.com/cart/`, {
         headers: {
           Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
           "Content-Type": "application/json",
@@ -39,7 +39,7 @@ const Cart = () => {
   const increaseQuantity = async (item) => {
     try {
       await axios.patch(
-        `http://localhost:1111/cart/inc/${item}`,
+        `https://justsmilebackend.onrender.com/cart/inc/${item}`,
         {},
         {
           headers: {
@@ -56,7 +56,7 @@ const Cart = () => {
   const decreaseQuantity = async (item) => {
     try {
       await axios.put(
-        `http://localhost:1111/cart/dec/${item}`,
+        `https://justsmilebackend.onrender.com/cart/dec/${item}`,
         {},
         {
           headers: {
@@ -74,7 +74,7 @@ const Cart = () => {
     console.log(cart._id);
     try {
       await axios.patch(
-        `http://localhost:1111/cart/${cart._id}`,
+        `https://justsmilebackend.onrender.com/cart/${cart._id}`,
         {},
         {
           headers: {
@@ -97,7 +97,7 @@ const Cart = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:1111/user/${userId}`);
+      const response = await axios.get(`https://justsmilebackend.onrender.com/user/${userId}`);
       setUserAddress(response.data.address);
       setUserName(response.data.name);
       setUserPhoneNumber(response.data.phoneNumber);
