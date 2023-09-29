@@ -14,8 +14,8 @@
 }
 
 .Signupbox {
-  height: 500px;
-  width: 351px;
+  height: 450px;
+  width: 320px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -25,7 +25,7 @@
   padding: 30px;
 }
 .SignupForm {
-  height: 360px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -33,19 +33,19 @@
 .ErrorMessageSignup {
   position: absolute;
   background-color: rgb(210, 119, 119);
-  margin-bottom: 310px;
+  margin-bottom: 250px;
   padding: 5px;
   border-radius: 4px;
 }
 .SuccessMessageSignup {
   position: absolute;
   background-color: rgb(167, 252, 167);
-  margin-bottom: 310px;
+  margin-bottom: 250px;
   padding: 5px;
   border-radius: 4px;
 }
 .SignupInputs {
-  height: 300px;
+  height: 220px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

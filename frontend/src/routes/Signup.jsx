@@ -77,8 +77,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [address, setAddress] = useState(null);
-  const [image, setImage] = useState("");
+  const [address, setAddress] = useState("");
   const [alert, setAlert] = useState("");
   const [signUpSuccess, setSignUpSuccess] = useState("");
   const [valid, setValid] = useState(false);
@@ -126,8 +125,7 @@ function Signup() {
         name,
         email,
         password,
-        address: address ? `${address.lat},${address.lng}` : "",
-        image,
+        address,
       });
     } catch (error) {
       console.log(error);
@@ -154,7 +152,7 @@ function Signup() {
           <h1 className="Signuptitle">Sign Up</h1>
         </div>
 
-        {valid && (
+        {!valid && (
           <i
             className={
               signUpSuccess ? "SuccessMessageSignup" : "ErrorMessageSignup"
@@ -203,15 +201,7 @@ function Signup() {
                 className="Signupinput"
               />
             </div>
-            <div className="input-field">
-              <p>Image</p>
-              <input
-                type="file"
-                placeholder="image"
-                onChange={(e) => setImage(e.target.value)}
-                className="Signupinput"
-              />
-            </div>
+           
           </div>
           <div className="SignupButton-txt">
             <input

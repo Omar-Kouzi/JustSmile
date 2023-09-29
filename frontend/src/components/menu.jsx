@@ -99,7 +99,7 @@ const SmMenu = () => {
             <li>
               {isLoggedIn ? (
                 <>
-                  <NavLink to={`/profile/${userId}`} className="">
+                  <NavLink to={`/profile/${userId}`} className="headersNavlink">
                     <h2>Profile </h2>
                     <CgProfile className="" />
                   </NavLink>

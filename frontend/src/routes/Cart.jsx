@@ -22,12 +22,15 @@ const Cart = () => {
   const navigate = useNavigate();
   const fetchCart = async () => {
     try {
-      const response = await axios.get(`https://justsmilebackend.onrender.com/cart/`, {
-        headers: {
-          Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        `https://justsmilebackend.onrender.com/cart/`,
+        {
+          headers: {
+            Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setTotalPrice(response.data.totalPrice);
       setCart(response.data);
       setCartItems(response.data.items);
@@ -38,7 +41,7 @@ const Cart = () => {
 
   const increaseQuantity = async (item) => {
     try {
-      await axios.patch(
+      const response = await axios.patch(
         `https://justsmilebackend.onrender.com/cart/inc/${item}`,
         {},
         {
@@ -47,6 +50,7 @@ const Cart = () => {
           },
         }
       );
+      console.log(response)
       fetchCart();
     } catch (error) {
       console.log(error);
@@ -55,7 +59,7 @@ const Cart = () => {
 
   const decreaseQuantity = async (item) => {
     try {
-      await axios.put(
+      const response = await axios.put(
         `https://justsmilebackend.onrender.com/cart/dec/${item}`,
         {},
         {
@@ -64,6 +68,7 @@ const Cart = () => {
           },
         }
       );
+      console.log(response)
       fetchCart();
     } catch (error) {
       console.log(error);
@@ -97,7 +102,9 @@ const Cart = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(`https://justsmilebackend.onrender.com/user/${userId}`);
+      const response = await axios.get(
+        `https://justsmilebackend.onrender.com/user/${userId}`
+      );
       setUserAddress(response.data.address);
       setUserName(response.data.name);
       setUserPhoneNumber(response.data.phoneNumber);

@@ -10,7 +10,7 @@
   width: 90vw;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
   overflow-y: scroll;
 }

@@ -17,7 +17,6 @@ const Profile = () => {
     password: "",
     address: "",
     phoneNumber: "",
-    image: null,
   });
 
   const [alert, setAlert] = useState("");
@@ -63,16 +62,19 @@ const Profile = () => {
     formData.append("oldPassword", newUser.oldPassword);
     formData.append("address", newUser.address || user.address);
     formData.append("phoneNumber", newUser.phoneNumber || user.phoneNumber);
-    formData.append("image", newUser.image || user.image);
     formData.append("id", userId.id);
 
     try {
-      const res = await axios.patch(`https://justsmilebackend.onrender.com/user/`, formData, {
-        headers: {
-          Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await axios.patch(
+        `https://justsmilebackend.onrender.com/user/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       fetchUser();
 
@@ -135,10 +137,6 @@ const Profile = () => {
       <div>
         {user ? (
           <div className="User">
-            <div>
-              <img src={user.image} alt="User" />
-              <input type="file" onChange={handleUserChange} />
-            </div>
             <div className="UserContent">
               {valid && (
                 <i

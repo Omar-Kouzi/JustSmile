@@ -75,7 +75,9 @@ const DashboardHome = () => {
   };
   const fetchRecommended = async () => {
     try {
-      const response = await axios.get(`https://justsmilebackend.onrender.com/recommended`);
+      const response = await axios.get(
+        `https://justsmilebackend.onrender.com/recommended`
+      );
       setRecommended(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -123,7 +125,9 @@ const DashboardHome = () => {
   };
   const fetchItems = async () => {
     try {
-      const response = await axios.get("https://justsmilebackend.onrender.com/items");
+      const response = await axios.get(
+        "https://justsmilebackend.onrender.com/items"
+      );
       setItems(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -132,7 +136,9 @@ const DashboardHome = () => {
 
   const fetchBarSupplier = async () => {
     try {
-      const response = await axios.get(`https://justsmilebackend.onrender.com/barSuppliers`);
+      const response = await axios.get(
+        `https://justsmilebackend.onrender.com/barSuppliers`
+      );
       setBarSuppliers(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -201,7 +207,9 @@ const DashboardHome = () => {
 
   const fetchOffer = async () => {
     try {
-      const response = await axios.get(`https://justsmilebackend.onrender.com/offer`);
+      const response = await axios.get(
+        `https://justsmilebackend.onrender.com/offer`
+      );
       setOffer(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -210,11 +218,14 @@ const DashboardHome = () => {
 
   const handleDeleteOffer = async (id) => {
     try {
-      const response = await axios.delete(`https://justsmilebackend.onrender.com/offer/${id}`, {
-        headers: {
-          Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.delete(
+        `https://justsmilebackend.onrender.com/offer/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
+          },
+        }
+      );
       fetchOffer();
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -311,27 +322,31 @@ const DashboardHome = () => {
                   className="recommendedImage"
                 />{" "}
               </div>
+              <div className="recommendedContent">
+                <h3 className="recommendedName">{recommended.title}</h3>
 
-              <h3 className="recommendedName">{recommended.title}</h3>
-
-              <div>
-                <div className="recommendedContent" id={`paragraph-${index}`}>
-                  {recommended.description}
+                <div>
+                  <div
+                    className="recommendedDescription"
+                    id={`paragraph-${index}`}
+                  >
+                    {recommended.description}
+                  </div>
                 </div>
+                <p>Price: {recommended.price}$</p>
+                <button
+                  onClick={() => handleDeleteRecommended(index)}
+                  className="recommendedDeleteButton"
+                >
+                  delete
+                </button>
+                <button
+                  onClick={() => handleItemClick(index)}
+                  className="orderButton"
+                >
+                  Show more
+                </button>
               </div>
-              <p>Price: {recommended.price}$</p>
-              <button
-                onClick={() => handleDeleteRecommended(index)}
-                className="recommendedDeleteButton"
-              >
-                delete
-              </button>
-              <button
-                onClick={() => handleItemClick(index)}
-                className="orderButton"
-              >
-                Show more
-              </button>
             </div>
           ))}
           <form

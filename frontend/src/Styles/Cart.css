@@ -6,7 +6,7 @@
 .cartHeader {
   display: flex;
   list-style: none;
-  width: 99.3%;
+  width: 95vw;
   justify-content: space-between;
   border-bottom: solid 1px;
   padding: 5px;
@@ -19,6 +19,7 @@
   align-items: center;
   border-bottom: solid 1px;
   padding: 3px;
+  width: 95vw;
 }
 .cartItemDescription {
   width: 35vw;
@@ -53,6 +54,7 @@
   justify-content: space-evenly;
   align-items: center;
   padding-top: 20px;
+  width: 95vw;
 }
 .cartInfo div div {
   display: flex;
@@ -110,7 +112,7 @@
   padding: 5px 10px;
 }
 .deletePopupButtons.yes {
-  background-color:#65ff62;
+  background-color: #65ff62;
   color: black;
 }
 .deletePopupButtons.no {
@@ -165,5 +167,19 @@
 
   .orderPopupContent {
     height: 210px;
+  }
+}
+@media screen and (max-width: 400px) {
+  .Cart {
+    padding: 15px;
+  }
+  .cartHeader {
+    width: 90vw;
+  }
+  .cartItem {
+    width: 90vw;
+  }
+  .cartInfo div div {
+    width: 45vh;
   }
 }

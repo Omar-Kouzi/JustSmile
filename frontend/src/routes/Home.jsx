@@ -27,7 +27,9 @@ const Home = () => {
 
   const fetchRecommended = async () => {
     try {
-      const response = await axios.get(`https://justsmilebackend.onrender.com/recommended`);
+      const response = await axios.get(
+        `https://justsmilebackend.onrender.com/recommended`
+      );
       setRecommended(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -36,7 +38,9 @@ const Home = () => {
 
   const fetchBarSupplier = async () => {
     try {
-      const response = await axios.get(`https://justsmilebackend.onrender.com/barSuppliers`);
+      const response = await axios.get(
+        `https://justsmilebackend.onrender.com/barSuppliers`
+      );
       setBarSuppliers(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -45,7 +49,9 @@ const Home = () => {
 
   const fetchOffer = async () => {
     try {
-      const response = await axios.get(`https://justsmilebackend.onrender.com/offer`);
+      const response = await axios.get(
+        `https://justsmilebackend.onrender.com/offer`
+      );
       setOffer(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -96,20 +102,25 @@ const Home = () => {
                   alt={recommended.title}
                   className="recommendedImage"
                 />
-                <h3 className="recommendedName">{recommended.title}</h3>
+                <div className="recommendedContent">
+                  <h3 className="recommendedName">{recommended.title}</h3>
 
-                <div>
-                  <div className="recommendedContent" id={`paragraph-${index}`}>
-                    {recommended.description}
+                  <div>
+                    <div
+                      className="recommendedDescription"
+                      id={`paragraph-${index}`}
+                    >
+                      {recommended.description}
+                    </div>
                   </div>
+                  <p>Price: {recommended.price}$</p>
+                  <button
+                    onClick={() => handleShowMoreItem(index)}
+                    className="orderButton"
+                  >
+                    Show more
+                  </button>
                 </div>
-                <p>Price: {recommended.price}$</p>
-                <button
-                  onClick={() => handleShowMoreItem(index)}
-                  className="orderButton"
-                >
-                  Show more
-                </button>
               </div>
             ))}
           </div>

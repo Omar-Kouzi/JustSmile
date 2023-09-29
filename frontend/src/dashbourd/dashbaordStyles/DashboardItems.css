@@ -136,6 +136,9 @@
     width: 150px;
     height: 150px;
   }
+  .CategoriesContainer {
+    justify-content: flex-start;
+    }
 }
 
 @media only screen and (max-width: 350px) {

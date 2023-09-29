@@ -1,12 +1,12 @@
 import asyncHandler from "express-async-handler";
 import generateToken from "../utils/generateToken.js";
 import User from "../models/userModel.js";
-import cloudinary from "cloudinary";
 import bcrypt from "bcryptjs";
 
 //============
 const registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password, role, address } = req.body;
+  console.log(req.body);
   if (!name || !email || !password) {
     return res
       .status(200)
@@ -25,53 +25,23 @@ const registerUser = asyncHandler(async (req, res, next) => {
         .json({ message: "Name must be unique", success: false });
     }
   }
-
-  cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET,
+  const user = new User({
+    name,
+    email,
+    password,
+    address,
+    role: role || "user",
+    success: true,
   });
+  console.log(user);
 
-  if (req.file) {
-    const result = (await cloudinary.uploader.upload(req.file.path)) || "";
-
-    const user = new User({
-      name,
-      email,
-      password,
-      address,
-      image: result.secure_url || "",
-      role: role || "user",
-      success: true,
-    });
-    console.log(user);
-
-    await user.save();
-    res.status(200).json({
-      user: user,
-      message: "Account created successfully",
-      token: generateToken(user._id),
-      success: true,
-    });
-  } else {
-    const user = new User({
-      name,
-      email,
-      password,
-      address,
-      role: role || "user",
-      success: true,
-    });
-    console.log(user);
-
-    await user.save();
-    res.status(200).json({
-      user: user,
-      message: "Account created successfully",
-      token: generateToken(user._id),
-      success: true,
-    });
-  }
+  await user.save();
+  res.status(200).json({
+    user: user,
+    message: "Account created successfully",
+    token: generateToken(user._id),
+    success: true,
+  });
 });
 
 //============
@@ -124,7 +94,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   if (!user) {
     return res.status(200).json({ message: "User not found", success: false });
   }
-console.log(req.body)
+  console.log(req.body);
   if (req.body.oldPassword) {
     const isPasswordMatch = await bcrypt.compare(
       req.body.oldPassword,
@@ -142,15 +112,6 @@ console.log(req.body)
   user.role = req.body.role || user.role;
   user.address = req.body.address || user.address;
   user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
-  if (req.file) {
-    cloudinary.config({
-      cloud_name: process.env.CLOUD_NAME,
-      api_key: process.env.API_KEY,
-      api_secret: process.env.API_SECRET,
-    });
-    const result = await cloudinary.uploader.upload(req.file.path);
-    user.profilePic = result.secure_url;
-  }
 
   if (req.body.password) {
     user.password = req.body.password;
