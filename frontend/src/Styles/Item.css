@@ -13,6 +13,7 @@
   width: 40%;
   margin-right: 10vw;
   gap: 10px;
+  justify-content: flex-end;
   display: flex;
   flex-direction: column;
 }
@@ -28,7 +29,16 @@
   display: flex;
   flex-direction: column;
 }
-
+.SuccessMessageitem {
+  background-color: rgb(167, 252, 167);
+  padding: 5px;
+  border-radius: 4px;
+}
+.ErrorMessageitem {
+  background-color: rgb(210, 119, 119);
+  padding: 5px;
+  border-radius: 4px;
+}
 @media screen and (max-width: 768px) {
   .item {
     flex-direction: column;
@@ -49,6 +59,5 @@
 @media screen and (max-width: 600px) {
   .item img {
     width: 100%;
-    object-fit: contain;
   }
 }

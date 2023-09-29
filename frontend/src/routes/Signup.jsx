@@ -152,7 +152,7 @@ function Signup() {
           <h1 className="Signuptitle">Sign Up</h1>
         </div>
 
-        {!valid && (
+        {valid && (
           <i
             className={
               signUpSuccess ? "SuccessMessageSignup" : "ErrorMessageSignup"

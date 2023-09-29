@@ -44,11 +44,10 @@
   border: 1px solid #0000001a;
   align-items: center;
   border-radius: 3px;
-  background: #ffffffa2;
+  background-color: #f2fce933;
   box-shadow: 5px 2px 9px #0000001a;
 }
 .recommendedImage {
-
   width: 150px;
   object-fit: cover;
   height: 150px;
@@ -111,7 +110,7 @@
   border: 1px solid #0000001a;
   align-items: center;
   border-radius: 3px;
-  background: #ffffffa2;
+  background-color: #f2fce933;
   box-shadow: 5px 2px 9px #0000001a;
 }
 .offers {
@@ -138,7 +137,7 @@
   justify-content: space-between;
   border: 1px solid #0000001a;
   border-radius: 3px;
-  background: #ffffffa2;
+  background-color: #f2fce933;
   box-shadow: 5px 2px 9px #0000001a;
 }
 
@@ -247,7 +246,7 @@
     height: 8px;
   }
   .mostRecommended::-webkit-scrollbar-thumb {
-    background: #65ff62;
+    background: #51fd08;
     border-radius: 10px;
   }
   .mostRecommended::-webkit-scrollbar-track {

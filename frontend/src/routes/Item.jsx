@@ -39,9 +39,9 @@ const Item = () => {
     }
     try {
       const res = await axios.post(
-        "https://justsmilebackend.onrender.com/cart",
+        "http://localhost:1111/cart",
         {
-          id: itemID.id, // Use itemID.id instead of an object
+          id: itemID.id,
           quantity: quantity,
           userId: secureLocalStorage.getItem("id"),
         },
@@ -86,13 +86,13 @@ const Item = () => {
             <img src={item.image} alt="item" />
 
             <div className="itemContent">
-              {valid && (
+              {!valid && (
                 <i
                   className={
-                    addedToCart ? "SuccessMessageLogin" : "ErrorMessageLogin"
+                    addedToCart ? "SuccessMessageitem" : "ErrorMessageitem"
                   }
                 >
-                  {alert}
+                  {alert}helo
                 </i>
               )}
               <h2>{item.title}</h2>

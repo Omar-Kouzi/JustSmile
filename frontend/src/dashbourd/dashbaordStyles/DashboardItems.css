@@ -106,22 +106,17 @@
   justify-content: space-around;
 }
 .ErrorMessageItemUpdate {
-  position: absolute;
   background-color: rgb(210, 119, 119);
-  margin-bottom: 510px;
   padding: 5px;
   border-radius: 4px;
 }
 .SuccessMessageItemUpdate {
-  position: absolute;
   background-color: rgb(167, 252, 167);
-  margin-bottom: 510px;
   padding: 5px;
   border-radius: 4px;
 }
 .dashboardItemContent {
   justify-content: center;
-  height: 70vh;
 }
 
 @media only screen and (max-width: 500px) {

@@ -87,7 +87,6 @@
   height: 199px;
   width: 70vw;
   margin-top: 10vh;
-  margin-left: 10vw;
   border: solid;
 }
 
@@ -112,7 +111,7 @@
   padding: 5px 10px;
 }
 .deletePopupButtons.yes {
-  background-color: #65ff62;
+  background-color: #51FD08;
   color: black;
 }
 .deletePopupButtons.no {
@@ -168,11 +167,12 @@
   .orderPopupContent {
     height: 210px;
   }
+  .Cart {
+    padding: 10px;
+  }
 }
 @media screen and (max-width: 400px) {
-  .Cart {
-    padding: 15px;
-  }
+ 
   .cartHeader {
     width: 90vw;
   }
