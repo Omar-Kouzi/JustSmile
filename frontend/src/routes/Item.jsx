@@ -92,7 +92,7 @@ const Item = () => {
                     addedToCart ? "SuccessMessageitem" : "ErrorMessageitem"
                   }
                 >
-                  {alert}helo
+                  {alert}
                 </i>
               )}
               <h2>{item.title}</h2>
