@@ -8,7 +8,8 @@ const addToCart = async (req, res) => {
     const { id, quantity } = req.body;
     const { userId } = req.body;
     const user = await User.findById(userId);
-
+    console.log(req.body);
+    
     if (!user) {
       return res.status(200).json({ message: "user not found" });
     }
