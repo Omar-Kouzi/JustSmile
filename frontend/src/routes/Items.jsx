@@ -73,8 +73,8 @@ const Items = () => {
       ? items
       : items.filter((item) => item.category === selectedCategory);
 
-  const handleItemClick = (index) => {
-    const ItemId = items[index]._id;
+  const handleItemClick = (ItemId) => {
+    // const ItemId = items[index]._id;
     navigate(`/items/${ItemId}`);
   };
   return (
@@ -142,7 +142,7 @@ const Items = () => {
               <p>Price: {item.price}$</p>
               {item.available ? (
                 <button
-                  onClick={() => handleItemClick(index)}
+                  onClick={() => handleItemClick(item._id)}
                   className="orderButton"
                 >
                   Show more
