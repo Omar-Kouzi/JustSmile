@@ -39,7 +39,7 @@ const Item = () => {
     }
     try {
       const res = await axios.post(
-        "http://localhost:1111/cart",
+        "https://justsmilebackend.onrender.com/cart",
         {
           id: itemID.id,
           quantity: quantity,
@@ -86,7 +86,7 @@ const Item = () => {
             <img src={item.image} alt="item" />
 
             <div className="itemContent">
-              {!valid && (
+              {valid && (
                 <i
                   className={
                     addedToCart ? "SuccessMessageitem" : "ErrorMessageitem"
