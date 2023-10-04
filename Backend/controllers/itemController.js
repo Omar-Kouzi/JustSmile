@@ -5,7 +5,7 @@ import cloudinary from "cloudinary";
 //============
 
 const postItem = asyncHandler(async (req, res) => {
-  const id = req.user.id;
+  const id = req.body.userId;
   const user = await User.findById(id);
   if (!user) {
     return res.status(200).json({ message: "User not found", success: false });
