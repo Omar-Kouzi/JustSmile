@@ -8,7 +8,7 @@ router.route("/").post(protect, cartController.addToCart);
 
 router.route("/").get(protect, cartController.getCart);
 
-router.route("/:id").patch(protect, cartController.clearCart);
+router.route("/").patch(protect, cartController.clearCart);
 
 router.route("/inc/:itemId").patch(protect, cartController.increaseQuantity);
 

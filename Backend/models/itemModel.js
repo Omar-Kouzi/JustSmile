@@ -13,7 +13,11 @@ const itemSchema = new mongoose.Schema({
   ingredients: {
     type: [],
   },
-  price: {
+  Lprice: {
+    type: Number,
+    null: true,
+  },
+  MLprice: {
     type: Number,
     null: true,
   },

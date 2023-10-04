@@ -20,24 +20,12 @@ const postItem = asyncHandler(async (req, res) => {
     description,
     ingredients,
     flavor,
-    price,
+    Lprice,
+    MLprice,
     category,
     available,
   } = req.body;
-  console.log(req.body)
-  // if (
-  //   !title ||
-  //   !description ||
-  //   !ingredients ||
-  //   !price ||
-  //   !category ||
-  //   !flavor ||
-  //   !available
-  // ) {
-  //   return res
-  //     .status(200)
-  //     .json({ message: "Missing required fields", success: false });
-  // }
+  console.log(req.body);
 
   if (!req.file || req.file.length === 0) {
     return res
@@ -59,7 +47,8 @@ const postItem = asyncHandler(async (req, res) => {
       title,
       description,
       ingredients: parsedIngredients,
-      price,
+      Lprice,
+      MLprice,
       flavor,
       image: result.secure_url,
       category,
@@ -105,7 +94,16 @@ const updateItem = asyncHandler(async (req, res) => {
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  const { title, description, ingredients, flavor, price, category,available } = req.body;
+  const {
+    title,
+    description,
+    ingredients,
+    flavor,
+    Lprice,
+    MLprice,
+    category,
+    available,
+  } = req.body;
 
   // Check if there is a new image
   let imageUrl;
@@ -129,7 +127,8 @@ const updateItem = asyncHandler(async (req, res) => {
     title,
     description,
     flavor,
-    price,
+    Lprice,
+    MLprice,
     category,
     ingredients: ingredients,
     available,

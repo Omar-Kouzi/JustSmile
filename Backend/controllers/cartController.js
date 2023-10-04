@@ -3,31 +3,130 @@ import Item from "../models/itemModel.js";
 import User from "../models/userModel.js";
 import Offer from "../models/offersModel.js";
 
+// const addToCart = async (req, res) => {
+//   try {
+//     const { id, quantityML, quantityL } = req.body;
+//     const userId = req.user.id;
+//     const user = await User.findById(userId);
+//     console.log(userId, user);
+//     if (!user) {
+//       return res.status(200).json({ message: "user not found" });
+//     }
+//     if (!userId) {
+//       return res.status(200).json({ message: "Unauthorized" });
+//     }
+//     const item = (await Offer.findById(id)) || (await Item.findById(id));
+//     if (!item) {
+//       return res.status(200).json({ message: "item not found" });
+//     }
+//     console.log(item.Lprice);
+//     const quantityLNum = parseInt(quantityL);
+//     const quantityMLNum = parseInt(quantityML);
+
+//     if (
+//       (isNaN(quantityLNum) || quantityLNum <= 0) &&
+//       (isNaN(quantityMLNum) || quantityMLNum <= 0)
+//     ) {
+//       return res.status(200).json({ message: "Invalid quantity L" });
+//     }
+
+//     const LtotalPrice = quantityLNum ;
+//     const MLtotalPrice = quantityMLNum ;
+//     const totalPrice = LtotalPrice + MLtotalPrice;
+//     const totalQuantity = quantityL + quantityML;
+
+//     const cart = await CartModel.findOne({ user: userId }).populate("items");
+//     if (!cart) {
+//       const newCart = await CartModel.create({
+//         user: userId,
+//         items: [
+//           {
+//             _id: item._id,
+//             image: item.image,
+//             title: item.title,
+//             Lprice: item.Lprice,
+//             MLprice: item.MLprice,
+//             MLquantity: quantityMLNum,
+//             Lquantity: quantityLNum,
+//           },
+//         ],
+//         totalPrice: totalPrice,
+//         totalQuantity: totalQuantity,
+//       });
+//       return res.status(201).json(newCart);
+//     }
+
+//     const existingItemIndex = cart.items.findIndex(
+//       (items) => items.title == item.title
+//     );
+
+//     if (existingItemIndex >= 0) {
+//       cart.items[existingItemIndex].MLquantity += quantityMLNum;
+//       cart.items[existingItemIndex].Lquantity += quantityLNum;
+//     } else {
+//       cart.items.push({
+//         _id: item._id,
+//         image: item.image,
+//         title: item.title,
+//         price: item.price,
+//         MLquantity: quantityMLNum,
+//         Lquantity: quantityLNum,
+//       });
+//     }
+
+//     cart.totalPrice += totalPrice; // add the new totalPrice to the existing totalPrice of the cart
+
+//     cart.totalQuantity =
+//       (cart.totalQuantity || 0) + quantityLNum + quantityMLNum; // add the new quantity to the existing totalQuantity of the cart
+//     await cart.save();
+
+//     return res.status(200).json({ cart, success: true });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };import CartModel from "../models/cartModel.js";
+// import Item from "../models/itemModel.js";
+// import User from "../models/userModel.js";
+// import Offer from "../models/offersModel.js";
+
 const addToCart = async (req, res) => {
   try {
-    const { id, quantity } = req.body;
-    const { userId } = req.body;
+    const { id, quantityML, quantityL } = req.body;
+    const userId = req.user.id;
     const user = await User.findById(userId);
-    console.log(req.body);
-    
+
     if (!user) {
       return res.status(200).json({ message: "user not found" });
     }
+
     if (!userId) {
       return res.status(200).json({ message: "Unauthorized" });
     }
+
     const item = (await Offer.findById(id)) || (await Item.findById(id));
+
     if (!item) {
       return res.status(200).json({ message: "item not found" });
     }
 
-    const quantityNum = parseInt(quantity);
-    if (isNaN(quantityNum) || quantityNum <= 0) {
-      return res.status(200).json({ message: "Invalid quantity" });
+    const quantityLNum = parseInt(quantityL);
+    const quantityMLNum = parseInt(quantityML);
+
+    if (
+      (isNaN(quantityLNum) || quantityLNum <= 0) &&
+      (isNaN(quantityMLNum) || quantityMLNum <= 0)
+    ) {
+      return res.status(200).json({ message: "Invalid quantity L" });
     }
 
-    const totalPrice = quantityNum * item.price;
+    const LtotalPrice = quantityLNum * item.Lprice;
+    const MLtotalPrice = quantityMLNum * item.MLprice;
+    const totalPrice = LtotalPrice + MLtotalPrice;
+    const totalQuantity = quantityLNum + quantityMLNum;
+
     const cart = await CartModel.findOne({ user: userId }).populate("items");
+    
     if (!cart) {
       const newCart = await CartModel.create({
         user: userId,
@@ -36,12 +135,16 @@ const addToCart = async (req, res) => {
             _id: item._id,
             image: item.image,
             title: item.title,
-            price: item.price,
-            quantity: quantityNum,
+            Lprice: item.Lprice,
+            MLprice: item.MLprice,
+            MLquantity: quantityMLNum,
+            Lquantity: quantityLNum,
+            totalPriceL: LtotalPrice,
+            totalPriceML: MLtotalPrice,
           },
         ],
         totalPrice: totalPrice,
-        totalQuantity: quantityNum,
+        totalQuantity: totalQuantity,
       });
       return res.status(201).json(newCart);
     }
@@ -51,22 +154,26 @@ const addToCart = async (req, res) => {
     );
 
     if (existingItemIndex >= 0) {
-      cart.items[existingItemIndex].quantity += quantityNum;
-      cart.items[existingItemIndex].totalPrice += totalPrice;
+      cart.items[existingItemIndex].MLquantity += quantityMLNum;
+      cart.items[existingItemIndex].Lquantity += quantityLNum;
+      cart.items[existingItemIndex].totalPriceL += LtotalPrice;
+      cart.items[existingItemIndex].totalPriceML += MLtotalPrice;
     } else {
       cart.items.push({
         _id: item._id,
         image: item.image,
         title: item.title,
-        price: item.price,
-        quantity: quantityNum,
-        totalPrice: totalPrice,
+        Lprice: item.Lprice,
+        MLprice: item.MLprice,
+        MLquantity: quantityMLNum,
+        Lquantity: quantityLNum,
+        totalPriceL: LtotalPrice,
+        totalPriceML: MLtotalPrice,
       });
     }
 
-    cart.totalPrice += totalPrice; // add the new totalPrice to the existing totalPrice of the cart
-
-    cart.totalQuantity = (cart.totalQuantity || 0) + quantityNum; // add the new quantity to the existing totalQuantity of the cart
+    cart.totalPrice += totalPrice;
+    cart.totalQuantity += totalQuantity;
     await cart.save();
 
     return res.status(200).json({ cart, success: true });
