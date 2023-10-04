@@ -13,7 +13,10 @@
   margin-top: 10px;
   margin-right: 10px;
 }
-
+.goback svg {
+  height: 20px;
+  width: 24px;
+}
 .Signupbox {
   height: 450px;
   width: 320px;

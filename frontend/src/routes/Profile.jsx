@@ -150,7 +150,7 @@ const Profile = () => {
                 </i>
               )}
               <div>
-                <h3>Username:</h3>{" "}
+                <h4>Username:</h4>{" "}
                 <textarea
                   onChange={handleUserChange}
                   defaultValue={user.name}
@@ -158,7 +158,7 @@ const Profile = () => {
                 />
               </div>
               <div>
-                <h3>Email:</h3>
+                <h4>Email:</h4>
                 <textarea
                   onChange={handleUserChange}
                   defaultValue={user.email}
@@ -166,7 +166,7 @@ const Profile = () => {
                 />
               </div>
               <div>
-                <h3>Old Password:</h3>
+                <h4>Old Password:</h4>
                 <textarea
                   type="text"
                   onChange={handleUserChange}
@@ -175,7 +175,7 @@ const Profile = () => {
                 />
               </div>
               <div>
-                <h3>New Password:</h3>
+                <h4>New Password:</h4>
                 <textarea
                   type="text"
                   onChange={handleUserChange}
@@ -184,7 +184,7 @@ const Profile = () => {
                 />
               </div>
               <div>
-                <h3>Address:</h3>
+                <h4>Address:</h4>
                 <textarea
                   onChange={handleUserChange}
                   defaultValue={user.address}
@@ -192,7 +192,7 @@ const Profile = () => {
                 />
               </div>{" "}
               <div>
-                <h3>Phone Number:</h3>
+                <h4>Phone Number:</h4>
                 <textarea
                   onChange={handleUserChange}
                   defaultValue={user.phoneNumber}

@@ -42,30 +42,34 @@
   justify-content: center;
 }
 .itemCard {
+  padding-top: 5px;
   width: 200px;
+  gap: 5px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 5px;
+  justify-content: space-around;
+  border: 1px solid #0000001a;
+  align-items: center;
+  border-radius: 3px;
   background-color: #f2fce933;
+  box-shadow: 5px 2px 9px #0000001a;
 }
 .itemImage {
+  width: 150px;
   object-fit: cover;
-  height: 200px;
-  border-radius: 5px 5px 5px 0px;
-}
-/* .itemName {
-  font-size: 20px;
-} */
-.content {
-  overflow: hidden;
-  line-height: 1.2em;
-  height: 2.4em;
+  height: 150px;
+  border-radius: 50%;
 }
 
-.expanded.content {
-  height: auto;
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px;
+  width: 95%;
 }
+
+
 
 .show-more {
   cursor: pointer;
@@ -88,15 +92,24 @@
     padding-left: 10px;
     padding-right: 10px;
   }
-  .itemCard {
-    width: 150px;
-  }
+ 
   .itemImage {
     width: 150px;
     height: 150px;
   }
 }
 
+@media only screen and (max-width: 450px) {
+ 
+ .itemCard {
+  width: 165px;
+}
+.itemImage {
+  height: 142px;
+  padding: 5px;
+  width: 140px;
+}
+}
 @media only screen and (max-width: 350px) {
   .Items {
     padding-left: 2px;
@@ -106,7 +119,7 @@
     width: 130px;
   }
   .itemImage {
-    width: 130px;
-    height: 130px;
+    width: 120px;
+    height: 120px;
   }
 }

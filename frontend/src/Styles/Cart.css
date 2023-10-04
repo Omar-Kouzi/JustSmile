@@ -35,15 +35,22 @@
 }
 .cartItemDescription img {
   height: 100px;
+  width: 100px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 .cartItemQuantityEdit {
   width: 15vw;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 .cartItemQuantityEdit p {
   border: 1px solid;
   padding: 3px 7px;
+}
+.cartItemQuantityEdit input{
+  width: 20px;
+  padding: 5px;
 }
 .cartItemPrice {
   width: 20vw;
@@ -86,8 +93,9 @@
   position: absolute;
   height: 199px;
   width: 70vw;
-  margin-top: 10vh;
   border: solid;
+  align-self: center;
+  justify-self: center;
 }
 
 .deletePopupContent {
@@ -111,7 +119,7 @@
   padding: 5px 10px;
 }
 .deletePopupButtons.yes {
-  background-color: #51FD08;
+  background-color: #51fd08;
   color: black;
 }
 .deletePopupButtons.no {
@@ -123,9 +131,9 @@
   position: absolute;
   height: 199px;
   width: 70vw;
-  margin-top: 10vh;
-  margin-left: 10vw;
+  align-self: center;
   border: solid;
+  justify-self: center;
 }
 
 .orderPopupContent {
@@ -138,7 +146,7 @@
 .orderPopupButtonsContainer {
   display: flex;
   align-self: flex-end;
-  width: 200px;
+  width: 121px;
   justify-content: space-between;
   gap: 5px;
 }
@@ -172,7 +180,6 @@
   }
 }
 @media screen and (max-width: 400px) {
- 
   .cartHeader {
     width: 90vw;
   }

@@ -17,6 +17,8 @@ const Cart = () => {
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [newLQuantity, setNewLQuantity] = useState("0");
+  const [newMLQuantity, setNewMLQuantity] = useState("0");
   const userId = secureLocalStorage.getItem("id");
   const transitionRef = useRef(null);
   const navigate = useNavigate();
@@ -39,36 +41,20 @@ const Cart = () => {
     }
   };
 
-  const increaseQuantity = async (item) => {
+  const updatedQuantity = async (itemId, newLQuantity, newMLQuantity) => {
     try {
       const response = await axios.patch(
-        `https://justsmilebackend.onrender.com/cart/inc/${item}`,
-        {},
+        `https://justsmilebackend.onrender.com/cart/qty/${itemId}`,
+        {
+          Lquantity: newLQuantity,
+          MLquantity: newMLQuantity,
+        },
         {
           headers: {
             Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
           },
         }
       );
-      console.log(response)
-      fetchCart();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const decreaseQuantity = async (item) => {
-    try {
-      const response = await axios.put(
-        `https://justsmilebackend.onrender.com/cart/dec/${item}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
-          },
-        }
-      );
-      console.log(response)
       fetchCart();
     } catch (error) {
       console.log(error);
@@ -76,10 +62,9 @@ const Cart = () => {
   };
 
   const handleDeleteConfirm = async () => {
-    console.log(cart._id);
     try {
       await axios.patch(
-        `https://justsmilebackend.onrender.com/cart/${cart._id}`,
+        `https://justsmilebackend.onrender.com/cart`,
         {},
         {
           headers: {
@@ -125,14 +110,15 @@ const Cart = () => {
     setUserAddress(e.target.value);
   };
 
-  const Form = `Hi there! Here's the list of items I want to Rent:
+  const Form = `Hi there! Here's the list of items I'm to Ordering:
 
   ${cartitems
     .map(
       (item, index) =>
-        `${index + 1}. ${item.title} - ${item.quantity} - ${
-          item.price
-        } USD/Piece `
+        `${index + 1}. ${item.title} - ${item.Lquantity} - ${
+          item.Lprice
+        } USD/Piece
+                              ${item.MLquantity} - ${item.MLprice}USD/Piece`
     )
     .join("\n")}
   
@@ -159,28 +145,71 @@ const Cart = () => {
     <>
       <Header />
       <div className="Cart">
-        <ul className="cartHeader">
-          <li className="cartItemDescriptio">Description</li>
-          <li className="cartItemQuantityEdit">Quantity</li>
-          <li className="cartItemPrice">Price</li>
-        </ul>
-        {cartitems.map((item, index) => (
-          <div className="cartItem" key={index}>
-            <div
-              onClick={() => navigate(`/items/${item._id}`)}
-              className="cartItemDescription"
-            >
-              <img src={item.image} alt="" />
-              <p className="cartItemName">{item.title}</p>
+        <div>
+          <ul className="cartHeader">
+            <li className="cartItemDescriptio">Description</li>
+            <li className="cartItemQuantityEdit">Quantity</li>
+            <li className="cartItemPrice">Price</li>
+          </ul>
+
+          {cartitems.map((item, index) => (
+            <div className="cartItem" key={index}>
+              <div
+                onClick={() => navigate(`/items/${item._id}`)}
+                className="cartItemDescription"
+              >
+                <img src={item.image} alt="" />
+                <p className="cartItemName">{item.title}</p>
+              </div>
+              <div>
+                <div className="cartItemQuantityEdit">
+                  <p>L</p>
+                  <input
+                    type="number"
+                    defaultValue={item.Lquantity}
+                    className="cartItemQuantity"
+                    onChange={(e) => setNewLQuantity(e.target.value)}
+                    onBlur={() =>
+                      updatedQuantity(item._id, newLQuantity, newMLQuantity)
+                    }
+                  />
+                </div>
+                <div className="cartItemQuantityEdit">
+                  <p>ML</p>
+                  <input
+                    type="number"
+                    defaultValue={item.MLquantity}
+                    className="cartItemQuantity"
+                    onChange={(e) => setNewMLQuantity(e.target.value)}
+                    onBlur={() =>
+                      updatedQuantity(item._id, newLQuantity, newMLQuantity)
+                    }
+                  />
+                </div>
+                {/* <div className="cartItemQuantityEdit">
+                <p>L</p>
+                <input
+                  type="number"
+                  defaultValue={item.Lquantity}
+                  className="cartItemQuantity"
+                />
+              </div>
+              <div className="cartItemQuantityEdit">
+                <p>ML</p>
+                <input
+                  type="number"
+                  defaultValue={item.MLquantity}
+                  className="cartItemQuantity"
+                />
+              </div> */}
+              </div>
+              <div>
+                <p className="cartItemPrice">{item.Lprice}$/Litter</p>
+                <p className="cartItemPrice">{item.MLprice}$/300ML</p>
+              </div>
             </div>
-            <div className="cartItemQuantityEdit">
-              <p onClick={() => decreaseQuantity(item._id)}>-</p>
-              <p className="cartItemQuantity">{item.quantity}</p>
-              <p onClick={() => increaseQuantity(item._id)}>+</p>
-            </div>
-            <p className="cartItemPrice">{item.price}$</p>
-          </div>
-        ))}
+          ))}
+        </div>
         <div className="cartInfo">
           <div>
             <div>
@@ -238,15 +267,15 @@ const Cart = () => {
                 <ReactWhatsapp
                   number="+961 81284452"
                   message={Form}
-                  className="orderPopupButtons yes"
+                  className="deletePopupButtons yes"
                 >
-                  ORDER NOW
+                  Order
                 </ReactWhatsapp>
                 <button
-                  className="orderPopupButtons no"
+                  className="deletePopupButtons no"
                   onClick={() => setShowConfirmationDialog(false)}
                 >
-                  Cancel
+                  No
                 </button>
               </div>
             </div>

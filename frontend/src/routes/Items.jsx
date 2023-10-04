@@ -9,16 +9,16 @@ import { useNavigate } from "react-router";
 const Items = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [loadedImages, setLoadedImages] = useState([]);
-  const [expandedItems, setExpandedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
-  // const [ItemId, setItemId] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://justsmilebackend.onrender.com/items");
+        const response = await axios.get(
+          "https://justsmilebackend.onrender.com/items"
+        );
         setItems(response.data);
       } catch (error) {
         console.log("Error fetching data:", error);
@@ -31,7 +31,9 @@ const Items = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("https://justsmilebackend.onrender.com/category");
+        const response = await axios.get(
+          "https://justsmilebackend.onrender.com/category"
+        );
         setCategories(response.data.categories);
       } catch (error) {
         console.log("Error fetching categories:", error);
@@ -54,19 +56,8 @@ const Items = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    setExpandedItems([]);
     secureLocalStorage.setItem("selectedCategory", category);
   };
-
-  // const toggleContent = (index) => {
-  //   if (expandedItems.includes(index)) {
-  //     setExpandedItems((prevExpandedItems) =>
-  //       prevExpandedItems.filter((itemIndex) => itemIndex !== index)
-  //     );
-  //   } else {
-  //     setExpandedItems((prevExpandedItems) => [...prevExpandedItems, index]);
-  //   }
-  // };
 
   const filteredItems =
     selectedCategory === "all"
@@ -74,7 +65,6 @@ const Items = () => {
       : items.filter((item) => item.category === selectedCategory);
 
   const handleItemClick = (ItemId) => {
-    // const ItemId = items[index]._id;
     navigate(`/items/${ItemId}`);
   };
   return (
@@ -127,29 +117,22 @@ const Items = () => {
                 onLoad={() => handleImageLoad(index)}
                 className="itemImage"
               />
-              <h3 className="itemName">{item.title}</h3>
 
-              <div>
-                <div
-                  className={`content ${
-                    expandedItems.includes(index) ? "expanded" : ""
-                  }`}
-                  id={`paragraph-${index}`}
-                >
-                  {item.description}
-                </div>
+              <div className="content">
+                {" "}
+                <h4 className="itemName">{item.title}</h4>
+                <div className="recommendedDescription">{item.description}</div>
+                {item.available ? (
+                  <button
+                    onClick={() => handleItemClick(item._id)}
+                    className="orderButton"
+                  >
+                    Show more
+                  </button>
+                ) : (
+                  <p className="orderButton-Unavailable">Item Unavailable</p>
+                )}
               </div>
-              <p>Price: {item.price}$</p>
-              {item.available ? (
-                <button
-                  onClick={() => handleItemClick(item._id)}
-                  className="orderButton"
-                >
-                  Show more
-                </button>
-              ) : (
-                <p className="orderButton-Unavailable">Item Unavailable</p>
-              )}
             </div>
           ))}
         </section>

@@ -6,7 +6,7 @@ button {
   border: 1px none;
   border-radius: 2px;
   color: #000;
-  background-color: #51FD08;
+  background-color: #51fd08;
   transition-delay: 2ms;
 }
 button:hover {
@@ -19,7 +19,7 @@ button:hover {
     Ubuntu, Cantarell, Helvetica Neue, sans-serif;
   padding: 0;
   margin: 0;
-  /* border: 1px solid; */
+  border: 1px solid;
 }
 *::-webkit-scrollbar {
   display: none;

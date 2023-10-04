@@ -16,7 +16,8 @@ const DashboardItems = () => {
     title: "",
     description: "",
     ingredients: "",
-    price: "",
+    MLprice: "",
+    Lprice: "",
     flavor: "",
     category: "",
     image: null,
@@ -26,7 +27,9 @@ const DashboardItems = () => {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("https://justsmilebackend.onrender.com/items");
+      const response = await axios.get(
+        "https://justsmilebackend.onrender.com/items"
+      );
       setItems(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -42,13 +45,16 @@ const DashboardItems = () => {
           },
         }
       );
+      fetchItems();
     } catch (error) {
       console.log("Error fetching categories:", error);
     }
   };
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("https://justsmilebackend.onrender.com/category");
+      const response = await axios.get(
+        "https://justsmilebackend.onrender.com/category"
+      );
       setCategories(response.data.categories);
     } catch (error) {
       console.log("Error fetching categories:", error);
@@ -92,11 +98,13 @@ const DashboardItems = () => {
     formData.append("title", newItem.title);
     formData.append("description", newItem.description);
     formData.append("ingredients", newItem.ingredients);
-    formData.append("price", newItem.price);
+    formData.append("Lprice", newItem.Lprice);
+    formData.append("MLprice", newItem.MLprice);
     formData.append("flavor", newItem.flavor);
     formData.append("category", newItem.category);
     formData.append("image", newItem.image);
     formData.append("availabe", newItem.available);
+    formData.append("userId", secureLocalStorage.getItem("id"));
 
     try {
       const response = await axios.post(
@@ -211,11 +219,23 @@ const DashboardItems = () => {
                 />
               </div>
               <div className="barJuiceItemFormInput-field">
-                <p>Price</p>
+                <p>LPrice</p>
                 <input
                   type="text"
-                  placeholder="price"
-                  name="price"
+                  placeholder="Lprice"
+                  name="Lprice"
+                  onChange={(e) => {
+                    handleItemChange(e);
+                  }}
+                  className="dashboardItemInput"
+                />
+              </div>{" "}
+              <div className="barJuiceItemFormInput-field">
+                <p>MLPrice</p>
+                <input
+                  type="text"
+                  placeholder="MLprice"
+                  name="MLprice"
                   onChange={(e) => {
                     handleItemChange(e);
                   }}
@@ -277,7 +297,6 @@ const DashboardItems = () => {
                   {item.description}
                 </div>
               </div>
-              <p>Price: {item.price}$</p>
               <button
                 className="dashboardItemDeleteButton"
                 onClick={() => handledeleteItem(item._id)}

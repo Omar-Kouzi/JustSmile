@@ -20,10 +20,26 @@
 .quantityAddToCartButtonContainer {
   display: flex;
   gap: 10px;
+  flex-direction: column;
 }
-.quantityAddToCartButtonContainer button,
-.quantityAddToCartButtonContainer input {
-  padding: 5px 10px;
+.quantityContainer{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: space-between;
+  width: 150px;
+}
+.quantityContainer div{
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
+}
+.quantityContainer input{
+  width: 16px;
+  padding: 5px;
+}
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 .ingredientsContainer {
   display: flex;

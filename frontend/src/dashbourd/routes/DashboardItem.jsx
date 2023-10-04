@@ -139,7 +139,7 @@ const DashboardItem = () => {
                 </i>
               )}
               <div>
-                <h3>Title</h3>
+                <h4>Title</h4>
                 <textarea
                   name="title"
                   value={newItem.title || item.title}
@@ -147,7 +147,7 @@ const DashboardItem = () => {
                 />
               </div>
               <div>
-                <h3>Description</h3>
+                <h4>Description</h4>
                 <textarea
                   name="description"
                   value={newItem.description || item.description}
@@ -155,7 +155,7 @@ const DashboardItem = () => {
                 />
               </div>
               <div>
-                <h3>Flavor</h3>
+                <h4>Flavor</h4>
                 <textarea
                   name="flavor"
                   value={newItem.flavor || item.flavor}
@@ -163,7 +163,7 @@ const DashboardItem = () => {
                 />
               </div>
               <div>
-                <h3>Price</h3>
+                <h4>Price</h4>
                 <textarea
                   name="price"
                   value={newItem.price || item.price}
@@ -171,7 +171,7 @@ const DashboardItem = () => {
                 />
               </div>
               <div>
-                <h3>Category</h3>
+                <h4>Category</h4>
                 <select
                   name="category"
                   value={newItem.category || item.category}
@@ -185,7 +185,7 @@ const DashboardItem = () => {
                 </select>
               </div>
               <div className="ingredientsContainer">
-                <h3>Ingredients:</h3>
+                <h4>Ingredients:</h4>
                 <textarea
                   name="ingredients"
                   value={newItem.ingredients || item.ingredients.join(", ")}
@@ -193,7 +193,7 @@ const DashboardItem = () => {
                 />
               </div>
               <div>
-                <h3>Available</h3>
+                <h4>Available</h4>
                 <select
                   name="available"
                   value={newItem.available || item.available}

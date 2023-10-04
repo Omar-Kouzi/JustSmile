@@ -10,9 +10,9 @@ router.route("/").get(protect, cartController.getCart);
 
 router.route("/").patch(protect, cartController.clearCart);
 
-router.route("/inc/:itemId").patch(protect, cartController.increaseQuantity);
+router.route("/qty/:itemId").patch(protect, cartController.updateQuantity);
 
-router.route("/dec/:itemId").put(protect, cartController.decreaseQuantity);
+// router.route("/dec/:itemId").put(protect, cartController.decreaseQuantity);
 
 
 export default router;

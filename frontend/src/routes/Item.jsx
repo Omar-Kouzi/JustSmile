@@ -9,7 +9,8 @@ import "../Styles/Item.css";
 
 const Item = () => {
   const [item, setItem] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [Lquantity, setLQuantity] = useState("0");
+  const [MLquantity, setMLQuantity] = useState("0");
   const [alert, setAlert] = useState("");
   const [valid, setValid] = useState(false);
   const [addedToCart, setAddedToCart] = useState("");
@@ -42,7 +43,9 @@ const Item = () => {
         "https://justsmilebackend.onrender.com/cart",
         {
           id: itemID.id,
-          quantity: quantity,
+          quantityL: Lquantity,
+          quantityML: MLquantity,
+
           userId: secureLocalStorage.getItem("id"),
         },
         {
@@ -98,21 +101,36 @@ const Item = () => {
               <h2>{item.title}</h2>
               <p>{item.description}</p>
               <div className="ingredientsContainer">
-                <h3>Ingredients:</h3>
+                <h4>Ingredients:</h4>
                 <ul>
                   {item.ingredients.map((ingredient, index) => (
                     <li key={index}>{ingredient}</li>
                   ))}
                 </ul>
               </div>
-
-              <p>Price: {item.price}$</p>
+              <div>
+                <p>Price: {item.Lprice}$/Liter</p>
+                <p>Price: {item.MLprice}$/300ML</p>
+              </div>
               <div className="quantityAddToCartButtonContainer">
-                <input
-                  type="number"
-                  placeholder="Quantity"
-                  onChange={(value) => setQuantity(value.target.value)}
-                />
+                <div>
+                  <div className="quantityContainer">
+                    <p>1L bottles</p>
+                    <input
+                      type="number"
+                      onChange={(value) => setLQuantity(value.target.value)}
+                    />
+                  </div>
+                  <div className="quantityContainer">
+                    <p>300ml bottles</p>
+                    <input
+                      type="number"
+                      min="0"
+                      onChange={(value) => setMLQuantity(value.target.value)}
+                    />
+                  </div>
+                </div>
+
                 <button onClick={() => handleAddToCart()}> Add To cart</button>
               </div>
             </div>

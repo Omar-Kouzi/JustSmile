@@ -323,7 +323,7 @@ const DashboardHome = () => {
                 />{" "}
               </div>
               <div className="recommendedContent">
-                <h3 className="recommendedName">{recommended.title}</h3>
+                <h4 className="recommendedName">{recommended.title}</h4>
 
                 <div>
                   <div
