@@ -216,7 +216,7 @@ const Profile = () => {
             >
               <div className="deletePopup" ref={transitionRef}>
                 <div className="deletePopupContent">
-                  <h1>Are you sure you want delete your account</h1>
+                  <h3>Are you sure you want delete your account</h3>
                   <div className="deletePopupButtonsContainer">
                     <button
                       className="deletePopupButtons yes"

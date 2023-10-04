@@ -29,7 +29,7 @@ function Slideshow() {
   if (slides.length === 0) {
     return (
       <div className="NoSlide">
-        <h1>No slide images available</h1>
+        <h2>No slide images available</h2>
       </div>
     );
   }

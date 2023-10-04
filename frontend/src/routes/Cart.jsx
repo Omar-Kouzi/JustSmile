@@ -262,7 +262,7 @@ const Cart = () => {
         {showConfirmationDialog ? (
           <div className="orderPopup">
             <div className="orderPopupContent">
-              <h1>Are you sure you want to place the order?</h1>
+              <h3>Are you sure you want to place the order?</h3>
               <div className="orderPopupButtonsContainer">
                 <ReactWhatsapp
                   number="+961 81284452"
@@ -292,7 +292,7 @@ const Cart = () => {
         >
           <div className="deletePopup" ref={transitionRef}>
             <div className="deletePopupContent">
-              <h1>Are you sure you want to clear your cart?</h1>
+              <h3>Are you sure you want to clear your cart?</h3>
               <div className="deletePopupButtonsContainer">
                 <button
                   className="deletePopupButtons yes"

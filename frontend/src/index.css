@@ -19,7 +19,7 @@ button:hover {
     Ubuntu, Cantarell, Helvetica Neue, sans-serif;
   padding: 0;
   margin: 0;
-  border: 1px solid;
+  /* border: 1px solid; */
 }
 *::-webkit-scrollbar {
   display: none;
