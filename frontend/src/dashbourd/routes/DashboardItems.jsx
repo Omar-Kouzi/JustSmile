@@ -277,8 +277,32 @@ const DashboardItems = () => {
               />
             </div>
           </form>
-
           {filteredItems.map((item, index) => (
+            <div key={index} className="itemCard">
+              <img
+                src={item.image}
+                alt={item.title}
+                className="itemImage"
+              />
+
+              <div className="content">
+                {" "}
+                <h4 className="itemName">{item.title}</h4>
+                <div className="recommendedDescription">{item.description}</div>
+                {item.available ? (
+                  <button
+                    onClick={() => handleItemClick(item._id)}
+                    className="orderButton"
+                  >
+                    Show more
+                  </button>
+                ) : (
+                  <p className="orderButton-Unavailable">Item Unavailable</p>
+                )}
+              </div>
+            </div>
+          ))}
+          {/* {filteredItems.map((item, index) => (
             <div key={index} className="itemCard">
               <img
                 src={item.image}
@@ -310,7 +334,7 @@ const DashboardItems = () => {
                 Show more
               </button>
             </div>
-          ))}
+          ))} */}
         </section>
       </div>
       <Footer />

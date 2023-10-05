@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Slideshow from "../components/Slidshow";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/loader";
 // import { MdLocationPin } from "react-icons/md";
 // import { AiOutlineLink } from "react-icons/ai";
 const Home = () => {
@@ -12,6 +13,8 @@ const Home = () => {
   const [offers, setOffer] = useState([]);
   const [barSuppliers, setBarSuppliers] = useState([]);
   const [recommendeds, setRecommended] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
   const fetchAbout = async () => {
@@ -70,108 +73,121 @@ const Home = () => {
     const SupplierId = barSuppliers[index]._id;
     navigate(`/supplier/${SupplierId}`);
   };
-  useEffect(() => {
+  const fetchData = () => {
     fetchAbout();
     fetchOffer();
     fetchBarSupplier();
     fetchRecommended();
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    fetchData();
   }, []);
 
   return (
     <>
+      {" "}
       <Header />
-      <div>
-        <Slideshow />
-
-        <div className="about">
-          <section className="aboutContent">
-            <h1>About us</h1>
-            <p>{about.about} </p>
-          </section>
-          <section>
-            <img src={about.image} className="aboutImage" alt="owner" />
-          </section>
+      {isLoading ? (
+        <div className="LoaderWrapper">
+          <Loader />
         </div>
-        <div className="recommended">
-          <h2>Our Recommendations </h2>
-          <div className="mostRecommended">
-            {recommendeds.map((recommended, index) => (
-              <div key={index} className="recommendedCard">
-                <img
-                  src={recommended.image}
-                  alt={recommended.title}
-                  className="recommendedImage"
-                />
-                <div className="recommendedContent">
-                  <h4 className="recommendedName">{recommended.title}</h4>
+      ) : (
+        <div>
+          <Slideshow />
 
-                  <div>
-                    <div
-                      className="recommendedDescription"
-                      id={`paragraph-${index}`}
-                    >
-                      {recommended.description}
+          <div className="about">
+            {" "}
+            <section className="aboutContent">
+              <h1>About us</h1>
+
+              <p>{about.about} </p>
+            </section>
+            <section>
+              <img src={about.image} className="aboutImage" alt="owner" />
+            </section>
+          </div>
+          <div className="recommended">
+            <h2>Our Recommendations </h2>
+            <div className="mostRecommended">
+              {recommendeds.map((recommended, index) => (
+                <div key={index} className="recommendedCard">
+                  <img
+                    src={recommended.image}
+                    alt={recommended.title}
+                    className="recommendedImage"
+                  />
+                  <div className="recommendedContent">
+                    <h4 className="recommendedName">{recommended.title}</h4>
+
+                    <div>
+                      <div
+                        className="recommendedDescription"
+                        id={`paragraph-${index}`}
+                      >
+                        {recommended.description}
+                      </div>
                     </div>
-                  </div>
-                  <p>Price: {recommended.price}$</p>
-                  <button
-                    onClick={() => handleShowMoreItem(index)}
-                    className="orderButton"
-                  >
-                    Show more
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="barJuiceSuppliers">
-          <h2>Bar Juice Suppliers </h2>
-          <div className="barJuiceSuppliersCarousel">
-            {barSuppliers.map((supplier, index) => (
-              <div key={index} className="barJuiceSuppliersCard">
-                <div className="barJuiceSuppliersContent">
-                  <h2>{supplier.title}</h2>
-                  <p>{supplier.description}</p>
-                  <button onClick={() => handleShowMoreSupplier(index)}>
-                    Show more
-                  </button>
-                </div>
-
-                <img
-                  src={supplier.image}
-                  alt=""
-                  className="barJuiceSuppliersImage"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="offers">
-          <h2>Offers </h2>
-          <div className="mostOffers">
-            {offers.length > 0 ? (
-              offers.map((offer, index) => (
-                <div key={index} className="offerCard">
-                  <div className="offerContent">
-                    <h2>{offer.title}</h2>
-                    <p className="offerDiscription">{offer.description}</p>
-                    <p>Just for the price of: {offer.price}$</p>
-                    <button onClick={() => handleShowMoreOffer(index)}>
-                      show more
+                    <p>Price: {recommended.price}$</p>
+                    <button
+                      onClick={() => handleShowMoreItem(index)}
+                      className="orderButton"
+                    >
+                      Show more
                     </button>
                   </div>
-                  <img src={offer.image} alt="" className="offerImage" />
                 </div>
-              ))
-            ) : (
-              <div>
-                <p className="NoOffer">There aren't any Offers now</p>
-              </div>
-            )}
+              ))}
+            </div>
+          </div>
+          <div className="barJuiceSuppliers">
+            <h2>Bar Juice Suppliers </h2>
+            <div className="barJuiceSuppliersCarousel">
+              {barSuppliers.map((supplier, index) => (
+                <div key={index} className="barJuiceSuppliersCard">
+                  <div className="barJuiceSuppliersContent">
+                    <h2>{supplier.title}</h2>
+                    <p>{supplier.description}</p>
+                    <button onClick={() => handleShowMoreSupplier(index)}>
+                      Show more
+                    </button>
+                  </div>
+
+                  <img
+                    src={supplier.image}
+                    alt=""
+                    className="barJuiceSuppliersImage"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="offers">
+            <h2>Offers </h2>
+            <div className="mostOffers">
+              {offers.length > 0 ? (
+                offers.map((offer, index) => (
+                  <div key={index} className="offerCard">
+                    <div className="offerContent">
+                      <h2>{offer.title}</h2>
+                      <p className="offerDiscription">{offer.description}</p>
+                      <p>Just for the price of: {offer.price}$</p>
+                      <button onClick={() => handleShowMoreOffer(index)}>
+                        show more
+                      </button>
+                    </div>
+                    <img src={offer.image} alt="" className="offerImage" />
+                  </div>
+                ))
+              ) : (
+                <div>
+                  <p className="NoOffer">There aren't any Offers now</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <Footer />
     </>
   );

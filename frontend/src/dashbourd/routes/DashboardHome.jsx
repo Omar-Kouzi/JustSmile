@@ -118,6 +118,8 @@ const DashboardHome = () => {
           },
         }
       );
+      console.log("click");
+      console.log(res);
       fetchRecommended();
     } catch (err) {
       console.error(err);
@@ -333,7 +335,6 @@ const DashboardHome = () => {
                     {recommended.description}
                   </div>
                 </div>
-                <p>Price: {recommended.price}$</p>
                 <button
                   onClick={() => handleDeleteRecommended(index)}
                   className="recommendedDeleteButton"

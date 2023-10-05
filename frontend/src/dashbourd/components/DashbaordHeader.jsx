@@ -25,17 +25,19 @@ const DashboardHeader = () => {
             )}`
           );
           setIsAdmin(response.data.role);
-          console.log(response.data.role);
         } catch (error) {}
       };
       fetchUser();
     } else {
       navigate("/login");
     }
-    if (isAdmin != "admin") {
+  }, []);
+  useEffect(() => {
+    if (isAdmin === "user") {
       navigate("/");
     }
-  }, []);
+  }, [isAdmin]);
+
   return (
     <>
       <section className={`Header ${activeClass ? "anotherClass" : ""}`}>

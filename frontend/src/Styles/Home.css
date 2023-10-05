@@ -1,7 +1,11 @@
 .carousel {
   height: 70vh;
 }
-
+.gif{
+  background:url("https://i.gifer.com/K9iV.gif") no-repeat ;
+  width: 100vw;
+  position: absolute;
+}
 .leaflet-container {
   height: 300px;
   width: 300px;
