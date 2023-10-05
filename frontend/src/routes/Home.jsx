@@ -128,7 +128,6 @@ const Home = () => {
                         {recommended.description}
                       </div>
                     </div>
-                    <p>Price: {recommended.price}$</p>
                     <button
                       onClick={() => handleShowMoreItem(index)}
                       className="orderButton"
