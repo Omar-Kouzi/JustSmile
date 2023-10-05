@@ -32,7 +32,6 @@ const postRecommended = asyncHandler(async (req, res) => {
       _id: item._id,
       description: item.description,
       title: item.title,
-      price: item.price,
       image: item.image,
     });
 
