@@ -42,16 +42,16 @@
 .cartItemQuantityEdit {
   width: 15vw;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 }
-.cartItemQuantityEdit p {
+.cartItemQuantityEdit p,
+.cartItemQuantityEdit input {
   border: 1px solid;
   padding: 3px 7px;
-}
-.cartItemQuantityEdit input{
   width: 20px;
-  padding: 5px;
+  text-align: center;
 }
+
 .cartItemPrice {
   width: 20vw;
   text-align: center;

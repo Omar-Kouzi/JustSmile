@@ -12,24 +12,28 @@ const DashboardHeader = () => {
   const handleToggleClass = () => {
     setActiveClass((prevActiveClass) => !prevActiveClass);
   };
-  const fetchUser = async () => {
-    try {
-      const response = await axios.get(
-        `https://justsmilebackend.onrender.com/user/${secureLocalStorage.getItem(
-          "id"
-        )}`
-      );
-      setIsAdmin(response.data.role);
-      console.log(response.data.role);
-    } catch (error) {}
-  };
+
   useEffect(() => {
     const id = secureLocalStorage.getItem("id");
 
-    if (!id || isAdmin !== "admin") {
-      navigate("/login");
-    } else {
+    if (id) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(
+            `https://justsmilebackend.onrender.com/user/${secureLocalStorage.getItem(
+              "id"
+            )}`
+          );
+          setIsAdmin(response.data.role);
+          console.log(response.data.role);
+        } catch (error) {}
+      };
       fetchUser();
+    } else {
+      navigate("/login");
+    }
+    if (isAdmin != "admin") {
+      navigate("/");
     }
   }, []);
   return (
