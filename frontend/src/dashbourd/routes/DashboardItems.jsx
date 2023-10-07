@@ -70,8 +70,7 @@ const DashboardItems = () => {
       ? items
       : items.filter((item) => item.category === selectedCategory);
 
-  const handleItemClick = (index) => {
-    const ItemId = items[index]._id;
+  const handleItemClick = (ItemId) => {
     navigate(`/dashboard/items/${ItemId}`);
   };
 
@@ -283,16 +282,18 @@ const DashboardItems = () => {
                 {" "}
                 <h4 className="itemName">{item.title}</h4>
                 <div className="recommendedDescription">{item.description}</div>
-                {item.available ? (
-                  <button
-                    onClick={() => handleItemClick(item._id)}
-                    className="orderButton"
-                  >
-                    Show more
-                  </button>
-                ) : (
-                  <p className="orderButton-Unavailable">Item Unavailable</p>
-                )}
+                <button
+                  className="dashboardItemDeleteButton"
+                  onClick={() => handledeleteItem(item._id)}
+                >
+                  delete
+                </button>
+                <button
+                  onClick={() => handleItemClick(item._id)}
+                  className="orderButton"
+                >
+                  Show more
+                </button>
               </div>
             </div>
           ))}

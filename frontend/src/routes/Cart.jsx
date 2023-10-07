@@ -244,21 +244,36 @@ const Cart = () => {
             </div>
           </div>
           <div className="cartButtons">
-            <button
-              onClick={() => setShowConfirmationDialog(true)}
-              className="purchase-button"
-            >
-              ORDER NOW
-            </button>
-
-            <button
-              onClick={() => handleDeleteClick()}
-              className="clearCartButton"
-            >
-              Clear Cart
-            </button>
+            {cartitems.length > 0 ? (
+              <>
+                {userAddress.trim() !== "" ? (
+                  <button
+                    onClick={() => setShowConfirmationDialog(true)}
+                    className="purchase-button"
+                  >
+                    ORDER NOW
+                  </button>
+                ) : (
+                  <p>
+                    Please enter your delivery address before placing an order
+                  </p>
+                )}
+              </>
+            ) : (
+              <p>Can't order with an empty cart</p>
+            )}
+            {cartitems.length > 0 ? (
+              <button
+                onClick={() => handleDeleteClick()}
+                className="clearCartButton"
+              >
+                Clear Cart
+              </button>
+            ) : (
+              <p></p>
+            )}
           </div>
-        </div>{" "}
+        </div>
         {showConfirmationDialog ? (
           <div className="orderPopup">
             <div className="orderPopupContent">
