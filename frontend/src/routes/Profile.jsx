@@ -40,43 +40,30 @@ const Profile = () => {
   };
 
   const handleUserChange = (e) => {
-    if (e.target.name === "image" && e.target.files.length > 0) {
-      setNewUser({
-        ...newUser,
-        [e.target.name]: e.target.files[0],
-      });
-    } else {
-      setNewUser({
-        ...newUser,
-        [e.target.name]: e.target.value,
-      });
-    }
+    setNewUser({
+      ...newUser,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handlePatchUser = async () => {
-    console.log(newUser);
-    const formData = new FormData();
-    formData.append("name", newUser.name || user.name);
-    formData.append("email", newUser.email || user.email);
-    formData.append("password", newUser.password || user.password);
-    formData.append("oldPassword", newUser.oldPassword);
-    formData.append("address", newUser.address || user.address);
-    formData.append("phoneNumber", newUser.phoneNumber || user.phoneNumber);
-    formData.append("id", userId.id);
-
     try {
       const res = await axios.patch(
-        `https://justsmilebackend.onrender.com/user/`,
-        formData,
+        `http://localhost:1111/user/`,
+        {
+          name: newUser.name,
+          email: newUser.email,
+          password: newUser.password,
+          oldPassword: newUser.oldPassword,
+          address: newUser.address,
+          phoneNumber: newUser.phoneNumber,
+        },
         {
           headers: {
             Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
-            "Content-Type": "multipart/form-data",
           },
         }
       );
-
-      fetchUser();
 
       if (res.data.message) {
         setUpdateSuccess(true);
@@ -85,8 +72,9 @@ const Profile = () => {
       } else {
         setUpdateSuccess(true);
         setValid(true);
-        setAlert("Item updated successfully");
+        setAlert("User updated successfully");
       }
+      fetchUser();
     } catch (err) {
       console.error(err);
     }

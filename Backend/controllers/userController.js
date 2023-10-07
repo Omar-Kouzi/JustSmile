@@ -90,11 +90,11 @@ const login = asyncHandler(async (req, res) => {
 const updateUserProfile = asyncHandler(async (req, res) => {
   const id = req.user.id;
   const user = await User.findById(id);
-
   if (!user) {
     return res.status(200).json({ message: "User not found", success: false });
   }
-  console.log(req.body);
+
+  console.log("body",req.body);
   if (req.body.oldPassword) {
     const isPasswordMatch = await bcrypt.compare(
       req.body.oldPassword,

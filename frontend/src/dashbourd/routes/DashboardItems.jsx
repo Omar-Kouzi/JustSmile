@@ -10,7 +10,6 @@ const DashboardItems = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [categories, setCategories] = useState([]);
 
-  const [expandedItems, setExpandedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({
     title: "",
@@ -63,7 +62,6 @@ const DashboardItems = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    setExpandedItems([]);
     secureLocalStorage.setItem("selectedCategory", category);
   };
 
@@ -279,11 +277,7 @@ const DashboardItems = () => {
           </form>
           {filteredItems.map((item, index) => (
             <div key={index} className="itemCard">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="itemImage"
-              />
+              <img src={item.image} alt={item.title} className="itemImage" />
 
               <div className="content">
                 {" "}
@@ -302,39 +296,6 @@ const DashboardItems = () => {
               </div>
             </div>
           ))}
-          {/* {filteredItems.map((item, index) => (
-            <div key={index} className="itemCard">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="dashboardItemImage"
-              />
-              <p className="itemName">{item.title}</p>
-
-              <div>
-                <div
-                  className={`content ${
-                    expandedItems.includes(index) ? "expanded" : ""
-                  }`}
-                  id={`paragraph-${index}`}
-                >
-                  {item.description}
-                </div>
-              </div>
-              <button
-                className="dashboardItemDeleteButton"
-                onClick={() => handledeleteItem(item._id)}
-              >
-                delete
-              </button>
-              <button
-                onClick={() => handleItemClick(index)}
-                className="orderButton"
-              >
-                Show more
-              </button>
-            </div>
-          ))} */}
         </section>
       </div>
       <Footer />

@@ -1,15 +1,11 @@
 .ErrorMessageUserUpdate {
-    position: absolute;
     background-color: rgb(167, 252, 167);
-    margin-bottom: 443px;
     padding: 5px;
     border-radius: 4px;
 }
   
   .SuccessMessageUserUpdate {
-    position: absolute;
     background-color: rgb(167, 252, 167);
-    margin-bottom: 443px;
     padding: 5px;
     border-radius: 4px;
 }
