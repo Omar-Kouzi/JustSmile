@@ -6,6 +6,7 @@ import secureLocalStorage from "react-secure-storage";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../Styles/Item.css";
+import Loader from "../components/loader";
 
 const Offer = () => {
   const [offer, setOffer] = useState("");
