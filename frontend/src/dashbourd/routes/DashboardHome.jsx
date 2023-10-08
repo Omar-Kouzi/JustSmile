@@ -6,8 +6,11 @@ import "../dashbaordStyles/DahboardHome.css";
 import Header from "../../components/Header";
 import DashboardHeader from "../components/DashbaordHeader";
 import Footer from "../../components/Footer";
+import Loader from "../../components/loader";
 
 const DashboardHome = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   const [about, setAbout] = useState("");
   const [newAbout, setNewAbout] = useState(about.about);
   const [aboutImg, setImg] = useState("");
@@ -282,278 +285,305 @@ const DashboardHome = () => {
     const SupplierId = barSuppliers[index]._id;
     navigate(`/supplier/${SupplierId}`);
   };
+  const fetchData = async () => {
+    const startTime = Date.now();
+
+    try {
+      await Promise.all([
+        fetchAbout(),
+        fetchOffer(),
+        fetchItems(),
+        fetchBarSupplier(),
+        fetchRecommended(),
+      ]);
+      const elapsedTime = Date.now() - startTime;
+      const minimumDuration = 3000;
+
+      if (elapsedTime < minimumDuration) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, minimumDuration - elapsedTime);
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    fetchOffer();
-    fetchAbout();
-    fetchRecommended();
-    fetchItems();
-    fetchBarSupplier();
+    fetchData();
   }, []);
   return (
     <>
       <Header />
       <DashboardHeader />
-
-      <div className="about">
-        <section className="aboutContent">
-          <h1>About us</h1>
-          <textarea
-            type="text"
-            onChange={handleAboutChange}
-            defaultValue={about.about}
-            className="aboutdashboardtext"
-          >
-            {about.about}
-          </textarea>
-          <button onClick={UpdateAbout}>Update About</button>
-        </section>{" "}
-        <div className="aboutdashboardimage">
-          <img src={about.image} alt="" />
-          <input type="file" onChange={handleImgChange} />
+      {isLoading ? (
+        <div className="LoaderWrapper">
+          <Loader />
         </div>
-      </div>
-      <div className="recommended">
-        <h2>Our Recommendations </h2>
-        <div className="mostRecommended">
-          {recommendeds.map((recommended, index) => (
-            <div key={index} className="recommendedCard">
-              <div>
-                <img
-                  src={recommended.image}
-                  alt={recommended.title}
-                  className="recommendedImage"
-                />{" "}
-              </div>
-              <div className="recommendedContent">
-                <h4 className="recommendedName">{recommended.title}</h4>
+      ) : (
+        <div>
+          <div className="about">
+            <section className="aboutContent">
+              <h1>About us</h1>
+              <textarea
+                type="text"
+                onChange={handleAboutChange}
+                defaultValue={about.about}
+                className="aboutdashboardtext"
+              ></textarea>
+              <button onClick={UpdateAbout}>Update About</button>
+            </section>{" "}
+            <div className="aboutdashboardimage">
+              <img src={about.image} alt="" />
+              <input type="file" onChange={handleImgChange} />
+            </div>
+          </div>
+          <div className="recommended">
+            <h2>Our Recommendations </h2>
+            <div className="mostRecommended">
+              {recommendeds.map((recommended, index) => (
+                <div key={index} className="recommendedCard">
+                  <div>
+                    <img
+                      src={recommended.image}
+                      alt={recommended.title}
+                      className="recommendedImage"
+                    />{" "}
+                  </div>
+                  <div className="recommendedContent">
+                    <h4 className="recommendedName">{recommended.title}</h4>
 
-                <div>
-                  <div
-                    className="recommendedDescription"
-                    id={`paragraph-${index}`}
-                  >
-                    {recommended.description}
+                    <div>
+                      <div
+                        className="recommendedDescription"
+                        id={`paragraph-${index}`}
+                      >
+                        {recommended.description}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteRecommended(index)}
+                      className="recommendedDeleteButton"
+                    >
+                      delete
+                    </button>
+                    <button
+                      onClick={() => handleItemClick(index)}
+                      className="orderButton"
+                    >
+                      Show more
+                    </button>
                   </div>
                 </div>
-                <button
-                  onClick={() => handleDeleteRecommended(index)}
-                  className="recommendedDeleteButton"
-                >
-                  delete
-                </button>
-                <button
-                  onClick={() => handleItemClick(index)}
-                  className="orderButton"
-                >
-                  Show more
-                </button>
-              </div>
-            </div>
-          ))}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handlePostRecommended();
-            }}
-            className="recommendedDashboardForm"
-          >
-            <select
-              id="itemSelect"
-              name="item"
-              onChange={(e) => setSelectedItem(e.target.value)}
-              value={selectedItem}
-            >
-              <option value="">Select an item</option>
-              {filteredItems.map((item, index) => (
-                <option key={index} value={item._id}>
-                  {item.title}
-                </option>
               ))}
-            </select>
-            <button type="submit">Create Recommended</button>
-          </form>
-        </div>
-      </div>
-      <div className="barJuiceSuppliers">
-        <h2>Bar Juice Suppliers </h2>
-        <div className="barJuiceSuppliersCarousel">
-          {barSuppliers.map((supplier, index) => (
-            <div key={index} className="barJuiceSuppliersCard">
-              <div className="barJuiceSuppliersContent">
-                <h2>{supplier.title}</h2>
-                <p>{supplier.description}</p>
-                <button onClick={() => handleShowMoreSupplier(index)}>
-                  show more
-                </button>
-                <button onClick={() => handleDeleteSupplier(supplier._id)}>
-                  Delete
-                </button>
-              </div>
-
-              <img
-                src={supplier.image}
-                alt=""
-                className="barJuiceSuppliersImage"
-              />
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handlePostRecommended();
+                }}
+                className="recommendedDashboardForm"
+              >
+                <select
+                  id="itemSelect"
+                  name="item"
+                  onChange={(e) => setSelectedItem(e.target.value)}
+                  value={selectedItem}
+                >
+                  <option value="">Select an item</option>
+                  {filteredItems.map((item, index) => (
+                    <option key={index} value={item._id}>
+                      {item.title}
+                    </option>
+                  ))}
+                </select>
+                <button type="submit">Create Recommended</button>
+              </form>
             </div>
-          ))}
-          <form action="#" className="barJuiceSupplierForm">
-            <div className="barJuiceSupplierFormInputs">
-              <div className="barJuiceSupplierFormInput-field">
-                <p>Title</p>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  placeholder="title"
-                  onChange={(e) => {
-                    handleSupplierChange(e);
-                  }}
-                />
-              </div>
-              <div className="barJuiceSupplierFormInput-field">
-                <p>Description</p>
-                <input
-                  type="text"
-                  id="description"
-                  name="description"
-                  placeholder="description"
-                  onChange={(e) => {
-                    handleSupplierChange(e);
-                  }}
-                />
-              </div>
-              <div className="barJuiceSupplierFormInput-field">
-                <p>Location</p>
-                <input
-                  type="text"
-                  placeholder="location"
-                  name="location"
-                  onChange={(e) => {
-                    handleSupplierChange(e);
-                  }}
-                />
-              </div>
-              <div className="barJuiceSupplierFormInput-field">
-                <p>Links</p>
-                <textarea
-                  type="text"
-                  placeholder={`Example for how to input the [{ "title": "Link 1 Title",
+          </div>
+          <div className="barJuiceSuppliers">
+            <h2>Bar Juice Suppliers </h2>
+            <div className="barJuiceSuppliersCarousel">
+              {barSuppliers.map((supplier, index) => (
+                <div key={index} className="barJuiceSuppliersCard">
+                  <div className="barJuiceSuppliersContent">
+                    <h2>{supplier.title}</h2>
+                    <p>{supplier.description}</p>
+                    <button onClick={() => handleShowMoreSupplier(index)}>
+                      show more
+                    </button>
+                    <button onClick={() => handleDeleteSupplier(supplier._id)}>
+                      Delete
+                    </button>
+                  </div>
+
+                  <img
+                    src={supplier.image}
+                    alt=""
+                    className="barJuiceSuppliersImage"
+                  />
+                </div>
+              ))}
+              <form action="#" className="barJuiceSupplierForm">
+                <div className="barJuiceSupplierFormInputs">
+                  <div className="barJuiceSupplierFormInput-field">
+                    <p>Title</p>
+                    <input
+                      type="text"
+                      id="title"
+                      name="title"
+                      placeholder="title"
+                      onChange={(e) => {
+                        handleSupplierChange(e);
+                      }}
+                    />
+                  </div>
+                  <div className="barJuiceSupplierFormInput-field">
+                    <p>Description</p>
+                    <input
+                      type="text"
+                      id="description"
+                      name="description"
+                      placeholder="description"
+                      onChange={(e) => {
+                        handleSupplierChange(e);
+                      }}
+                    />
+                  </div>
+                  <div className="barJuiceSupplierFormInput-field">
+                    <p>Location</p>
+                    <input
+                      type="text"
+                      placeholder="location"
+                      name="location"
+                      onChange={(e) => {
+                        handleSupplierChange(e);
+                      }}
+                    />
+                  </div>
+                  <div className="barJuiceSupplierFormInput-field">
+                    <p>Links</p>
+                    <textarea
+                      type="text"
+                      placeholder={`Example for how to input the [{ "title": "Link 1 Title",
                   "link": "Link 1 URL" },{ "title": "Link 2 Title",
                   "link": "Link 2 URL" },{ "title": "Link 3 Title",
                   "link": "Link 3 URL" } ]`}
-                  name="links"
-                  onChange={(e) => {
-                    handleSupplierChange(e);
-                  }}
-                />
-                <p className="barJuiceSupplierFormExample">
-                  Example for how to input the &#91; &#123; "title": "Link 1
-                  Title", "link": "Link 1 URL" &#125;, &#123; "title": "Link 2
-                  Title", "link": "Link 2 URL" &#125;, &#123; "title": "Link 3
-                  Title", "link": "Link 3 URL" &#125; &#93;
-                </p>
-              </div>
-              <div className="barJuiceSupplierFormInput-field">
-                <p>Image</p>
-                <input
-                  type="file"
-                  accept="image/*"
-                  name="image"
-                  onChange={(e) => {
-                    handleSupplierChange(e);
-                  }}
-                />
-              </div>
+                      name="links"
+                      onChange={(e) => {
+                        handleSupplierChange(e);
+                      }}
+                    />
+                    <p className="barJuiceSupplierFormExample">
+                      Example for how to input the &#91; &#123; "title": "Link 1
+                      Title", "link": "Link 1 URL" &#125;, &#123; "title": "Link
+                      2 Title", "link": "Link 2 URL" &#125;, &#123; "title":
+                      "Link 3 Title", "link": "Link 3 URL" &#125; &#93;
+                    </p>
+                  </div>
+                  <div className="barJuiceSupplierFormInput-field">
+                    <p>Image</p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      name="image"
+                      onChange={(e) => {
+                        handleSupplierChange(e);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="barJuiceSupplierFormInput-Submitfield ">
+                  <input
+                    type="submit"
+                    value="Post a Supplier"
+                    onClick={(e) => handlePostSupplier(e)}
+                  />
+                </div>
+              </form>
             </div>
-            <div className="barJuiceSupplierFormInput-Submitfield ">
-              <input
-                type="submit"
-                value="Post a Supplier"
-                onClick={(e) => handlePostSupplier(e)}
-              />
+          </div>
+          <div className="offers">
+            <h2>Offers </h2>
+            <div className="mostOffers">
+              <form action="#" className="barJuiceSupplierForm">
+                <div className="offerFormInputs">
+                  <div className="barJuiceSupplierFormInput-field">
+                    <p>Title</p>
+                    <input
+                      type="text"
+                      id="title"
+                      name="title"
+                      placeholder="title"
+                      onChange={(e) => {
+                        handleOfferChange(e);
+                      }}
+                    />
+                  </div>
+                  <div className="barJuiceSupplierFormInput-field">
+                    <p>Description</p>
+                    <input
+                      type="text"
+                      id="description"
+                      name="description"
+                      placeholder="description"
+                      onChange={(e) => {
+                        handleOfferChange(e);
+                      }}
+                    />
+                  </div>
+                  <div className="barJuiceSupplierFormInput-field">
+                    <p>Price</p>
+                    <input
+                      type="text"
+                      placeholder="price"
+                      name="price"
+                      onChange={(e) => {
+                        handleOfferChange(e);
+                      }}
+                    />
+                  </div>
+                  <div className="barJuiceSupplierFormInput-field">
+                    <p>Image</p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      name="image"
+                      onChange={(e) => {
+                        handleOfferChange(e);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="  ">
+                  <input
+                    type="submit"
+                    value="Post a Supplier"
+                    onClick={(e) => handlePostOffer(e)}
+                  />
+                </div>
+              </form>
+              {offers.map((offer, index) => (
+                <div key={index} className="offerCard">
+                  <div className="offerContent">
+                    <h2>{offer.title}</h2>
+                    <p className="offerDiscription">{offer.description}</p>
+                    <p>Just for the price of: {offer.price}$</p>
+                    <button onClick={() => handleShowMoreOffer(index)}>
+                      show more
+                    </button>
+                    <button onClick={() => handleDeleteOffer(offer._id)}>
+                      Delete
+                    </button>
+                  </div>
+                  <img src={offer.image} alt="" className="offerImage" />
+                </div>
+              ))}
             </div>
-          </form>
+          </div>
         </div>
-      </div>
-      <div className="offers">
-        <h2>Offers </h2>
-        <div className="mostOffers">
-          <form action="#" className="barJuiceSupplierForm">
-            <div className="offerFormInputs">
-              <div className="barJuiceSupplierFormInput-field">
-                <p>Title</p>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  placeholder="title"
-                  onChange={(e) => {
-                    handleOfferChange(e);
-                  }}
-                />
-              </div>
-              <div className="barJuiceSupplierFormInput-field">
-                <p>Description</p>
-                <input
-                  type="text"
-                  id="description"
-                  name="description"
-                  placeholder="description"
-                  onChange={(e) => {
-                    handleOfferChange(e);
-                  }}
-                />
-              </div>
-              <div className="barJuiceSupplierFormInput-field">
-                <p>Price</p>
-                <input
-                  type="text"
-                  placeholder="price"
-                  name="price"
-                  onChange={(e) => {
-                    handleOfferChange(e);
-                  }}
-                />
-              </div>
-              <div className="barJuiceSupplierFormInput-field">
-                <p>Image</p>
-                <input
-                  type="file"
-                  accept="image/*"
-                  name="image"
-                  onChange={(e) => {
-                    handleOfferChange(e);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="  ">
-              <input
-                type="submit"
-                value="Post a Supplier"
-                onClick={(e) => handlePostOffer(e)}
-              />
-            </div>
-          </form>
-          {offers.map((offer, index) => (
-            <div key={index} className="offerCard">
-              <div className="offerContent">
-                <h2>{offer.title}</h2>
-                <p className="offerDiscription">{offer.description}</p>
-                <p>Just for the price of: {offer.price}$</p>
-                <button onClick={() => handleShowMoreOffer(index)}>
-                  show more
-                </button>
-                <button onClick={() => handleDeleteOffer(offer._id)}>
-                  Delete
-                </button>
-              </div>
-              <img src={offer.image} alt="" className="offerImage" />
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
       <Footer />
     </>
   );

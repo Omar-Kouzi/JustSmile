@@ -6,9 +6,11 @@ import Footer from "../components/Footer";
 import "../Styles/Item.css";
 import { AiOutlineLink } from "react-icons/ai";
 import { MdLocationPin } from "react-icons/md";
+import Loader from "../components/loader";
 
 const Supplier = () => {
   const [supplier, setSupplier] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const supplierId = useParams();
 
   const fetchSupplier = async () => {
@@ -21,41 +23,58 @@ const Supplier = () => {
       console.log("Error fetching data:", error);
     }
   };
+  const fetchData = async () => {
+    const startTime = Date.now();
+
+    try {
+      await Promise.all([fetchSupplier()]);
+      const elapsedTime = Date.now() - startTime;
+      const minimumDuration = 3000;
+
+      if (elapsedTime < minimumDuration) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, minimumDuration - elapsedTime);
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    fetchSupplier();
+    fetchData();
   }, [supplierId.id]);
 
   return (
     <>
       <Header />
-
-      <div>
-        {supplier ? (
-          <div className="item">
-            <img src={supplier.image} alt="item"  />
-            <div className="itemContent">
-              <h2>
-                {supplier.title}
-              </h2>
-              <p>{supplier.description}</p>
-              <p> {supplier.location}</p>
-              <div className="barJuiceSuppliersIcons">
-                {supplier.links.map((link, index) => (
-                  <a key={index} href={link.link} title={link.title}>
-                    {link.title}
-                    <AiOutlineLink />
-                  </a>
-                ))}
-                <a href={supplier.location} target="_blank">
-                  <MdLocationPin />
+      {isLoading ? (
+        <div className="LoaderWrapper">
+          <Loader />
+        </div>
+      ) : (
+        <div className="item">
+          <img src={supplier.image} alt="item" />
+          <div className="itemContent">
+            <h2>{supplier.title}</h2>
+            <p>{supplier.description}</p>
+            <p> {supplier.location}</p>
+            <div className="barJuiceSuppliersIcons">
+              {supplier.links.map((link, index) => (
+                <a key={index} href={link.link} title={link.title}>
+                  {link.title}
+                  <AiOutlineLink />
                 </a>
-              </div>
+              ))}
+              <a href={supplier.location} target="_blank">
+                <MdLocationPin />
+              </a>
             </div>
           </div>
-        ) : (
-          <p>Loading supplier data...</p>
-        )}
-      </div>
+        </div>
+      )}
       <Footer />
     </>
   );

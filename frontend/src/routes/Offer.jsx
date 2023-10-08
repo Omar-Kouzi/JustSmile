@@ -14,6 +14,8 @@ const Offer = () => {
   const [alert, setAlert] = useState("");
   const [valid, setValid] = useState(false);
   const [addedToCart, setAddedToCart] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
   const fetchOffer = async () => {
@@ -26,9 +28,6 @@ const Offer = () => {
       console.log("Error fetching data:", error);
     }
   };
-  useEffect(() => {
-    fetchOffer();
-  }, [offerId.id]);
 
   const handleAddToCart = async () => {
     if (!secureLocalStorage.getItem("token")) {
@@ -63,54 +62,75 @@ const Offer = () => {
       console.error(err);
     }
   };
+  const fetchData = async () => {
+    const startTime = Date.now();
+
+    try {
+      await Promise.all([fetchOffer()]);
+      const elapsedTime = Date.now() - startTime;
+      const minimumDuration = 3000;
+
+      if (elapsedTime < minimumDuration) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, minimumDuration - elapsedTime);
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
+    fetchData();
     let timer;
     if (valid) {
       timer = setTimeout(() => {
         setValid(false);
-      }, 4000);
+      }, 3000);
     }
     return () => clearTimeout(timer);
-  }, [valid]);
+  }, [valid, offerId.id]);
 
   return (
     <>
       <Header />
 
-      <div>
-        {offer ? (
-          <div className="item">
-            <img src={offer.image} alt="item" />
+      {isLoading ? (
+        <div className="LoaderWrapper">
+          <Loader />
+        </div>
+      ) : (
+        <div className="item">
+          <img src={offer.image} alt="item" />
 
-            <div className="itemContent">
-              {valid && (
-                <i
-                  className={
-                    addedToCart ? "SuccessMessageLogin" : "ErrorMessageLogin"
-                  }
-                >
-                  {alert}
-                </i>
-              )}
-              <h2>{offer.title}</h2>
-              <p>{offer.description}</p>
+          <div className="itemContent">
+            {valid && (
+              <i
+                className={
+                  addedToCart ? "SuccessMessageLogin" : "ErrorMessageLogin"
+                }
+              >
+                {alert}
+              </i>
+            )}
+            <h2>{offer.title}</h2>
+            <p>{offer.description}</p>
 
-              <p>Price: {offer.price}$</p>
-              <div className="quantityAddToCartButtonContainer">
-                <input
-                  type="number"
-                  placeholder="Quantity"
-                  onChange={(value) => setQuantity(value.target.value)}
-                />
-                <button onClick={() => handleAddToCart()}> Add To cart</button>
-              </div>
+            <p>Price: {offer.price}$</p>
+            <div className="quantityAddToCartButtonContainer">
+              <input
+                type="number"
+                placeholder="Quantity"
+                onChange={(value) => setQuantity(value.target.value)}
+              />
+              <button onClick={() => handleAddToCart()}> Add To cart</button>
             </div>
           </div>
-        ) : (
-          <p>Loading offer data...</p>
-        )}
-      </div>
+        </div>
+      )}
+
       <Footer />
     </>
   );

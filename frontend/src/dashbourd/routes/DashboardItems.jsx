@@ -6,6 +6,8 @@ import Footer from "../../components/Footer";
 import "../dashbaordStyles/DashboardItems.css";
 import { useNavigate } from "react-router";
 import DashboardHeader from "../components/DashbaordHeader";
+import Loader from "../../components/loader";
+
 const DashboardItems = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [categories, setCategories] = useState([]);
@@ -22,6 +24,8 @@ const DashboardItems = () => {
     image: null,
     available: true,
   });
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
   const fetchItems = async () => {
@@ -120,185 +124,214 @@ const DashboardItems = () => {
       console.log("Error fetching data:", error);
     }
   };
+  const fetchData = async () => {
+    const startTime = Date.now();
+
+    try {
+      await Promise.all([
+        fetchItems(),
+        fetchCategories(),
+      ]);
+      const elapsedTime = Date.now() - startTime;
+      const minimumDuration = 3000;
+
+      if (elapsedTime < minimumDuration) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, minimumDuration - elapsedTime);
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
+    fetchData();
+
     const storedCategory = secureLocalStorage.getItem("selectedCategory");
     if (storedCategory) {
       setSelectedCategory(storedCategory);
     }
   }, []);
-  useEffect(() => {
-    fetchItems();
-    fetchCategories();
-  }, []);
   return (
     <>
       <Header />
-      <DashboardHeader />
-      <div>
-        <section className="CategoriesBar">
-          <div className="CategoriesContainer">
-            <p
-              onClick={() => handleCategoryChange("all")}
-              className={
-                selectedCategory === "all" ? "Category active" : "Category"
-              }
-            >
-              All
-            </p>
-            {categories.map((category, key) => (
+      <DashboardHeader />{" "}
+      {isLoading ? (
+        <div className="LoaderWrapper">
+          <Loader />
+        </div>
+      ) : (
+        <div>
+          <section className="CategoriesBar">
+            <div className="CategoriesContainer">
               <p
-                key={key}
-                onClick={() => handleCategoryChange(category._id)}
+                onClick={() => handleCategoryChange("all")}
                 className={
-                  selectedCategory === category._id
-                    ? "Category active"
-                    : "Category"
+                  selectedCategory === "all" ? "Category active" : "Category"
                 }
               >
-                {category.title}
+                All
               </p>
-            ))}
-          </div>
-        </section>
-        <section className="Items">
-          <form action="#" className="itemCardform">
-            <div className="itemFormInputs">
-              <div className="barJuiceItemFormInput-field">
-                <p>Title</p>
-                <input
-                  className="dashboardItemInput"
-                  type="text"
-                  id="title"
-                  name="title"
-                  placeholder="title"
-                  onChange={(e) => {
-                    handleItemChange(e);
-                  }}
-                />
-              </div>
-              <div className="barJuiceItemFormInput-field">
-                <p>Description</p>
-                <input
-                  type="text"
-                  id="description"
-                  name="description"
-                  placeholder="description"
-                  onChange={(e) => {
-                    handleItemChange(e);
-                  }}
-                  className="dashboardItemInput"
-                />
-              </div>
-              <div className="barJuiceItemFormInput-field">
-                <p>Ingredients</p>
-                <input
-                  type="text"
-                  id="ingredients"
-                  name="ingredients"
-                  placeholder="ingredients"
-                  onChange={(e) => {
-                    handleItemChange(e);
-                  }}
-                  className="dashboardItemInput"
-                />
-              </div>
-              <div className="barJuiceItemFormInput-field">
-                <p>Flavor</p>
-                <input
-                  type="text"
-                  id="flavor"
-                  name="flavor"
-                  placeholder="flavor"
-                  onChange={(e) => {
-                    handleItemChange(e);
-                  }}
-                  className="dashboardItemInput"
-                />
-              </div>
-              <div className="barJuiceItemFormInput-field">
-                <p>LPrice</p>
-                <input
-                  type="text"
-                  placeholder="Lprice"
-                  name="Lprice"
-                  onChange={(e) => {
-                    handleItemChange(e);
-                  }}
-                  className="dashboardItemInput"
-                />
-              </div>{" "}
-              <div className="barJuiceItemFormInput-field">
-                <p>MLPrice</p>
-                <input
-                  type="text"
-                  placeholder="MLprice"
-                  name="MLprice"
-                  onChange={(e) => {
-                    handleItemChange(e);
-                  }}
-                  className="dashboardItemInput"
-                />
-              </div>
-              <select
-                id="itemSelect"
-                name="category"
-                onChange={(e) => {
-                  handleItemChange(e);
-                }}
-                className="dashboardItemInput"
-              >
-                <option value="">Select a category</option>
-                {categories.map((category, index) => (
-                  <option key={index} value={category._id}>
-                    {category.title}
-                  </option>
-                ))}
-              </select>
-              <div className="barJuiceItemFormInput-field">
-                <p>Image</p>
-                <input
-                  type="file"
-                  accept="image/*"
-                  name="image"
-                  onChange={(e) => {
-                    handleItemChange(e);
-                  }}
-                />
-              </div>
+              {categories.map((category, key) => (
+                <p
+                  key={key}
+                  onClick={() => handleCategoryChange(category._id)}
+                  className={
+                    selectedCategory === category._id
+                      ? "Category active"
+                      : "Category"
+                  }
+                >
+                  {category.title}
+                </p>
+              ))}
             </div>
-            <div className="">
-              <input
-                type="submit"
-                value="Post a Item"
-                onClick={(e) => handlePostItem(e)}
-              />
-            </div>
-          </form>
-          {filteredItems.map((item, index) => (
-            <div key={index} className="itemCard">
-              <img src={item.image} alt={item.title} className="itemImage" />
+          </section>
+          <section className="Items">
+            <form action="#" className="itemCardform">
+              <div className="itemFormInputs">
+                <div className="barJuiceItemFormInput-field">
+                  <p>Title</p>
+                  <input
+                    className="dashboardItemInput"
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="title"
+                    onChange={(e) => {
+                      handleItemChange(e);
+                    }}
+                  />
+                </div>
+                <div className="barJuiceItemFormInput-field">
+                  <p>Description</p>
+                  <input
+                    type="text"
+                    id="description"
+                    name="description"
+                    placeholder="description"
+                    onChange={(e) => {
+                      handleItemChange(e);
+                    }}
+                    className="dashboardItemInput"
+                  />
+                </div>
+                <div className="barJuiceItemFormInput-field">
+                  <p>Ingredients</p>
+                  <input
+                    type="text"
+                    id="ingredients"
+                    name="ingredients"
+                    placeholder="ingredients"
+                    onChange={(e) => {
+                      handleItemChange(e);
+                    }}
+                    className="dashboardItemInput"
+                  />
+                </div>
+                <div className="barJuiceItemFormInput-field">
+                  <p>Flavor</p>
+                  <input
+                    type="text"
+                    id="flavor"
+                    name="flavor"
+                    placeholder="flavor"
+                    onChange={(e) => {
+                      handleItemChange(e);
+                    }}
+                    className="dashboardItemInput"
+                  />
+                </div>
+                <div className="barJuiceItemFormInput-field">
+                  <p>LPrice</p>
+                  <input
+                    type="text"
+                    placeholder="Lprice"
+                    name="Lprice"
+                    onChange={(e) => {
+                      handleItemChange(e);
+                    }}
+                    className="dashboardItemInput"
+                  />
+                </div>{" "}
+                <div className="barJuiceItemFormInput-field">
+                  <p>MLPrice</p>
+                  <input
+                    type="text"
+                    placeholder="MLprice"
+                    name="MLprice"
+                    onChange={(e) => {
+                      handleItemChange(e);
+                    }}
+                    className="dashboardItemInput"
+                  />
+                </div>
+                <select
+                  id="itemSelect"
+                  name="category"
+                  onChange={(e) => {
+                    handleItemChange(e);
+                  }}
+                  className="dashboardItemInput"
+                >
+                  <option value="">Select a category</option>
+                  {categories.map((category, index) => (
+                    <option key={index} value={category._id}>
+                      {category.title}
+                    </option>
+                  ))}
+                </select>
+                <div className="barJuiceItemFormInput-field">
+                  <p>Image</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="image"
+                    onChange={(e) => {
+                      handleItemChange(e);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="">
+                <input
+                  type="submit"
+                  value="Post a Item"
+                  onClick={(e) => handlePostItem(e)}
+                />
+              </div>
+            </form>
+            {filteredItems.map((item, index) => (
+              <div key={index} className="itemCard">
+                <img src={item.image} alt={item.title} className="itemImage" />
 
-              <div className="content">
-                {" "}
-                <h4 className="itemName">{item.title}</h4>
-                <div className="recommendedDescription">{item.description}</div>
-                <button
-                  className="dashboardItemDeleteButton"
-                  onClick={() => handledeleteItem(item._id)}
-                >
-                  delete
-                </button>
-                <button
-                  onClick={() => handleItemClick(item._id)}
-                  className="orderButton"
-                >
-                  Show more
-                </button>
+                <div className="content">
+                  {" "}
+                  <h4 className="itemName">{item.title}</h4>
+                  <div className="recommendedDescription">
+                    {item.description}
+                  </div>
+                  <button
+                    className="dashboardItemDeleteButton"
+                    onClick={() => handledeleteItem(item._id)}
+                  >
+                    delete
+                  </button>
+                  <button
+                    onClick={() => handleItemClick(item._id)}
+                    className="orderButton"
+                  >
+                    Show more
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </section>
-      </div>
+            ))}
+          </section>
+        </div>
+      )}
       <Footer />
     </>
   );

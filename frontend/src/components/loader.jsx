@@ -1,10 +1,16 @@
-// import "../Styles/Loader.css";
+import "../Styles/Loader.css";
 const Loader = () => {
   return (
-    <section className="loader">
-     
-     <img src="https://i.gifer.com/K9iV.gif" className="gif" />
+    <section className="LoaderSection">
+       <ul className="loader">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
     </section>
+   
   );
 };
 export default Loader;

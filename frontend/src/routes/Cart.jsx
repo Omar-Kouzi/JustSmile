@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import "../Styles/Cart.css";
 import ReactWhatsapp from "react-whatsapp";
 import { CSSTransition } from "react-transition-group";
+import Loader from "../components/loader";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -20,6 +21,8 @@ const Cart = () => {
   const [newLQuantity, setNewLQuantity] = useState("0");
   const [newMLQuantity, setNewMLQuantity] = useState("0");
   const userId = secureLocalStorage.getItem("id");
+  const [isLoading, setIsLoading] = useState(true);
+
   const transitionRef = useRef(null);
   const navigate = useNavigate();
   const fetchCart = async () => {
@@ -131,202 +134,211 @@ const Cart = () => {
   - Total Price: USD ${totalPrice}
   - Payment method: on delivery
   `;
-  useEffect(() => {
-    const token = secureLocalStorage.getItem("token");
-    const loggedIn = secureLocalStorage.getItem("loggedIn");
-    if (!token || !loggedIn === true) {
-      navigate("/login");
-    }
+  const fetchData = async () => {
+    const startTime = Date.now();
 
-    fetchCart();
+    try {
+      const token = secureLocalStorage.getItem("token");
+      const loggedIn = secureLocalStorage.getItem("loggedIn");
+      if (!token || !loggedIn === true) {
+        navigate("/login");
+      }
+
+      fetchCart();
+      const elapsedTime = Date.now() - startTime;
+      const minimumDuration = 3000;
+
+      if (elapsedTime < minimumDuration) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, minimumDuration - elapsedTime);
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   return (
     <>
       <Header />
-      <div className="Cart">
-        <div>
-          <ul className="cartHeader">
-            <li className="cartItemDescriptio">Description</li>
-            <li className="cartItemQuantityEdit">Quantity</li>
-            <li className="cartItemPrice">Price</li>
-          </ul>
-
-          {cartitems.map((item, index) => (
-            <div className="cartItem" key={index}>
-              <div
-                onClick={() => navigate(`/items/${item._id}`)}
-                className="cartItemDescription"
-              >
-                <img src={item.image} alt="" />
-                <p className="cartItemName">{item.title}</p>
-              </div>
-              <div>
-                <div className="cartItemQuantityEdit">
-                  <p>L</p>
-                  <input
-                    type="number"
-                    defaultValue={item.Lquantity}
-                    className="cartItemQuantity"
-                    onChange={(e) => setNewLQuantity(e.target.value)}
-                    onBlur={() =>
-                      updatedQuantity(item._id, newLQuantity, newMLQuantity)
-                    }
-                  />
-                </div>
-                <div className="cartItemQuantityEdit">
-                  <p>ML</p>
-                  <input
-                    type="number"
-                    defaultValue={item.MLquantity}
-                    className="cartItemQuantity"
-                    onChange={(e) => setNewMLQuantity(e.target.value)}
-                    onBlur={() =>
-                      updatedQuantity(item._id, newLQuantity, newMLQuantity)
-                    }
-                  />
-                </div>
-                {/* <div className="cartItemQuantityEdit">
-                <p>L</p>
-                <input
-                  type="number"
-                  defaultValue={item.Lquantity}
-                  className="cartItemQuantity"
-                />
-              </div>
-              <div className="cartItemQuantityEdit">
-                <p>ML</p>
-                <input
-                  type="number"
-                  defaultValue={item.MLquantity}
-                  className="cartItemQuantity"
-                />
-              </div> */}
-              </div>
-              <div>
-                <p className="cartItemPrice">{item.Lprice}$/Litter</p>
-                <p className="cartItemPrice">{item.MLprice}$/300ML</p>
-              </div>
-            </div>
-          ))}
+      {isLoading ? (
+        <div className="LoaderWrapper">
+          <Loader />
         </div>
-        <div className="cartInfo">
+      ) : (
+        <div className="Cart">
           <div>
+            <ul className="cartHeader">
+              <li className="cartItemDescriptio">Description</li>
+              <li className="cartItemQuantityEdit">Quantity</li>
+              <li className="cartItemPrice">Price</li>
+            </ul>
+
+            {cartitems.map((item, index) => (
+              <div className="cartItem" key={index}>
+                <div
+                  onClick={() => navigate(`/items/${item._id}`)}
+                  className="cartItemDescription"
+                >
+                  <img src={item.image} alt="" />
+                  <p className="cartItemName">{item.title}</p>
+                </div>
+                <div>
+                  <div className="cartItemQuantityEdit">
+                    <p>L</p>
+                    <input
+                      type="number"
+                      defaultValue={item.Lquantity}
+                      className="cartItemQuantity"
+                      onChange={(e) => setNewLQuantity(e.target.value)}
+                      onBlur={() =>
+                        updatedQuantity(item._id, newLQuantity, newMLQuantity)
+                      }
+                    />
+                  </div>
+                  <div className="cartItemQuantityEdit">
+                    <p>ML</p>
+                    <input
+                      type="number"
+                      defaultValue={item.MLquantity}
+                      className="cartItemQuantity"
+                      onChange={(e) => setNewMLQuantity(e.target.value)}
+                      onBlur={() =>
+                        updatedQuantity(item._id, newLQuantity, newMLQuantity)
+                      }
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="cartItemPrice">{item.Lprice}$/Litter</p>
+                  <p className="cartItemPrice">{item.MLprice}$/300ML</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="cartInfo">
             <div>
               <div>
-                <p>Total quantity</p>
-                <p>{cart.totalQuantity}</p>
+                <div>
+                  <p>Total quantity</p>
+                  <p>{cart.totalQuantity}</p>
+                </div>
+                <div>
+                  <p>Total price</p>
+                  <p>{cart.totalPrice}</p>
+                </div>
               </div>
+
               <div>
-                <p>Total price</p>
-                <p>{cart.totalPrice}</p>
+                <p>Phone Number</p>
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  defaultValue={userPhoneNumber}
+                  onChange={handlePhoneNumberChange}
+                />
+              </div>
+
+              <div>
+                <p>Address</p>
+                <input
+                  type="text"
+                  placeholder="Address"
+                  defaultValue={userAddress}
+                  onChange={handleAddressChange}
+                />
               </div>
             </div>
-
-            <div>
-              <p>Phone Number</p>
-              <input
-                type="text"
-                placeholder="Phone Number"
-                defaultValue={userPhoneNumber}
-                onChange={handlePhoneNumberChange}
-              />
-            </div>
-
-            <div>
-              <p>Address</p>
-              <input
-                type="text"
-                placeholder="Address"
-                defaultValue={userAddress}
-                onChange={handleAddressChange}
-              />
+            <div className="cartButtons">
+              {cartitems.length > 0 ? (
+                <>
+                  {userAddress.trim() !== "" ? (
+                    <button
+                      onClick={() => setShowConfirmationDialog(true)}
+                      className="purchase-button"
+                    >
+                      ORDER NOW
+                    </button>
+                  ) : (
+                    <p>
+                      Please enter your delivery address before placing an order
+                    </p>
+                  )}
+                </>
+              ) : (
+                <p>Can't order with an empty cart</p>
+              )}
+              {cartitems.length > 0 ? (
+                <button
+                  onClick={() => handleDeleteClick()}
+                  className="clearCartButton"
+                >
+                  Clear Cart
+                </button>
+              ) : (
+                <p></p>
+              )}
             </div>
           </div>
-          <div className="cartButtons">
-            {cartitems.length > 0 ? (
-              <>
-                {userAddress.trim() !== "" ? (
-                  <button
-                    onClick={() => setShowConfirmationDialog(true)}
-                    className="purchase-button"
+          {showConfirmationDialog ? (
+            <div className="orderPopup">
+              <div className="orderPopupContent">
+                <h3>Are you sure you want to place the order?</h3>
+                <div className="orderPopupButtonsContainer">
+                  <ReactWhatsapp
+                    number="+961 81284452"
+                    message={Form}
+                    className="deletePopupButtons yes"
                   >
-                    ORDER NOW
+                    Order
+                  </ReactWhatsapp>
+                  <button
+                    className="deletePopupButtons no"
+                    onClick={() => setShowConfirmationDialog(false)}
+                  >
+                    No
                   </button>
-                ) : (
-                  <p>
-                    Please enter your delivery address before placing an order
-                  </p>
-                )}
-              </>
-            ) : (
-              <p>Can't order with an empty cart</p>
-            )}
-            {cartitems.length > 0 ? (
-              <button
-                onClick={() => handleDeleteClick()}
-                className="clearCartButton"
-              >
-                Clear Cart
-              </button>
-            ) : (
-              <p></p>
-            )}
-          </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+          <CSSTransition
+            in={showDeletePopup}
+            timeout={300}
+            classNames="deletePopup"
+            unmountOnExit
+            nodeRef={transitionRef} // Assign the ref here
+          >
+            <div className="deletePopup" ref={transitionRef}>
+              <div className="deletePopupContent">
+                <h3>Are you sure you want to clear your cart?</h3>
+                <div className="deletePopupButtonsContainer">
+                  <button
+                    className="deletePopupButtons yes"
+                    onClick={handleDeleteConfirm}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    className="deletePopupButtons no"
+                    onClick={handleDeleteCancel}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            </div>
+          </CSSTransition>
         </div>
-        {showConfirmationDialog ? (
-          <div className="orderPopup">
-            <div className="orderPopupContent">
-              <h3>Are you sure you want to place the order?</h3>
-              <div className="orderPopupButtonsContainer">
-                <ReactWhatsapp
-                  number="+961 81284452"
-                  message={Form}
-                  className="deletePopupButtons yes"
-                >
-                  Order
-                </ReactWhatsapp>
-                <button
-                  className="deletePopupButtons no"
-                  onClick={() => setShowConfirmationDialog(false)}
-                >
-                  No
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
-        <CSSTransition
-          in={showDeletePopup}
-          timeout={300}
-          classNames="deletePopup"
-          unmountOnExit
-          nodeRef={transitionRef} // Assign the ref here
-        >
-          <div className="deletePopup" ref={transitionRef}>
-            <div className="deletePopupContent">
-              <h3>Are you sure you want to clear your cart?</h3>
-              <div className="deletePopupButtonsContainer">
-                <button
-                  className="deletePopupButtons yes"
-                  onClick={handleDeleteConfirm}
-                >
-                  Yes
-                </button>
-                <button
-                  className="deletePopupButtons no"
-                  onClick={handleDeleteCancel}
-                >
-                  No
-                </button>
-              </div>
-            </div>
-          </div>
-        </CSSTransition>
-      </div>
-
+      )}
       <Footer />
     </>
   );

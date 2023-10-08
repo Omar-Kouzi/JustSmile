@@ -7,6 +7,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../Styles/profile.css";
 import { CSSTransition } from "react-transition-group";
+import Loader from "../components/loader";
 
 const Profile = () => {
   const [user, setUser] = useState("");
@@ -23,8 +24,9 @@ const Profile = () => {
   const [valid, setValid] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const transitionRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
 
+  const transitionRef = useRef(null);
   const userId = useParams();
   const navigate = useNavigate();
 
@@ -102,18 +104,37 @@ const Profile = () => {
   const handleDeleteCancel = () => {
     setShowDeletePopup(false);
   };
+  const fetchData = async () => {
+    const startTime = Date.now();
+
+    try {
+      await Promise.all([fetchUser()]);
+      const elapsedTime = Date.now() - startTime;
+      const minimumDuration = 3000;
+
+      if (elapsedTime < minimumDuration) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, minimumDuration - elapsedTime);
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const token = secureLocalStorage.getItem("token");
     const loggedIn = secureLocalStorage.getItem("loggedIn");
     if (!token || !loggedIn === true) {
       navigate("/login");
     }
-    fetchUser();
+    fetchData();
     let timer;
     if (valid) {
       timer = setTimeout(() => {
         setValid(false);
-      }, 4000);
+      }, 3000);
     }
     return () => clearTimeout(timer);
   }, [valid, userId.id]);
@@ -121,112 +142,111 @@ const Profile = () => {
   return (
     <>
       <Header />
-
-      <div>
-        {user ? (
-          <div className="User">
-            <div className="UserContent">
-              {valid && (
-                <i
-                  className={
-                    updateSuccess
-                      ? "SuccessMessageUserUpdate"
-                      : "ErrorMessageUserUpdate"
-                  }
-                >
-                  {alert}
-                </i>
-              )}
-              <div>
-                <h4>Username:</h4>{" "}
-                <textarea
-                  onChange={handleUserChange}
-                  defaultValue={user.name}
-                  name="name"
-                />
-              </div>
-              <div>
-                <h4>Email:</h4>
-                <textarea
-                  onChange={handleUserChange}
-                  defaultValue={user.email}
-                  name="email"
-                />
-              </div>
-              <div>
-                <h4>Old Password:</h4>
-                <textarea
-                  type="text"
-                  onChange={handleUserChange}
-                  placeholder="Old Password"
-                  name="oldPassword"
-                />
-              </div>
-              <div>
-                <h4>New Password:</h4>
-                <textarea
-                  type="text"
-                  onChange={handleUserChange}
-                  name="password"
-                  placeholder="New Password"
-                />
-              </div>
-              <div>
-                <h4>Address:</h4>
-                <textarea
-                  onChange={handleUserChange}
-                  defaultValue={user.address}
-                  name="address"
-                />
-              </div>{" "}
-              <div>
-                <h4>Phone Number:</h4>
-                <textarea
-                  onChange={handleUserChange}
-                  defaultValue={user.phoneNumber}
-                  name="phoneNumber"
-                />
-              </div>
-              <button onClick={() => handlePatchUser()}>Update User</button>
-              <button
-                onClick={() => handleDeleteClick()}
-                className="clearCartButton "
+      {isLoading ? (
+        <div className="LoaderWrapper">
+          <Loader />
+        </div>
+      ) : (
+        <div className="User">
+          <div className="UserContent">
+            {valid && (
+              <i
+                className={
+                  updateSuccess
+                    ? "SuccessMessageUserUpdate"
+                    : "ErrorMessageUserUpdate"
+                }
               >
-                Delete User
-              </button>
+                {alert}
+              </i>
+            )}
+            <div>
+              <h4>Username:</h4>{" "}
+              <textarea
+                onChange={handleUserChange}
+                defaultValue={user.name}
+                name="name"
+              />
+            </div>
+            <div>
+              <h4>Email:</h4>
+              <textarea
+                onChange={handleUserChange}
+                defaultValue={user.email}
+                name="email"
+              />
+            </div>
+            <div>
+              <h4>Old Password:</h4>
+              <textarea
+                type="text"
+                onChange={handleUserChange}
+                placeholder="Old Password"
+                name="oldPassword"
+              />
+            </div>
+            <div>
+              <h4>New Password:</h4>
+              <textarea
+                type="text"
+                onChange={handleUserChange}
+                name="password"
+                placeholder="New Password"
+              />
+            </div>
+            <div>
+              <h4>Address:</h4>
+              <textarea
+                onChange={handleUserChange}
+                defaultValue={user.address}
+                name="address"
+              />
             </div>{" "}
-            <CSSTransition
-              in={showDeletePopup}
-              timeout={300}
-              classNames="deletePopup"
-              unmountOnExit
-              nodeRef={transitionRef} // Assign the ref here
+            <div>
+              <h4>Phone Number:</h4>
+              <textarea
+                onChange={handleUserChange}
+                defaultValue={user.phoneNumber}
+                name="phoneNumber"
+              />
+            </div>
+            <button onClick={() => handlePatchUser()}>Update User</button>
+            <button
+              onClick={() => handleDeleteClick()}
+              className="clearCartButton "
             >
-              <div className="deletePopup" ref={transitionRef}>
-                <div className="deletePopupContent">
-                  <h3>Are you sure you want delete your account</h3>
-                  <div className="deletePopupButtonsContainer">
-                    <button
-                      className="deletePopupButtons yes"
-                      onClick={handleDeleteUser}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      className="deletePopupButtons no"
-                      onClick={handleDeleteCancel}
-                    >
-                      No
-                    </button>
-                  </div>
+              Delete User
+            </button>
+          </div>{" "}
+          <CSSTransition
+            in={showDeletePopup}
+            timeout={300}
+            classNames="deletePopup"
+            unmountOnExit
+            nodeRef={transitionRef} // Assign the ref here
+          >
+            <div className="deletePopup" ref={transitionRef}>
+              <div className="deletePopupContent">
+                <h3>Are you sure you want delete your account</h3>
+                <div className="deletePopupButtonsContainer">
+                  <button
+                    className="deletePopupButtons yes"
+                    onClick={handleDeleteUser}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="deletePopupButtons no"
+                    onClick={handleDeleteCancel}
+                  >
+                    No
+                  </button>
                 </div>
               </div>
-            </CSSTransition>
-          </div>
-        ) : (
-          <p>Loading user data...</p>
-        )}
-      </div>
+            </div>
+          </CSSTransition>
+        </div>
+      )}
       <Footer />
     </>
   );

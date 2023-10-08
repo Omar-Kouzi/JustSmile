@@ -31,12 +31,12 @@ const DashboardHeader = () => {
     } else {
       navigate("/login");
     }
-  }, []);
+  });
   useEffect(() => {
     if (isAdmin === "user") {
       navigate("/");
     }
-  }, [isAdmin]);
+  });
 
   return (
     <>

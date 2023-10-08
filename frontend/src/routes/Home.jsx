@@ -6,15 +6,12 @@ import Footer from "../components/Footer";
 import Slideshow from "../components/Slidshow";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/loader";
-// import { MdLocationPin } from "react-icons/md";
-// import { AiOutlineLink } from "react-icons/ai";
 const Home = () => {
   const [about, setAbout] = useState([]);
   const [offers, setOffer] = useState([]);
   const [barSuppliers, setBarSuppliers] = useState([]);
   const [recommendeds, setRecommended] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
   const navigate = useNavigate();
 
   const fetchAbout = async () => {
@@ -73,20 +70,37 @@ const Home = () => {
     const SupplierId = barSuppliers[index]._id;
     navigate(`/supplier/${SupplierId}`);
   };
-  const fetchData = () => {
-    fetchAbout();
-    fetchOffer();
-    fetchBarSupplier();
-    fetchRecommended();
-    setIsLoading(false);
+  const fetchData = async () => {
+    const startTime = Date.now();
+
+    try {
+      await Promise.all([
+        fetchAbout(),
+        fetchOffer(),
+        fetchBarSupplier(),
+        fetchRecommended(),
+      ]);
+      const elapsedTime = Date.now() - startTime;
+      const minimumDuration = 3000;
+
+      if (elapsedTime < minimumDuration) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, minimumDuration - elapsedTime);
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
     <>
-      {" "}
       <Header />
       {isLoading ? (
         <div className="LoaderWrapper">

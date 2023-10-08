@@ -67,7 +67,7 @@ function Login() {
     if (valid) {
       timer = setTimeout(() => {
         setValid(false);
-      }, 4000);
+      }, 3000);
     }
     return () => clearTimeout(timer);
   }, [valid]);
