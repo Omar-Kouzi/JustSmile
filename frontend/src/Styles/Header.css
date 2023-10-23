@@ -47,14 +47,14 @@
   width: 100%;
 }
 
-.headersNavlinkCart{
+.headersNavlinkCart {
   width: 70px;
 }
 
 .sm-menu-container {
   display: none;
 }
-.respociveNavIcons{
+.respociveNavIcons {
   display: flex;
   align-items: center;
   gap: 5px;

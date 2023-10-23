@@ -91,8 +91,8 @@
 .deletePopup {
   background-color: white;
   position: absolute;
-  height: 199px;
-  width: 70vw;
+  height: 50%;
+  width: 90vw;
   border: solid;
   align-self: center;
   justify-self: center;
@@ -101,7 +101,7 @@
 .deletePopupContent {
   display: flex;
   flex-direction: column;
-  height: 178px;
+  height: 90%;
   padding: 10px;
   justify-content: space-between;
 }
@@ -129,8 +129,8 @@
 .orderPopup {
   background-color: white;
   position: absolute;
-  height: 199px;
-  width: 70vw;
+  height: 50%;
+  width: 90vw;
   align-self: center;
   border: solid;
   justify-self: center;
@@ -139,7 +139,7 @@
 .orderPopupContent {
   display: flex;
   flex-direction: column;
-  height: 178px;
+  height: 90%;
   padding: 10px;
   justify-content: space-between;
 }
