@@ -51,7 +51,7 @@ const Profile = () => {
   const handlePatchUser = async () => {
     try {
       const res = await axios.patch(
-        `http://localhost:1111/user/`,
+        `https://justsmilebackend.onrender.com/user/`,
         {
           name: newUser.name,
           email: newUser.email,

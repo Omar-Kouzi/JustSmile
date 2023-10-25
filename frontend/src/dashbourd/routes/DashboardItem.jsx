@@ -18,14 +18,13 @@ const DashboardItem = () => {
     title: "",
     description: "",
     flavor: "",
-    price: "",
+    sizePrice: "",
     category: "",
     ingredients: "",
     image: null,
     available: true,
   });
   const [isLoading, setIsLoading] = useState(true);
-
   const itemID = useParams();
 
   const fetchItem = async () => {
@@ -71,7 +70,7 @@ const DashboardItem = () => {
     formData.append("title", newItem.title || item.title);
     formData.append("description", newItem.description || item.description);
     formData.append("flavor", newItem.flavor || item.flavor);
-    formData.append("price", newItem.price || item.price);
+    formData.append("sizePrice", newItem.sizePrice || item.sizePrice);
     formData.append("category", newItem.category || item.category);
     formData.append(
       "ingredients",
@@ -195,10 +194,13 @@ const DashboardItem = () => {
               />
             </div>
             <div>
-              <h4>Price</h4>
+              <h4>Size & Price</h4>
+              {item.sizePrice.map((size,index)=>(
+                <div key={index}>{size.size} {size.price}$</div>
+              ))}
               <textarea
-                name="price"
-                value={newItem.price || item.price}
+                name="sizePrice"
+                defaultValue="[{&#34;size&#34;:&#34; 	&#34;,&#34;price&#34;:&#34;	 &#34;&#125;,{&#34;size&#34;:&#34; 	&#34;,&#34;price&#34;:&#34;	 &#34;&#125;,]"
                 onChange={handleItemChange}
               />
             </div>

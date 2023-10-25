@@ -101,6 +101,7 @@
   justify-content: center;
 }
 
+
 @media only screen and (max-width: 500px) {
   .Items {
     padding-left: 10px;

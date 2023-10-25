@@ -17,13 +17,13 @@ const DashboardItems = () => {
     title: "",
     description: "",
     ingredients: "",
-    MLprice: "",
-    Lprice: "",
+    sizePrice: "", //[{"size":"","price":""}]
     flavor: "",
     category: "",
     image: null,
     available: true,
   });
+
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -77,7 +77,6 @@ const DashboardItems = () => {
   const handleItemClick = (ItemId) => {
     navigate(`/dashboard/items/${ItemId}`);
   };
-
   const handleItemChange = (e) => {
     if (e.target.name === "image" && e.target.files.length > 0) {
       setNewItem({
@@ -92,6 +91,7 @@ const DashboardItems = () => {
       });
     }
   };
+
   const handlePostItem = async (e) => {
     e.preventDefault();
 
@@ -99,14 +99,12 @@ const DashboardItems = () => {
     formData.append("title", newItem.title);
     formData.append("description", newItem.description);
     formData.append("ingredients", newItem.ingredients);
-    formData.append("Lprice", newItem.Lprice);
-    formData.append("MLprice", newItem.MLprice);
+    formData.append("sizePrice", newItem.sizePrice);
     formData.append("flavor", newItem.flavor);
     formData.append("category", newItem.category);
     formData.append("image", newItem.image);
     formData.append("availabe", newItem.available);
     formData.append("userId", secureLocalStorage.getItem("id"));
-
     try {
       const response = await axios.post(
         "https://justsmilebackend.onrender.com/items/",
@@ -128,12 +126,9 @@ const DashboardItems = () => {
     const startTime = Date.now();
 
     try {
-      await Promise.all([
-        fetchItems(),
-        fetchCategories(),
-      ]);
+      await Promise.all([fetchItems(), fetchCategories()]);
       const elapsedTime = Date.now() - startTime;
-      const minimumDuration = 3000;
+      const minimumDuration = 1000;
 
       if (elapsedTime < minimumDuration) {
         setTimeout(() => {
@@ -158,7 +153,6 @@ const DashboardItems = () => {
   return (
     <>
       <Header />
-      
       <DashboardHeader />{" "}
       {isLoading ? (
         <div className="LoaderWrapper">
@@ -246,29 +240,24 @@ const DashboardItems = () => {
                     className="dashboardItemInput"
                   />
                 </div>
-                <div className="barJuiceItemFormInput-field">
-                  <p>LPrice</p>
-                  <input
-                    type="text"
-                    placeholder="Lprice"
-                    name="Lprice"
-                    onChange={(e) => {
-                      handleItemChange(e);
-                    }}
-                    className="dashboardItemInput"
-                  />
-                </div>{" "}
-                <div className="barJuiceItemFormInput-field">
-                  <p>MLPrice</p>
-                  <input
-                    type="text"
-                    placeholder="MLprice"
-                    name="MLprice"
-                    onChange={(e) => {
-                      handleItemChange(e);
-                    }}
-                    className="dashboardItemInput"
-                  />
+
+                <div className="barJuiceItemFormInput-field ">
+                  <p>Size and price</p>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="size and price"
+                      name="sizePrice"
+                      value="[{&#34;size&#34;:&#34; 	&#34;,&#34;price&#34;:&#34;	 &#34;&#125;,]"
+                      className="dashboardItemInput"
+                      onChange={(e) => {
+                        handleItemChange(e);
+                      }}
+                    />
+                    <b>you can add more sizes by copying and pasting </b>
+                    &#123; &#34;size&#34;:&#34; &#34;,&#34;price&#34;:&#34;
+                    &#34;&#125;, and puting your values in the quots
+                  </div>
                 </div>
                 <select
                   id="itemSelect"

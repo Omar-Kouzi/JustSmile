@@ -5,7 +5,7 @@ import cloudinary from "cloudinary";
 //============
 
 const postItem = asyncHandler(async (req, res) => {
-  const id = req.body.userId;
+  const id = req.user.id;
   const user = await User.findById(id);
   if (!user) {
     return res.status(200).json({ message: "User not found", success: false });
@@ -15,18 +15,9 @@ const postItem = asyncHandler(async (req, res) => {
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  const {
-    title,
-    description,
-    ingredients,
-    flavor,
-    Lprice,
-    MLprice,
-    category,
-    available,
-  } = req.body;
-  console.log(req.body);
-
+  const { title, description, ingredients, flavor, category, available } =
+    req.body;
+  const sizePrice = JSON.parse(req.body.sizePrice);
   if (!req.file || req.file.length === 0) {
     return res
       .status(200)
@@ -47,8 +38,7 @@ const postItem = asyncHandler(async (req, res) => {
       title,
       description,
       ingredients: parsedIngredients,
-      Lprice,
-      MLprice,
+      sizePrice,
       flavor,
       image: result.secure_url,
       category,
@@ -94,16 +84,10 @@ const updateItem = asyncHandler(async (req, res) => {
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  const {
-    title,
-    description,
-    ingredients,
-    flavor,
-    Lprice,
-    MLprice,
-    category,
-    available,
-  } = req.body;
+  console.log(req.body)
+  const { title, description, ingredients, flavor, category, available } =
+    req.body;
+  const sizePrice = JSON.parse(req.body.sizePrice);
 
   // Check if there is a new image
   let imageUrl;
@@ -127,8 +111,7 @@ const updateItem = asyncHandler(async (req, res) => {
     title,
     description,
     flavor,
-    Lprice,
-    MLprice,
+    sizePrice,
     category,
     ingredients: ingredients,
     available,

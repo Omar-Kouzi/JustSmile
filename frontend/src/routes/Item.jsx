@@ -134,8 +134,11 @@ const Item = () => {
               </ul>
             </div>
             <div>
-              <p>Price: {item.Lprice}$/Liter</p>
-              <p>Price: {item.MLprice}$/300ML</p>
+              {item.sizePrice.map((size, index) => (
+                <div key={index}>
+                  Price: {size.price}$/{size.size}
+                </div>
+              ))}
             </div>
             <div className="quantityAddToCartButtonContainer">
               <div>
