@@ -5,12 +5,12 @@ import Offer from "../models/offersModel.js";
 
 const addToCart = async (req, res) => {
   try {
-    const { id, quantityML, quantityL } = req.body;
+    const { id, quantity, sizeIndex } = req.body;
     const userId = req.user.id;
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(200).json({ message: "user not found" });
+      return res.status(200).json({ message: "User not found" });
     }
 
     if (!userId) {
@@ -20,23 +20,21 @@ const addToCart = async (req, res) => {
     const item = (await Offer.findById(id)) || (await Item.findById(id));
 
     if (!item) {
-      return res.status(200).json({ message: "item not found" });
+      return res.status(200).json({ message: "Item not found" });
     }
 
-    const quantityLNum = parseInt(quantityL);
-    const quantityMLNum = parseInt(quantityML);
-
-    if (
-      (isNaN(quantityLNum) || quantityLNum <= 0) &&
-      (isNaN(quantityMLNum) || quantityMLNum <= 0)
-    ) {
-      return res.status(200).json({ message: "Invalid quantity L" });
+    const quantityNum = parseInt(quantity);
+    if (isNaN(quantityNum) || quantityNum <= 0) {
+      return res.status(200).json({ message: "Invalid quantity" });
     }
 
-    const LtotalPrice = quantityLNum * item.Lprice;
-    const MLtotalPrice = quantityMLNum * item.MLprice;
-    const totalPrice = LtotalPrice + MLtotalPrice;
-    const totalQuantity = quantityLNum + quantityMLNum;
+    const sizePrice = item.sizePrice[sizeIndex];
+
+    if (!sizePrice) {
+      return res.status(200).json({ message: "Size not found for the item" });
+    }
+
+    const totalPrice = sizePrice.price * quantityNum;
 
     const cart = await CartModel.findOne({ user: userId }).populate("items");
 
@@ -48,45 +46,75 @@ const addToCart = async (req, res) => {
             _id: item._id,
             image: item.image,
             title: item.title,
-            Lprice: item.Lprice,
-            MLprice: item.MLprice,
-            MLquantity: quantityMLNum,
-            Lquantity: quantityLNum,
-            totalPriceL: LtotalPrice,
-            totalPriceML: MLtotalPrice,
+            sizePrice: [
+              {
+                size: sizePrice.size,
+                price: sizePrice.price,
+                quantity: quantityNum,
+              },
+            ],
           },
         ],
         totalPrice: totalPrice,
-        totalQuantity: totalQuantity,
+        totalQuantity: quantityNum,
       });
       return res.status(201).json(newCart);
     }
 
+    let updatedTotalQuantity = 0;
+
     const existingItemIndex = cart.items.findIndex(
-      (items) => items.title == item.title
+      (cartItem) => cartItem.title === item.title
     );
 
     if (existingItemIndex >= 0) {
-      cart.items[existingItemIndex].MLquantity += quantityMLNum;
-      cart.items[existingItemIndex].Lquantity += quantityLNum;
-      cart.items[existingItemIndex].totalPriceL += LtotalPrice;
-      cart.items[existingItemIndex].totalPriceML += MLtotalPrice;
+      const existingSizePriceIndex = cart.items[
+        existingItemIndex
+      ].sizePrice.findIndex((size) => size.size === sizePrice.size);
+
+      if (existingSizePriceIndex >= 0) {
+        cart.items[existingItemIndex].sizePrice[
+          existingSizePriceIndex
+        ].quantity += quantityNum;
+      } else {
+        cart.items[existingItemIndex].sizePrice.push({
+          size: sizePrice.size,
+          price: sizePrice.price,
+          quantity: quantityNum,
+        });
+      }
+
+      cart.items[existingItemIndex].totalQuantity = cart.items[
+        existingItemIndex
+      ].sizePrice.reduce((acc, sizePrice) => acc + sizePrice.quantity, 0);
+
+      updatedTotalQuantity = cart.items.reduce(
+        (acc, item) => acc + item.totalQuantity,
+        0
+      );
     } else {
       cart.items.push({
         _id: item._id,
         image: item.image,
         title: item.title,
-        Lprice: item.Lprice,
-        MLprice: item.MLprice,
-        MLquantity: quantityMLNum,
-        Lquantity: quantityLNum,
-        totalPriceL: LtotalPrice,
-        totalPriceML: MLtotalPrice,
+        sizePrice: [
+          {
+            size: sizePrice.size,
+            price: sizePrice.price,
+            quantity: quantityNum,
+          },
+        ],
+        totalQuantity: quantityNum,
       });
+
+      updatedTotalQuantity = cart.items.reduce(
+        (acc, item) => acc + item.totalQuantity,
+        0
+      );
     }
 
     cart.totalPrice += totalPrice;
-    cart.totalQuantity += totalQuantity;
+    cart.totalQuantity = updatedTotalQuantity;
     await cart.save();
 
     return res.status(200).json({ cart, success: true });
@@ -118,64 +146,14 @@ const getCart = async (req, res) => {
   }
 };
 
-
-// const decreaseQuantity = async (req, res) => {
-//   try {
-//     const { itemId } = req.params;
-//     const userId = req.user ? req.user._id : undefined;
-//     if (!userId) {
-//       return res.status(401).json({ message: "Unauthorized" });
-//     }
-
-//     const cart = await CartModel.findOne({ user: userId });
-
-//     if (!cart) {
-//       return res.status(404).json({ message: "Cart not found" });
-//     }
-
-//     const itemIndex = cart.items.findIndex(
-//       (item) => item._id.toString() === itemId
-//     );
-
-//     if (itemIndex < 0) {
-//       return res.status(404).json({ message: "Item not found in cart" });
-//     }
-
-//     const item = cart.items[itemIndex];
-
-//     if (item.quantity > 1) {
-//       item.quantity -= 1;
-//       item.totalPrice -= item.price;
-//       cart.totalPrice -= item.price;
-//       await updateTotalQuantity(cart);
-//       await cart.save();
-//       return res.status(200).json(cart);
-//     } else if (item.quantity === 1) {
-//       // Remove the item from the cart
-//       cart.items.splice(itemIndex, 1);
-//       cart.totalPrice -= item.price;
-//       await updateTotalQuantity(cart);
-//       await cart.save();
-//       return res.status(200).json(cart);
-//     } else {
-//       return res
-//         .status(400)
-//         .json({ message: "Cannot decrease quantity below 1" });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ message: "Server error" });
-//   }
-// };
-
 //================
 
 const updateQuantity = async (req, res) => {
   try {
     const { itemId } = req.params;
-    const { MLquantity, Lquantity } = req.body;
+    const { sizeIndex, quantity } = req.body;
     const userId = req.user ? req.user._id : undefined;
-    console.log(req.body);
+
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -195,28 +173,28 @@ const updateQuantity = async (req, res) => {
     }
 
     const item = cart.items[itemIndex];
-    console.log(item);
-    // Ensure MLquantity and Lquantity are valid numbers
-    const MLquantityNum = parseInt(MLquantity);
-    const LquantityNum = parseInt(Lquantity);
-    console.log(MLquantityNum, LquantityNum);
-    if (
-      (isNaN(LquantityNum) || LquantityNum <= 0) &&
-      (isNaN(MLquantityNum) || MLquantityNum <= 0)
-    ) {
+
+    const sizePrice = item.sizePrice[sizeIndex];
+
+    if (!sizePrice) {
+      return res.status(200).json({ message: "Size not found for the item" });
+    }
+
+    const quantityNum = parseInt(quantity);
+
+    if (isNaN(quantityNum) || quantityNum <= 0) {
       return res.status(200).json({ message: "Invalid quantity" });
     }
 
-    // Update the item's quantities and total prices
-    item.MLquantity = MLquantityNum;
-    item.Lquantity = LquantityNum;
+    const oldQuantity = sizePrice.quantity;
+    sizePrice.quantity = quantityNum;
 
-    // Recalculate the cart's total price and quantity
-    const newCart = await cart.save();
     await updateTotalQuantity(cart);
     await updateTotalPrice(cart);
-    console.log(cart);
-    return res.status(200).json(newCart);
+
+    await cart.save();
+
+    return res.status(200).json(cart);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
@@ -226,31 +204,38 @@ const updateQuantity = async (req, res) => {
 //================
 
 const updateTotalQuantity = async (cart) => {
-  let totalQuantity = 0;
-  for (let i = 0; i < cart.items.length; i++) {
-    console.log(cart.items[i].MLquantity);
-    totalQuantity =
-      cart.items[i].Lquantity + cart.items[i].MLquantity + totalQuantity;
+  try {
+    const updatedTotalQuantity = cart.items.reduce((acc, item) => {
+      return (
+        acc +
+        item.sizePrice.reduce(
+          (itemAcc, sizePrice) => itemAcc + sizePrice.quantity,
+          0
+        )
+      );
+    }, 0);
+    cart.totalQuantity = updatedTotalQuantity;
+    await cart.save();
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
-  console.log(totalQuantity);
-  cart.totalQuantity = totalQuantity;
-  await cart.save();
 };
+
 const updateTotalPrice = async (cart) => {
   try {
-    let totalPrice = 0;
+    let updatedTotalPrice = 0;
 
     for (let i = 0; i < cart.items.length; i++) {
       const item = cart.items[i];
-      const itemLTotalPrice = item.Lquantity * item.Lprice;
-      const itemMLTotalPrice = item.MLquantity * item.MLprice;
-      totalPrice += itemLTotalPrice + itemMLTotalPrice;
+      for (let j = 0; j < item.sizePrice.length; j++) {
+        const sizePrice = item.sizePrice[j];
+        updatedTotalPrice += sizePrice.price * sizePrice.quantity;
+      }
     }
 
-    cart.totalPrice = totalPrice;
+    cart.totalPrice = updatedTotalPrice;
     await cart.save();
-
-    console.log(`Updated cart total price to ${totalPrice}`);
   } catch (error) {
     console.error(error);
     throw error;
