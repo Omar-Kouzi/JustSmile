@@ -2,7 +2,6 @@ import CartModel from "../models/cartModel.js";
 import Item from "../models/itemModel.js";
 import User from "../models/userModel.js";
 import Offer from "../models/offersModel.js";
-
 const addToCart = async (req, res) => {
   try {
     const { id, quantity, sizeIndex } = req.body;
@@ -39,6 +38,7 @@ const addToCart = async (req, res) => {
     const cart = await CartModel.findOne({ user: userId }).populate("items");
 
     if (!cart) {
+      // If the user's cart does not exist, create a new cart.
       const newCart = await CartModel.create({
         user: userId,
         items: [
@@ -53,15 +53,22 @@ const addToCart = async (req, res) => {
                 quantity: quantityNum,
               },
             ],
+            totalQuantity: quantityNum, // Set totalQuantity for the single item
           },
         ],
         totalPrice: totalPrice,
-        totalQuantity: quantityNum,
+        totalQuantity: quantityNum, // Set totalQuantity for the cart
       });
       return res.status(201).json(newCart);
     }
 
     let updatedTotalQuantity = 0;
+
+    for (const cartItem of cart.items) {
+      for (const sizePrice of cartItem.sizePrice) {
+        updatedTotalQuantity += sizePrice.quantity;
+      }
+    }
 
     const existingItemIndex = cart.items.findIndex(
       (cartItem) => cartItem.title === item.title
@@ -84,14 +91,10 @@ const addToCart = async (req, res) => {
         });
       }
 
+      // Update the totalQuantity for the existing item.
       cart.items[existingItemIndex].totalQuantity = cart.items[
         existingItemIndex
       ].sizePrice.reduce((acc, sizePrice) => acc + sizePrice.quantity, 0);
-
-      updatedTotalQuantity = cart.items.reduce(
-        (acc, item) => acc + item.totalQuantity,
-        0
-      );
     } else {
       cart.items.push({
         _id: item._id,
@@ -104,17 +107,10 @@ const addToCart = async (req, res) => {
             quantity: quantityNum,
           },
         ],
-        totalQuantity: quantityNum,
+        totalQuantity: quantityNum, // Set totalQuantity for the new item
       });
-
-      updatedTotalQuantity = cart.items.reduce(
-        (acc, item) => acc + item.totalQuantity,
-        0
-      );
     }
 
-    cart.totalPrice += totalPrice;
-    cart.totalQuantity = updatedTotalQuantity;
     await cart.save();
 
     return res.status(200).json({ cart, success: true });
@@ -123,6 +119,128 @@ const addToCart = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+
+// const addToCart = async (req, res) => {
+//   try {
+//     const { id, quantity, sizeIndex } = req.body;
+//     const userId = req.user.id;
+//     const user = await User.findById(userId);
+
+//     if (!user) {
+//       return res.status(200).json({ message: "User not found" });
+//     }
+
+//     if (!userId) {
+//       return res.status(200).json({ message: "Unauthorized" });
+//     }
+
+//     const item = (await Offer.findById(id)) || (await Item.findById(id));
+
+//     if (!item) {
+//       return res.status(200).json({ message: "Item not found" });
+//     }
+
+//     const quantityNum = parseInt(quantity);
+//     if (isNaN(quantityNum) || quantityNum <= 0) {
+//       return res.status(200).json({ message: "Invalid quantity" });
+//     }
+
+//     const sizePrice = item.sizePrice[sizeIndex];
+
+//     if (!sizePrice) {
+//       return res.status(200).json({ message: "Size not found for the item" });
+//     }
+
+//     const totalPrice = sizePrice.price * quantityNum;
+
+//     const cart = await CartModel.findOne({ user: userId }).populate("items");
+
+//     if (!cart) {
+//       const newCart = await CartModel.create({
+//         user: userId,
+//         items: [
+//           {
+//             _id: item._id,
+//             image: item.image,
+//             title: item.title,
+//             sizePrice: [
+//               {
+//                 size: sizePrice.size,
+//                 price: sizePrice.price,
+//                 quantity: quantityNum,
+//               },
+//             ],
+//           },
+//         ],
+//         totalPrice: totalPrice,
+//         totalQuantity: quantityNum,
+//       });
+//       return res.status(201).json(newCart);
+//     }
+
+//     let updatedTotalQuantity = 0;
+
+//     const existingItemIndex = cart.items.findIndex(
+//       (cartItem) => cartItem.title === item.title
+//     );
+
+//     if (existingItemIndex >= 0) {
+//       const existingSizePriceIndex = cart.items[
+//         existingItemIndex
+//       ].sizePrice.findIndex((size) => size.size === sizePrice.size);
+
+//       if (existingSizePriceIndex >= 0) {
+//         cart.items[existingItemIndex].sizePrice[
+//           existingSizePriceIndex
+//         ].quantity += quantityNum;
+//       } else {
+//         cart.items[existingItemIndex].sizePrice.push({
+//           size: sizePrice.size,
+//           price: sizePrice.price,
+//           quantity: quantityNum,
+//         });
+//       }
+
+//       cart.items[existingItemIndex].totalQuantity = cart.items[
+//         existingItemIndex
+//       ].sizePrice.reduce((acc, sizePrice) => acc + sizePrice.quantity, 0);
+
+//       updatedTotalQuantity = cart.items.reduce(
+//         (acc, item) => acc + item.totalQuantity,
+//         0
+//       );
+//     } else {
+//       cart.items.push({
+//         _id: item._id,
+//         image: item.image,
+//         title: item.title,
+//         sizePrice: [
+//           {
+//             size: sizePrice.size,
+//             price: sizePrice.price,
+//             quantity: quantityNum,
+//           },
+//         ],
+//         totalQuantity: quantityNum,
+//       });
+
+//       updatedTotalQuantity = cart.items.reduce(
+//         (acc, item) => acc + item.totalQuantity,
+//         0
+//       );
+//     }
+
+//     cart.totalPrice += totalPrice;
+//     cart.totalQuantity = updatedTotalQuantity;
+//     await cart.save();
+
+//     return res.status(200).json({ cart, success: true });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
 
 //================
 
@@ -241,6 +359,8 @@ const updateTotalPrice = async (cart) => {
     throw error;
   }
 };
+
+//================
 
 //================
 
