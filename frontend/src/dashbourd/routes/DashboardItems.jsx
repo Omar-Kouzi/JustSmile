@@ -248,7 +248,7 @@ const DashboardItems = () => {
                       type="text"
                       placeholder="size and price"
                       name="sizePrice"
-                      value="[{&#34;size&#34;:&#34; 	&#34;,&#34;price&#34;:&#34;	 &#34;&#125;,]"
+                      defaultValue="[{&#34;size&#34;:&#34; 	&#34;,&#34;price&#34;:&#34;	 &#34;&#125;,]"
                       className="dashboardItemInput"
                       onChange={(e) => {
                         handleItemChange(e);
