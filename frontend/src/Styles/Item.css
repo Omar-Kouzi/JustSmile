@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 59vh;
+  height: 70vh;
 }
 .item img {
   height: 100%;
@@ -27,7 +27,7 @@
   align-items: center;
   gap: 5px;
   justify-content: space-between;
-  width: 200px;
+  width: 216px;
 }
 .quantityContainer div {
   display: flex;

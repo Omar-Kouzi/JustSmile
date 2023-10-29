@@ -18,13 +18,13 @@ const Cart = () => {
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [newLQuantity, setNewLQuantity] = useState("0");
-  const [newMLQuantity, setNewMLQuantity] = useState("0");
+  const [quantity, setNewQuantity] = useState("0");
   const userId = secureLocalStorage.getItem("id");
   const [isLoading, setIsLoading] = useState(true);
 
   const transitionRef = useRef(null);
   const navigate = useNavigate();
+
   const fetchCart = async () => {
     try {
       const response = await axios.get(
@@ -44,13 +44,13 @@ const Cart = () => {
     }
   };
 
-  const updatedQuantity = async (itemId, newLQuantity, newMLQuantity) => {
+  const updatedQuantity = async (itemId, quantity, sizeIndex) => {
     try {
       const response = await axios.patch(
         `https://justsmilebackend.onrender.com/cart/qty/${itemId}`,
         {
-          Lquantity: newLQuantity,
-          MLquantity: newMLQuantity,
+          quantity: quantity,
+          sizeIndex: sizeIndex, // Pass the size index to the API
         },
         {
           headers: {
@@ -58,6 +58,7 @@ const Cart = () => {
           },
         }
       );
+      console.log(response)
       fetchCart();
     } catch (error) {
       console.log(error);
@@ -81,9 +82,11 @@ const Cart = () => {
       console.log(error);
     }
   };
+
   const handleDeleteClick = () => {
     setShowDeletePopup(true);
   };
+
   const handleDeleteCancel = () => {
     setShowDeletePopup(false);
   };
@@ -134,6 +137,7 @@ const Cart = () => {
   - Total Price: USD ${totalPrice}
   - Payment method: on delivery
   `;
+
   const fetchData = async () => {
     const startTime = Date.now();
 
@@ -188,36 +192,29 @@ const Cart = () => {
                 >
                   <img src={item.image} alt="" />
                   <p className="cartItemName">{item.title}</p>
+                </div>{" "}
+                <div>
+                  {item.sizePrice.map((size, index) => (
+                    <div key={index} className="cartItemQuantityEdit">
+                      <p>{size.size}</p>
+                      <input
+                        type="number"
+                        defaultValue={size.quantity}
+                        className="cartItemQuantity"
+                        onChange={(e) => setNewQuantity(e.target.value)}
+                        onBlur={() =>
+                          updatedQuantity(item._id, quantity, index)
+                        }
+                      />
+                    </div>
+                  ))}
                 </div>
                 <div>
-                  <div className="cartItemQuantityEdit">
-                    <p>L</p>
-                    <input
-                      type="number"
-                      defaultValue={item.Lquantity}
-                      className="cartItemQuantity"
-                      onChange={(e) => setNewLQuantity(e.target.value)}
-                      onBlur={() =>
-                        updatedQuantity(item._id, newLQuantity, newMLQuantity)
-                      }
-                    />
-                  </div>
-                  <div className="cartItemQuantityEdit">
-                    <p>ML</p>
-                    <input
-                      type="number"
-                      defaultValue={item.MLquantity}
-                      className="cartItemQuantity"
-                      onChange={(e) => setNewMLQuantity(e.target.value)}
-                      onBlur={() =>
-                        updatedQuantity(item._id, newLQuantity, newMLQuantity)
-                      }
-                    />
-                  </div>
-                </div>
-                <div>
-                  <p className="cartItemPrice">{item.Lprice}$/Litter</p>
-                  <p className="cartItemPrice">{item.MLprice}$/300ML</p>
+                  {item.sizePrice.map((size, index) => (
+                    <div key={index}>
+                      <p className="cartItemPrice">{size.price}$/{size.size}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}

@@ -11,13 +11,12 @@ import "../Styles/Item.css";
 
 const Item = () => {
   const [item, setItem] = useState("");
-  const [Lquantity, setLQuantity] = useState(0);
-  const [MLquantity, setMLQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(0);
+  const [sizeIndex, setSizeIndex] = useState(0);
   const [alert, setAlert] = useState("");
   const [valid, setValid] = useState(false);
   const [addedToCart, setAddedToCart] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
   const itemID = useParams();
   const navigate = useNavigate();
 
@@ -42,10 +41,8 @@ const Item = () => {
         "https://justsmilebackend.onrender.com/cart",
         {
           id: itemID.id,
-          quantityL: Lquantity,
-          quantityML: MLquantity,
-
-          userId: secureLocalStorage.getItem("id"),
+          quantity: quantity,
+          sizeIndex: sizeIndex,
         },
         {
           headers: {
@@ -140,48 +137,36 @@ const Item = () => {
                 </div>
               ))}
             </div>
+            <select
+              name=""
+              id=""
+              onChange={(event) => setSizeIndex(event.target.value)}
+            >
+              {item.sizePrice.map((size, index) => (
+                <option key={index} value={index}>
+                  {size.size}
+                </option>
+              ))}
+            </select>
+
             <div className="quantityAddToCartButtonContainer">
               <div>
                 <div className="quantityContainer">
-                  <p>1L bottles</p>
                   <div>
                     <div
                       className="QuantitySubtract"
-                      onClick={() => setLQuantity(Math.max(0, Lquantity - 1))}
+                      onClick={() => setQuantity(Math.max(0, quantity - 1))}
                     >
                       <p>-</p>
                     </div>
                     <input
                       type="number"
-                      value={Lquantity}
-                      onChange={(value) => setLQuantity(value.target.value)}
+                      value={quantity}
+                      onChange={(value) => setQuantity(value.target.value)}
                     />
                     <div
                       className="Quantityadd"
-                      onClick={() => setLQuantity(Lquantity + 1)}
-                    >
-                      <p>+</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="quantityContainer">
-                  <p>300ml bottles</p>
-                  <div>
-                    <div
-                      className="QuantitySubtract"
-                      onClick={() => setMLQuantity(Math.max(0, MLquantity - 1))}
-                    >
-                      <p>-</p>
-                    </div>
-                    <input
-                      type="number"
-                      value={MLquantity}
-                      min="0"
-                      onChange={(value) => setMLQuantity(value.target.value)}
-                    />
-                    <div
-                      className="Quantityadd"
-                      onClick={() => setMLQuantity(MLquantity + 1)}
+                      onClick={() => setQuantity(quantity + 1)}
                     >
                       <p>+</p>
                     </div>
