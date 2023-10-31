@@ -36,6 +36,7 @@ const Cart = () => {
           },
         }
       );
+      console.log(response.data);
       setTotalPrice(response.data.totalPrice);
       setCart(response.data);
       setCartItems(response.data.items);
@@ -58,7 +59,7 @@ const Cart = () => {
           },
         }
       );
-      console.log(response)
+      console.log(response);
       fetchCart();
     } catch (error) {
       console.log(error);
@@ -104,10 +105,6 @@ const Cart = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
   const handlePhoneNumberChange = (e) => {
     setUserPhoneNumber(e.target.value);
   };
@@ -116,18 +113,19 @@ const Cart = () => {
     setUserAddress(e.target.value);
   };
 
-  const Form = `Hi there! Here's the list of items I'm to Ordering:
+  const Form = `Hi there! Here's the list of items I'm ordering:
 
-  ${cartitems
-    .map(
-      (item, index) =>
-        `${index + 1}. ${item.title} - ${item.Lquantity} - ${
-          item.Lprice
-        } USD/Piece
-                              ${item.MLquantity} - ${item.MLprice}USD/Piece`
-    )
-    .join("\n")}
-  
+  ${cartitems.length > 0
+    ? cartitems
+        .map(
+          (item, index) =>
+            `${index + 1}. ${item.title} - ${
+              item.sizePrice[0].quantity
+            } x ${item.sizePrice[0].size} - $${item.sizePrice[0].price} USD/Piece\n`
+        )
+        .join('')
+    : 'Your cart is empty'}
+    
   Please confirm the items in your cart and their respective quantities. If you need to make any changes, please let us know.
   
   To proceed with the purchase, please provide the following details:
@@ -137,6 +135,7 @@ const Cart = () => {
   - Total Price: USD ${totalPrice}
   - Payment method: on delivery
   `;
+  
 
   const fetchData = async () => {
     const startTime = Date.now();
@@ -166,6 +165,7 @@ const Cart = () => {
 
   useEffect(() => {
     fetchData();
+    fetchUser();
   }, []);
 
   return (
@@ -212,7 +212,9 @@ const Cart = () => {
                 <div>
                   {item.sizePrice.map((size, index) => (
                     <div key={index}>
-                      <p className="cartItemPrice">{size.price}$/{size.size}</p>
+                      <p className="cartItemPrice">
+                        {size.price}$/{size.size}
+                      </p>
                     </div>
                   ))}
                 </div>

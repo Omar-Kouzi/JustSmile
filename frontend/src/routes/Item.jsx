@@ -159,11 +159,12 @@ const Item = () => {
                     >
                       <p>-</p>
                     </div>
-                    <input
+                    {/* <input
                       type="number"
                       value={quantity}
                       onChange={(value) => setQuantity(value.target.value)}
-                    />
+                    /> */}
+                    <p className="itemQuantityBox">{quantity}</p>
                     <div
                       className="Quantityadd"
                       onClick={() => setQuantity(quantity + 1)}
