@@ -8,7 +8,7 @@ import "../Styles/Cart.css";
 import ReactWhatsapp from "react-whatsapp";
 import { CSSTransition } from "react-transition-group";
 import Loader from "../components/loader";
-
+import { BsTrash } from "react-icons/bs";
 const Cart = () => {
   const [cart, setCart] = useState([]);
   const [cartitems, setCartItems] = useState([]);
@@ -83,6 +83,22 @@ const Cart = () => {
       console.log(error);
     }
   };
+  const handleRemoveItem = async (id) => {
+    try {
+      await axios.patch(
+        `http://localhost:1111/cart/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
+          },
+        }
+      );
+      fetchCart();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleDeleteClick = () => {
     setShowDeletePopup(true);
@@ -115,16 +131,18 @@ const Cart = () => {
 
   const Form = `Hi there! Here's the list of items I'm ordering:
 
-  ${cartitems.length > 0
-    ? cartitems
-        .map(
-          (item, index) =>
-            `${index + 1}. ${item.title} - ${
-              item.sizePrice[0].quantity
-            } x ${item.sizePrice[0].size} - $${item.sizePrice[0].price} USD/Piece\n`
-        )
-        .join('')
-    : 'Your cart is empty'}
+  ${
+    cartitems.length > 0
+      ? cartitems
+          .map(
+            (item, index) =>
+              `${index + 1}. ${item.title} - ${item.sizePrice[0].quantity} x ${
+                item.sizePrice[0].size
+              } - $${item.sizePrice[0].price} USD/Piece\n`
+          )
+          .join("")
+      : "Your cart is empty"
+  }
     
   Please confirm the items in your cart and their respective quantities. If you need to make any changes, please let us know.
   
@@ -135,7 +153,6 @@ const Cart = () => {
   - Total Price: USD ${totalPrice}
   - Payment method: on delivery
   `;
-  
 
   const fetchData = async () => {
     const startTime = Date.now();
@@ -208,8 +225,15 @@ const Cart = () => {
                       />
                     </div>
                   ))}
-                </div>
+                </div>{" "}
+                <button
+                  className="removeItemCart"
+                  onClick={() => handleRemoveItem(item._id)}
+                >
+                  <BsTrash className="removeItemIcon" />
+                </button>
                 <div>
+                  {" "}
                   {item.sizePrice.map((size, index) => (
                     <div key={index}>
                       <p className="cartItemPrice">
@@ -217,7 +241,7 @@ const Cart = () => {
                       </p>
                     </div>
                   ))}
-                </div>
+                </div>{" "}
               </div>
             ))}
           </div>

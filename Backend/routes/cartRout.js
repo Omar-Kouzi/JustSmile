@@ -12,7 +12,7 @@ router.route("/").patch(protect, cartController.clearCart);
 
 router.route("/qty/:itemId").patch(protect, cartController.updateQuantity);
 
-// router.route("/dec/:itemId").put(protect, cartController.decreaseQuantity);
+router.route("/:id").patch(protect, cartController.removeItem);
 
 
 export default router;

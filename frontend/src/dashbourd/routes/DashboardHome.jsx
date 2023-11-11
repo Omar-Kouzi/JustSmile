@@ -342,6 +342,29 @@ const DashboardHome = () => {
           </div>
           <div className="recommended">
             <h2>Our Recommendations </h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handlePostRecommended();
+              }}
+              className="recommendedDashboardForm"
+            >
+              <select
+                id="itemSelect"
+                name="item"
+                onChange={(e) => setSelectedItem(e.target.value)}
+                value={selectedItem}
+              >
+                <option value="">Select an item</option>
+                {filteredItems.map((item, index) => (
+                  <option key={index} value={item._id}>
+                    {item.title}
+                  </option>
+                ))}
+              </select>
+              <button type="submit">Create Recommended</button>
+            </form>
+
             <div className="mostRecommended">
               {recommendeds.map((recommended, index) => (
                 <div key={index} className="recommendedCard">
@@ -354,7 +377,6 @@ const DashboardHome = () => {
                   </div>
                   <div className="recommendedContent">
                     <h4 className="recommendedName">{recommended.title}</h4>
-
                     <div>
                       <div
                         className="recommendedDescription"
@@ -364,46 +386,101 @@ const DashboardHome = () => {
                       </div>
                     </div>
                     <button
+                      onClick={() => handleItemClick(index)}
+                      className="orderButton"
+                    >
+                      Show more
+                    </button>{" "}
+                    <button
                       onClick={() => handleDeleteRecommended(index)}
                       className="recommendedDeleteButton"
                     >
                       delete
                     </button>
-                    <button
-                      onClick={() => handleItemClick(index)}
-                      className="orderButton"
-                    >
-                      Show more
-                    </button>
                   </div>
                 </div>
               ))}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handlePostRecommended();
-                }}
-                className="recommendedDashboardForm"
-              >
-                <select
-                  id="itemSelect"
-                  name="item"
-                  onChange={(e) => setSelectedItem(e.target.value)}
-                  value={selectedItem}
-                >
-                  <option value="">Select an item</option>
-                  {filteredItems.map((item, index) => (
-                    <option key={index} value={item._id}>
-                      {item.title}
-                    </option>
-                  ))}
-                </select>
-                <button type="submit">Create Recommended</button>
-              </form>
             </div>
           </div>
-          <div className="barJuiceSuppliers">
+          <div className="barJuiceSuppliers dashboardSuplier">
             <h2>Bar Juice Suppliers </h2>
+            <form action="#" className="barJuiceSupplierForm">
+              <div className="barJuiceSupplierFormInputs">
+                <div className="barJuiceSupplierFormInput-field">
+                  <p>Title</p>
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="title"
+                    onChange={(e) => {
+                      handleSupplierChange(e);
+                    }}
+                  />
+                </div>
+                <div className="barJuiceSupplierFormInput-field">
+                  <p>Description</p>
+                  <input
+                    type="text"
+                    id="description"
+                    name="description"
+                    placeholder="description"
+                    onChange={(e) => {
+                      handleSupplierChange(e);
+                    }}
+                  />
+                </div>
+                <div className="barJuiceSupplierFormInput-field">
+                  <p>Location</p>
+                  <input
+                    type="text"
+                    placeholder="location"
+                    name="location"
+                    onChange={(e) => {
+                      handleSupplierChange(e);
+                    }}
+                  />
+                </div>
+                <div className="barJuiceSupplierFormInput-field">
+                  <p>Links</p>
+                  <textarea
+                    type="text"
+                    placeholder={`Example for how to input the [{ "title": "Link 1 Title",
+                  "link": "Link 1 URL" },{ "title": "Link 2 Title",
+                  "link": "Link 2 URL" },{ "title": "Link 3 Title",
+                  "link": "Link 3 URL" } ]`}
+                    name="links"
+                    onChange={(e) => {
+                      handleSupplierChange(e);
+                    }}
+                  />
+                  <p className="barJuiceSupplierFormExample">
+                    Example for how to input the &#91; &#123; "title": "Link 1
+                    Title", "link": "Link 1 URL" &#125;, &#123; "title": "Link 2
+                    Title", "link": "Link 2 URL" &#125;, &#123; "title": "Link 3
+                    Title", "link": "Link 3 URL" &#125; &#93;
+                  </p>
+                </div>
+                <div className="barJuiceSupplierFormInput-field">
+                  <p>Image</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="image"
+                    onChange={(e) => {
+                      handleSupplierChange(e);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="barJuiceSupplierFormInput-Submitfield ">
+                <input
+                  type="submit"
+                  value="Post a Supplier"
+                  onClick={(e) => handlePostSupplier(e)}
+                />
+              </div>
+            </form>
             <div className="barJuiceSuppliersCarousel">
               {barSuppliers.map((supplier, index) => (
                 <div key={index} className="barJuiceSuppliersCard">
@@ -413,7 +490,10 @@ const DashboardHome = () => {
                     <button onClick={() => handleShowMoreSupplier(index)}>
                       show more
                     </button>
-                    <button onClick={() => handleDeleteSupplier(supplier._id)}>
+                    <button
+                      className="recommendedDeleteButton"
+                      onClick={() => handleDeleteSupplier(supplier._id)}
+                    >
                       Delete
                     </button>
                   </div>
@@ -425,145 +505,68 @@ const DashboardHome = () => {
                   />
                 </div>
               ))}
-              <form action="#" className="barJuiceSupplierForm">
-                <div className="barJuiceSupplierFormInputs">
-                  <div className="barJuiceSupplierFormInput-field">
-                    <p>Title</p>
-                    <input
-                      type="text"
-                      id="title"
-                      name="title"
-                      placeholder="title"
-                      onChange={(e) => {
-                        handleSupplierChange(e);
-                      }}
-                    />
-                  </div>
-                  <div className="barJuiceSupplierFormInput-field">
-                    <p>Description</p>
-                    <input
-                      type="text"
-                      id="description"
-                      name="description"
-                      placeholder="description"
-                      onChange={(e) => {
-                        handleSupplierChange(e);
-                      }}
-                    />
-                  </div>
-                  <div className="barJuiceSupplierFormInput-field">
-                    <p>Location</p>
-                    <input
-                      type="text"
-                      placeholder="location"
-                      name="location"
-                      onChange={(e) => {
-                        handleSupplierChange(e);
-                      }}
-                    />
-                  </div>
-                  <div className="barJuiceSupplierFormInput-field">
-                    <p>Links</p>
-                    <textarea
-                      type="text"
-                      placeholder={`Example for how to input the [{ "title": "Link 1 Title",
-                  "link": "Link 1 URL" },{ "title": "Link 2 Title",
-                  "link": "Link 2 URL" },{ "title": "Link 3 Title",
-                  "link": "Link 3 URL" } ]`}
-                      name="links"
-                      onChange={(e) => {
-                        handleSupplierChange(e);
-                      }}
-                    />
-                    <p className="barJuiceSupplierFormExample">
-                      Example for how to input the &#91; &#123; "title": "Link 1
-                      Title", "link": "Link 1 URL" &#125;, &#123; "title": "Link
-                      2 Title", "link": "Link 2 URL" &#125;, &#123; "title":
-                      "Link 3 Title", "link": "Link 3 URL" &#125; &#93;
-                    </p>
-                  </div>
-                  <div className="barJuiceSupplierFormInput-field">
-                    <p>Image</p>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      name="image"
-                      onChange={(e) => {
-                        handleSupplierChange(e);
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="barJuiceSupplierFormInput-Submitfield ">
-                  <input
-                    type="submit"
-                    value="Post a Supplier"
-                    onClick={(e) => handlePostSupplier(e)}
-                  />
-                </div>
-              </form>
             </div>
           </div>
           <div className="offers">
-            <h2>Offers </h2>
-            <div className="mostOffers">
-              <form action="#" className="barJuiceSupplierForm">
-                <div className="offerFormInputs">
-                  <div className="barJuiceSupplierFormInput-field">
-                    <p>Title</p>
-                    <input
-                      type="text"
-                      id="title"
-                      name="title"
-                      placeholder="title"
-                      onChange={(e) => {
-                        handleOfferChange(e);
-                      }}
-                    />
-                  </div>
-                  <div className="barJuiceSupplierFormInput-field">
-                    <p>Description</p>
-                    <input
-                      type="text"
-                      id="description"
-                      name="description"
-                      placeholder="description"
-                      onChange={(e) => {
-                        handleOfferChange(e);
-                      }}
-                    />
-                  </div>
-                  <div className="barJuiceSupplierFormInput-field">
-                    <p>Price</p>
-                    <input
-                      type="text"
-                      placeholder="price"
-                      name="price"
-                      onChange={(e) => {
-                        handleOfferChange(e);
-                      }}
-                    />
-                  </div>
-                  <div className="barJuiceSupplierFormInput-field">
-                    <p>Image</p>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      name="image"
-                      onChange={(e) => {
-                        handleOfferChange(e);
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="  ">
+            <h2>Offers </h2>{" "}
+            <form action="#" className="barJuiceSupplierForm">
+              <div className="offerFormInputs">
+                <div className="barJuiceSupplierFormInput-field">
+                  <p>Title</p>
                   <input
-                    type="submit"
-                    value="Post a Supplier"
-                    onClick={(e) => handlePostOffer(e)}
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="title"
+                    onChange={(e) => {
+                      handleOfferChange(e);
+                    }}
                   />
                 </div>
-              </form>
+                <div className="barJuiceSupplierFormInput-field">
+                  <p>Description</p>
+                  <input
+                    type="text"
+                    id="description"
+                    name="description"
+                    placeholder="description"
+                    onChange={(e) => {
+                      handleOfferChange(e);
+                    }}
+                  />
+                </div>
+                <div className="barJuiceSupplierFormInput-field">
+                  <p>Price</p>
+                  <input
+                    type="text"
+                    placeholder="price"
+                    name="price"
+                    onChange={(e) => {
+                      handleOfferChange(e);
+                    }}
+                  />
+                </div>
+                <div className="barJuiceSupplierFormInput-field">
+                  <p>Image</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="image"
+                    onChange={(e) => {
+                      handleOfferChange(e);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="  ">
+                <input
+                  type="submit"
+                  value="Post a Supplier"
+                  onClick={(e) => handlePostOffer(e)}
+                />
+              </div>
+            </form>
+            <div className="mostOffers">
               {offers.map((offer, index) => (
                 <div key={index} className="offerCard">
                   <div className="offerContent">
@@ -573,7 +576,10 @@ const DashboardHome = () => {
                     <button onClick={() => handleShowMoreOffer(index)}>
                       show more
                     </button>
-                    <button onClick={() => handleDeleteOffer(offer._id)}>
+                    <button
+                      className="recommendedDeleteButton"
+                      onClick={() => handleDeleteOffer(offer._id)}
+                    >
                       Delete
                     </button>
                   </div>

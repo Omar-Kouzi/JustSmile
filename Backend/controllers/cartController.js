@@ -52,11 +52,11 @@ import Offer from "../models/offersModel.js";
 //                 quantity: quantityNum,
 //               },
 //             ],
-//             totalQuantity: quantityNum, 
+//             totalQuantity: quantityNum,
 //           },
 //         ],
 //         totalPrice: totalPrice,
-//         totalQuantity: quantityNum, 
+//         totalQuantity: quantityNum,
 //       });
 //       return res.status(201).json(newCart);
 //     }
@@ -105,7 +105,7 @@ import Offer from "../models/offersModel.js";
 //             quantity: quantityNum,
 //           },
 //         ],
-//         totalQuantity: quantityNum, 
+//         totalQuantity: quantityNum,
 //       });
 //     }
 
@@ -191,10 +191,14 @@ const addToCart = async (req, res) => {
     );
 
     if (existingItemIndex >= 0) {
-      const existingSizePriceIndex = cart.items[existingItemIndex].sizePrice.findIndex((size) => size.size === sizePrice.size);
+      const existingSizePriceIndex = cart.items[
+        existingItemIndex
+      ].sizePrice.findIndex((size) => size.size === sizePrice.size);
 
       if (existingSizePriceIndex >= 0) {
-        cart.items[existingItemIndex].sizePrice[existingSizePriceIndex].quantity += quantityNum;
+        cart.items[existingItemIndex].sizePrice[
+          existingSizePriceIndex
+        ].quantity += quantityNum;
       } else {
         cart.items[existingItemIndex].sizePrice.push({
           size: sizePrice.size,
@@ -203,7 +207,9 @@ const addToCart = async (req, res) => {
         });
       }
 
-      cart.items[existingItemIndex].totalQuantity = cart.items[existingItemIndex].sizePrice.reduce((acc, sizePrice) => acc + sizePrice.quantity, 0);
+      cart.items[existingItemIndex].totalQuantity = cart.items[
+        existingItemIndex
+      ].sizePrice.reduce((acc, sizePrice) => acc + sizePrice.quantity, 0);
     } else {
       cart.items.push({
         _id: item._id,
@@ -231,6 +237,7 @@ const addToCart = async (req, res) => {
   }
 };
 
+//================
 
 const getCart = async (req, res) => {
   try {
@@ -350,8 +357,6 @@ const updateTotalPrice = async (cart) => {
 
 //================
 
-//================
-
 const clearCart = async (req, res) => {
   try {
     const userId = req.user ? req.user._id : undefined;
@@ -377,10 +382,44 @@ const clearCart = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+const removeItem = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const userId = req.user ? req.user._id : undefined;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const cart = await CartModel.findOne({ user: userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+    const itemIndex = cart.items.findIndex((item) => item._id);
+
+    if (itemIndex < 0) {
+      return res.status(404).json({ message: "Item not found in cart" });
+    }
+
+    const removedItem = cart.items.splice(itemIndex, 1)[0];
+
+    await updateTotalQuantity(cart);
+    await updateTotalPrice(cart);
+
+    await cart.save();
+
+    return res.status(200).json({ cart, removedItem });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
 
 export default {
   addToCart,
   getCart,
   updateQuantity,
   clearCart,
+  removeItem,
 };

@@ -159,7 +159,7 @@ const Home = () => {
               {barSuppliers.map((supplier, index) => (
                 <div key={index} className="barJuiceSuppliersCard">
                   <div className="barJuiceSuppliersContent">
-                    <h2>{supplier.title}</h2>
+                    <h4>{supplier.title}</h4>
                     <p>{supplier.description}</p>
                     <button onClick={() => handleShowMoreSupplier(index)}>
                       Show more

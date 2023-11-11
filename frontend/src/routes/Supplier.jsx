@@ -60,7 +60,6 @@ const Supplier = () => {
           <div className="itemContent">
             <h2>{supplier.title}</h2>
             <p>{supplier.description}</p>
-            <p> {supplier.location}</p>
             <div className="barJuiceSuppliersIcons">
               {supplier.links.map((link, index) => (
                 <a key={index} href={link.link} title={link.title}>

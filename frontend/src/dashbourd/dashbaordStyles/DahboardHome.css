@@ -25,14 +25,9 @@ textarea {
   align-items: center;
 }
 
-
-.barJuiceSuppliersCarousel {
-  gap: 5px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 90%;
-  width: 80%;
+.dashboardSuplier{
+  height: auto;
+  gap: 20px;
 }
 
 .barJuiceSupplierForm {
@@ -42,7 +37,6 @@ textarea {
   justify-content: space-around;
 }
 .barJuiceSupplierFormInputs {
-  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -66,7 +60,7 @@ textarea {
   height: 8px;
 }
 .barJuiceSupplierFormExample::-webkit-scrollbar-thumb {
-  background: #51FD08;
+  background: #f0ea22;
   border-radius: 10px;
 }
 .barJuiceSupplierFormExample::-webkit-scrollbar-track {
