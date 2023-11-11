@@ -86,7 +86,7 @@ const Cart = () => {
   const handleRemoveItem = async (id) => {
     try {
       await axios.patch(
-        `http://localhost:1111/cart/${id}`,
+        `https://justsmilebackend.onrender.com/cart/${id}`,
         {},
         {
           headers: {
