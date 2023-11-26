@@ -13,16 +13,16 @@ const Footer = () => {
       <p>© 2023. Just Smile. All Rights Reserved.</p>
       <hr className="hr" />
       <div className="socialMedia">
-        <a href="https://maps.app.goo.gl/9c4HfQJ8VaDQD6rT8">
+        <a href="https://maps.app.goo.gl/9c4HfQJ8VaDQD6rT8" target="_blank">
           {" "}
           <MdLocationPin className="footerIcon locationIcon" />
         </a>
-        <a href="https://www.instagram.com/justsmile20222023/">
+        <a href="https://www.instagram.com/justsmile.organic_juices/" target="_blank">
           {" "}
           <BiLogoInstagram className="footerIcon instaIcon" />
         </a>
         <a href="https://wa.me/70503796">
-          <BiLogoWhatsapp className="footerIcon whatsAppIcon" />
+          <BiLogoWhatsapp className="footerIcon whatsAppIcon" target="_blank"/>
         </a>
       </div>
     </section>
