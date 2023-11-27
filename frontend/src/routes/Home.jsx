@@ -133,14 +133,11 @@ const Home = () => {
                   />
                   <div className="recommendedContent">
                     <h4 className="recommendedName">{recommended.title}</h4>
-
-                    <div>
-                      <div
-                        className="recommendedDescription"
-                        id={`paragraph-${index}`}
-                      >
-                        {recommended.description}
-                      </div>
+                    <div
+                      className="recommendedDescription"
+                      id={`paragraph-${index}`}
+                    >
+                      {recommended.description}
                     </div>
                     <button
                       onClick={() => handleShowMoreItem(index)}
@@ -153,24 +150,31 @@ const Home = () => {
               ))}
             </div>
           </div>
-          <div className="barJuiceSuppliers">
-            <h2>Bar Juice Suppliers </h2>
-            <div className="barJuiceSuppliersCarousel">
+          <div className="recommended">
+            <h2>We Supply </h2>
+            <div className="mostRecommended">
               {barSuppliers.map((supplier, index) => (
-                <div key={index} className="barJuiceSuppliersCard">
-                  <div className="barJuiceSuppliersContent">
-                    <h4>{supplier.title}</h4>
-                    <p>{supplier.description}</p>
-                    <button onClick={() => handleShowMoreSupplier(index)}>
-                      Show more
-                    </button>
-                  </div>
-
-                  <img
-                    src={supplier.image}
-                    alt=""
-                    className="barJuiceSuppliersImage"
-                  />
+                <div key={index} className="recommendedCard">
+                    <img
+                      src={supplier.image}
+                      alt=""
+                      className="recommendedImage"
+                    />
+                    <div className="recommendedContent">
+                      <h4 className="recommendedName">{supplier.title}</h4>
+                      <div
+                        className="recommendedDescription"
+                        id={`paragraph-${index}`}
+                      >
+                        {supplier.description}
+                      </div>
+                      <button
+                        onClick={() => handleShowMoreSupplier(index)}
+                        className="orderButton"
+                      >
+                        Show more
+                      </button>
+                    </div>
                 </div>
               ))}
             </div>

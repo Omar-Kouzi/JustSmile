@@ -40,15 +40,20 @@
   border-radius: 50%;
 }
 .cartItemQuantityEdit {
-  width: 15vw;
   display: flex;
   justify-content: center;
 }
-.cartItemQuantityEdit p,
-.cartItemQuantityEdit input {
+.cartItemQuantityEdit p {
   border: 1px solid;
   padding: 3px 7px;
   width: 55px;
+  text-align: center;
+}
+
+.cartItemQuantityEdit input {
+  border: 1px solid;
+  padding: 3px 7px;
+  width: 30px;
   text-align: center;
 }
 

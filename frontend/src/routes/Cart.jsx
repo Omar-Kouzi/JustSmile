@@ -36,7 +36,6 @@ const Cart = () => {
           },
         }
       );
-      console.log(response.data);
       setTotalPrice(response.data.totalPrice);
       setCart(response.data);
       setCartItems(response.data.items);

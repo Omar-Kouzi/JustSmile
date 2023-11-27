@@ -403,7 +403,7 @@ const DashboardHome = () => {
             </div>
           </div>
           <div className="barJuiceSuppliers dashboardSuplier">
-            <h2>Bar Juice Suppliers </h2>
+            <h2>We Supply</h2>
             <form action="#" className="barJuiceSupplierForm">
               <div className="barJuiceSupplierFormInputs">
                 <div className="barJuiceSupplierFormInput-field">
@@ -481,31 +481,42 @@ const DashboardHome = () => {
                 />
               </div>
             </form>
-            <div className="barJuiceSuppliersCarousel">
+            <div className="recommended">
+            <h2>We Supply </h2>
+            <div className="mostRecommended">
               {barSuppliers.map((supplier, index) => (
-                <div key={index} className="barJuiceSuppliersCard">
-                  <div className="barJuiceSuppliersContent">
-                    <h2>{supplier.title}</h2>
-                    <p>{supplier.description}</p>
-                    <button onClick={() => handleShowMoreSupplier(index)}>
-                      show more
-                    </button>
-                    <button
+                <div key={index} className="recommendedCard">
+                    <img
+                      src={supplier.image}
+                      alt=""
+                      className="recommendedImage"
+                    />
+                    <div className="recommendedContent">
+                      <h4 className="recommendedName">{supplier.title}</h4>
+                      <div
+                        className="recommendedDescription"
+                        id={`paragraph-${index}`}
+                      >
+                        {supplier.description}
+                      </div>
+                      <button
+                        onClick={() => handleShowMoreSupplier(index)}
+                        className="orderButton"
+                      >
+                        Show more
+                      </button>
+                      <button
                       className="recommendedDeleteButton"
                       onClick={() => handleDeleteSupplier(supplier._id)}
                     >
                       Delete
                     </button>
-                  </div>
-
-                  <img
-                    src={supplier.image}
-                    alt=""
-                    className="barJuiceSuppliersImage"
-                  />
+                    </div>
                 </div>
               ))}
             </div>
+          </div>
+         
           </div>
           <div className="offers">
             <h2>Offers </h2>{" "}

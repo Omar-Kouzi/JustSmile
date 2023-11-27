@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
-import { Blurhash } from "react-blurhash";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../Styles/Items.css";
@@ -10,7 +9,6 @@ import Loader from "../components/loader";
 
 const Items = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [loadedImages, setLoadedImages] = useState([]);
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
@@ -38,9 +36,7 @@ const Items = () => {
     }
   };
 
-  const handleImageLoad = (index) => {
-    setLoadedImages((prevLoadedImages) => [...prevLoadedImages, index]);
-  };
+
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
@@ -119,23 +115,7 @@ const Items = () => {
           <section className="Items">
             {filteredItems.map((item, index) => (
               <div key={index} className="itemCard">
-                {!loadedImages.includes(index) && (
-                  <Blurhash
-                    hash={"LEHV6nWB2yk8pyo0adR*.7kCMdnj"}
-                    width={200}
-                    height={200}
-                    resolutionX={32}
-                    resolutionY={32}
-                    punch={1}
-                    style={{ display: "inline-block" }}
-                  />
-                )}
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  onLoad={() => handleImageLoad(index)}
-                  className="itemImage"
-                />
+                <img src={item.image} alt={item.title} className="itemImage" />
 
                 <div className="content">
                   {" "}

@@ -94,49 +94,9 @@
   align-items: center;
   justify-content: center;
 }
-.barJuiceSuppliersCarousel {
-  gap: 20px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 90%;
-  width: 700px;
-  overflow-y: scroll;
-  padding: 10px;
 
-}
-.barJuiceSuppliersContent {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  padding: 5px;
-  height: 80%;
-  width: 90%;
-}
-.barJuiceSuppliersContent p {
-  height: 2.4rem;
-  overflow: hidden;
-}
 
-.barJuiceSuppliersImage {
-  width: 150px;
-  object-fit: cover;
-  height: 150px;
-  margin: 5px;
-  border-radius: 50%;
-}
-.barJuiceSuppliersCard {
-  width: 50%;
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: space-around;
-  border: 1px solid #0000001a;
-  align-items: center;
-  border-radius: 3px;
-  background-color: #f2fce933;
-  /* box-shadow: 5px 2px 9px #0000001a; */
-  box-shadow: 5px 2px 9px #0000001a;
-}
+
 .offers {
   height: 45vh;
   display: flex;
@@ -193,7 +153,7 @@
   text-align: center;
 }
 @media screen and (max-width: 1050px) {
-  .barJuiceSuppliersCard {
+  /* .barJuiceSuppliersCard {
     width: 250px;
     height: 300px;
     padding-top: 5px;
@@ -204,7 +164,7 @@
   .barJuiceSuppliersContent {
     width: 90%;
     height: 120px;
-  }
+  } */
 }
 @media screen and (max-width: 750px) {
   .mostRecommended {
@@ -235,15 +195,15 @@
     width: 190px;
     padding: 5px 10px;
   }
-  .barJuiceSuppliersCarousel {
-    flex-wrap: wrap;
+  /* .barJuiceSuppliersCarousel {
+    
     width: 90vw;
     margin-top: 10px;
-  }
-  .barJuiceSuppliersCard {
+  } */
+  /* .barJuiceSuppliersCard {
     width: 190px;
     height: auto;
-  }
+  } */
   .offerDiscription {
     height: 2.5rem;
     overflow: hidden;
@@ -303,9 +263,7 @@
   .recommendedCard {
     width: 165px;
   }
-  .barJuiceSuppliersCard {
-    width: 165px;
-  }
+
   .mostOffers {
     width: 350px;
   }
