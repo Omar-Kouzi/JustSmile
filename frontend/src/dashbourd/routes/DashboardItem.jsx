@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 import Header from "../../components/Header";
+import DashboardHeader from "../components/DashbaordHeader";
 import Footer from "../../components/Footer";
 import Loader from "../../components/loader";
 
@@ -18,7 +19,7 @@ const DashboardItem = () => {
     title: "",
     description: "",
     flavor: "",
-    sizePrice: "",
+    sizePrice: [{ size: "", price: "" }],
     category: "",
     ingredients: "",
     image: null,
@@ -33,12 +34,15 @@ const DashboardItem = () => {
         `https://justsmilebackend.onrender.com/items/${itemID.id}`
       );
       setItem(response.data);
+      setNewItem((prevItem) => ({
+        ...prevItem,
+        sizePrice: response.data.sizePrice,
+      }));
     } catch (error) {
       console.log("Error fetching data:", error);
     }
   };
 
-  // Fetch Categories function
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
@@ -50,18 +54,47 @@ const DashboardItem = () => {
     }
   };
 
-  const handleItemChange = (e) => {
+  const handleItemChange = (e, index) => {
     if (e.target.name === "image" && e.target.files.length > 0) {
       setNewItem({
         ...newItem,
         [e.target.name]: e.target.files[0],
       });
     } else {
-      setNewItem({
-        ...newItem,
-        [e.target.name]: e.target.value,
-      });
+      const { name, value } = e.target;
+
+      if (name.startsWith("size") || name.startsWith("price")) {
+        const updatedSizes = [...newItem.sizePrice];
+        updatedSizes[index][name] = value;
+
+        setNewItem({
+          ...newItem,
+          sizePrice: updatedSizes,
+        });
+      } else {
+        setNewItem({
+          ...newItem,
+          [name]: value,
+        });
+      }
     }
+  };
+
+  const handleAddSizePrice = () => {
+    setNewItem({
+      ...newItem,
+      sizePrice: [...newItem.sizePrice, { size: "", price: "" }],
+    });
+  };
+
+  const handleRemoveSizePrice = (index) => {
+    const updatedSizes = [...newItem.sizePrice];
+    updatedSizes.splice(index, 1);
+
+    setNewItem({
+      ...newItem,
+      sizePrice: updatedSizes,
+    });
   };
 
   const handlePatchItem = async () => {
@@ -70,7 +103,7 @@ const DashboardItem = () => {
     formData.append("title", newItem.title || item.title);
     formData.append("description", newItem.description || item.description);
     formData.append("flavor", newItem.flavor || item.flavor);
-    formData.append("sizePrice", newItem.sizePrice || item.sizePrice);
+    formData.append("sizePrice", JSON.stringify(newItem.sizePrice));
     formData.append("category", newItem.category || item.category);
     formData.append(
       "ingredients",
@@ -106,6 +139,7 @@ const DashboardItem = () => {
       console.error(err);
     }
   };
+
   const fetchData = async () => {
     const startTime = Date.now();
 
@@ -141,6 +175,7 @@ const DashboardItem = () => {
   return (
     <>
       <Header />
+      <DashboardHeader />
       {isLoading ? (
         <div className="LoaderWrapper">
           <Loader />
@@ -152,7 +187,7 @@ const DashboardItem = () => {
             <input
               type="file"
               name="image"
-              onChange={handleItemChange}
+              onChange={(e) => handleItemChange(e)}
               accept="image/*"
             />
           </div>
@@ -171,10 +206,12 @@ const DashboardItem = () => {
             )}
             <div>
               <h4>Title</h4>
-              <textarea
+              <input
                 name="title"
                 value={newItem.title || item.title}
-                onChange={handleItemChange}
+                onChange={(e) => handleItemChange(e)}
+                className="dashboardItemInput"
+
               />
             </div>
             <div>
@@ -182,34 +219,65 @@ const DashboardItem = () => {
               <textarea
                 name="description"
                 value={newItem.description || item.description}
-                onChange={handleItemChange}
+                onChange={(e) => handleItemChange(e)}
+                className="dashboardItemInput"
+
               />
             </div>
             <div>
               <h4>Flavor</h4>
-              <textarea
+              <input
                 name="flavor"
                 value={newItem.flavor || item.flavor}
-                onChange={handleItemChange}
+                onChange={(e) => handleItemChange(e)}
+                className="dashboardItemInput"
+
               />
             </div>
+           
             <div>
               <h4>Size & Price</h4>
-              {item.sizePrice.map((size,index)=>(
-                <div key={index}>{size.size} {size.price}$</div>
+              {newItem.sizePrice.map((sizePrice, index) => (
+                <div className="sizePriceItem" key={index}>
+                  <div className="sizePriceItemInput">
+                    <input
+                      type="text"
+                      placeholder="Size"
+                      name={`size${index}`}
+                      value={sizePrice.size}
+                      onChange={(e) => handleItemChange(e, index)}
+                      className="dashboardItemInput"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Price"
+                      name={`price${index}`}
+                      value={sizePrice.price}
+                      onChange={(e) => handleItemChange(e, index)}
+                      className="dashboardItemInput"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveSizePrice(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
               ))}
-              <textarea
-                name="sizePrice"
-                defaultValue="[{&#34;size&#34;:&#34; 	&#34;,&#34;price&#34;:&#34;	 &#34;&#125;,{&#34;size&#34;:&#34; 	&#34;,&#34;price&#34;:&#34;	 &#34;&#125;,]"
-                onChange={handleItemChange}
-              />
+              <button type="button" onClick={handleAddSizePrice}>
+                Add Size/Price
+              </button>
             </div>
             <div>
               <h4>Category</h4>
               <select
                 name="category"
                 value={newItem.category || item.category}
-                onChange={handleItemChange}
+                onChange={(e) => handleItemChange(e)}
+                className="dashboardItemInput"
+
               >
                 {categories.map((category, index) => (
                   <option key={index} value={category._id}>
@@ -220,10 +288,12 @@ const DashboardItem = () => {
             </div>
             <div className="ingredientsContainer">
               <h4>Ingredients:</h4>
-              <textarea
+              <input
                 name="ingredients"
                 value={newItem.ingredients || item.ingredients.join(", ")}
-                onChange={handleItemChange}
+                onChange={(e) => handleItemChange(e)}
+                className="dashboardItemInput"
+
               />
             </div>
             <div>
@@ -231,7 +301,9 @@ const DashboardItem = () => {
               <select
                 name="available"
                 value={newItem.available || item.available}
-                onChange={handleItemChange}
+                onChange={(e) => handleItemChange(e)}
+                className="dashboardItemInput"
+
               >
                 <option value={true}>True</option>
                 <option value={false}>False</option>

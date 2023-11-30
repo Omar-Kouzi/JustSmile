@@ -1,31 +1,28 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
+import Loader from "../../components/loader";
 import Header from "../../components/Header";
+import DashboardHeader from "../components/DashbaordHeader";
 import Footer from "../../components/Footer";
 import "../dashbaordStyles/DashboardItems.css";
 import { useNavigate } from "react-router";
-import DashboardHeader from "../components/DashbaordHeader";
-import Loader from "../../components/loader";
 
 const DashboardItems = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [categories, setCategories] = useState([]);
-
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({
     title: "",
     description: "",
     ingredients: "",
-    sizePrice: "", //[{"size":"","price":""}]
+    sizePrice: [{ size: "", price: "" }],
     flavor: "",
     category: "",
     image: null,
     available: true,
   });
-
   const [isLoading, setIsLoading] = useState(true);
-
   const navigate = useNavigate();
 
   const fetchItems = async () => {
@@ -38,9 +35,10 @@ const DashboardItems = () => {
       console.log("Error fetching data:", error);
     }
   };
+
   const handledeleteItem = async (itemId) => {
     try {
-      const response = await axios.delete(
+      await axios.delete(
         `https://justsmilebackend.onrender.com/items/${itemId}`,
         {
           headers: {
@@ -50,9 +48,10 @@ const DashboardItems = () => {
       );
       fetchItems();
     } catch (error) {
-      console.log("Error fetching categories:", error);
+      console.log("Error deleting item:", error);
     }
   };
+
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
@@ -77,6 +76,7 @@ const DashboardItems = () => {
   const handleItemClick = (ItemId) => {
     navigate(`/dashboard/items/${ItemId}`);
   };
+
   const handleItemChange = (e) => {
     if (e.target.name === "image" && e.target.files.length > 0) {
       setNewItem({
@@ -85,26 +85,44 @@ const DashboardItems = () => {
       });
     } else {
       const { name, value } = e.target;
-      setNewItem({
-        ...newItem,
-        [name]: value,
-      });
+
+      if (
+        name.startsWith("additionalSize") ||
+        name.startsWith("additionalPrice")
+      ) {
+        const index = parseInt(name.replace(/\D/g, ""), 10);
+        const updatedSizes = [...newItem.sizePrice];
+
+        if (!updatedSizes[index]) {
+          updatedSizes[index] = { size: "", price: "" };
+        }
+        updatedSizes[index][name.includes("Size") ? "size" : "price"] = value;
+        setNewItem({
+          ...newItem,
+          sizePrice: updatedSizes,
+        });
+      } else {
+        setNewItem({
+          ...newItem,
+          [name]: value,
+        });
+      }
     }
   };
 
   const handlePostItem = async (e) => {
     e.preventDefault();
 
+    const newItemCopy = { ...newItem };
+
+    newItemCopy.sizePrice = JSON.stringify(newItemCopy.sizePrice);
+
     const formData = new FormData();
-    formData.append("title", newItem.title);
-    formData.append("description", newItem.description);
-    formData.append("ingredients", newItem.ingredients);
-    formData.append("sizePrice", newItem.sizePrice);
-    formData.append("flavor", newItem.flavor);
-    formData.append("category", newItem.category);
-    formData.append("image", newItem.image);
-    formData.append("availabe", newItem.available);
-    formData.append("userId", secureLocalStorage.getItem("id"));
+
+    for (const key in newItemCopy) {
+      formData.append(key, newItemCopy[key]);
+    }
+
     try {
       const response = await axios.post(
         "https://justsmilebackend.onrender.com/items/",
@@ -119,9 +137,10 @@ const DashboardItems = () => {
       console.log(response.data);
       fetchItems();
     } catch (error) {
-      console.log("Error fetching data:", error);
+      console.log("Error posting item:", error);
     }
   };
+
   const fetchData = async () => {
     const startTime = Date.now();
 
@@ -138,7 +157,7 @@ const DashboardItems = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching data:", error);
     }
   };
 
@@ -150,10 +169,18 @@ const DashboardItems = () => {
       setSelectedCategory(storedCategory);
     }
   }, []);
+
+  const handleAddSizePrice = () => {
+    setNewItem({
+      ...newItem,
+      sizePrice: [...newItem.sizePrice, { size: "", price: "" }],
+    });
+  };
+
   return (
     <>
       <Header />
-      <DashboardHeader />{" "}
+      <DashboardHeader />
       {isLoading ? (
         <div className="LoaderWrapper">
           <Loader />
@@ -241,23 +268,31 @@ const DashboardItems = () => {
                   />
                 </div>
 
-                <div className="barJuiceItemFormInput-field ">
-                  <p>Size and price</p>
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="size and price"
-                      name="sizePrice"
-                      defaultValue="[{&#34;size&#34;:&#34; 	&#34;,&#34;price&#34;:&#34;	 &#34;&#125;,]"
-                      className="dashboardItemInput"
-                      onChange={(e) => {
-                        handleItemChange(e);
-                      }}
-                    />
-                    <b>you can add more sizes by copying and pasting </b>
-                    &#123; &#34;size&#34;:&#34; &#34;,&#34;price&#34;:&#34;
-                    &#34;&#125;, and puting your values in the quots
-                  </div>
+                <div className="barJuiceItemFormInput-field">
+                  <p>Size and Price</p>
+                  {newItem.sizePrice.map((sizePrice, index) => (
+                    <div key={index}>
+                      <input
+                        type="text"
+                        placeholder="Size"
+                        name={`additionalSize${index}`}
+                        value={sizePrice.size}
+                        onChange={(e) => handleItemChange(e, index, "size")}
+                        className="dashboardItemInput"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Price"
+                        name={`additionalPrice${index}`}
+                        value={sizePrice.price}
+                        onChange={(e) => handleItemChange(e, index, "price")}
+                        className="dashboardItemInput"
+                      />
+                    </div>
+                  ))}
+                  <button type="button" onClick={handleAddSizePrice}>
+                    Add Size/Price
+                  </button>
                 </div>
                 <select
                   id="itemSelect"
@@ -289,7 +324,7 @@ const DashboardItems = () => {
               <div className="">
                 <input
                   type="submit"
-                  value="Post a Item"
+                  value="Post an Item"
                   onClick={(e) => handlePostItem(e)}
                 />
               </div>
@@ -299,7 +334,6 @@ const DashboardItems = () => {
                 <img src={item.image} alt={item.title} className="itemImage" />
 
                 <div className="content">
-                  {" "}
                   <h4 className="itemName">{item.title}</h4>
                   <div className="recommendedDescription">
                     {item.description}
@@ -308,7 +342,7 @@ const DashboardItems = () => {
                     className="dashboardItemDeleteButton"
                     onClick={() => handledeleteItem(item._id)}
                   >
-                    delete
+                    Delete
                   </button>
                   <button
                     onClick={() => handleItemClick(item._id)}

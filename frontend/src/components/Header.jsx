@@ -33,30 +33,6 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const response = await axios.get(
-          `https://justsmilebackend.onrender.com/cart/`,
-          {
-            headers: {
-              Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (response.message === "Request failed with status code 401") {
-          secureLocalStorage.clear();
-          setIsLoggedIn(false);
-        } else {
-          setIsLoggedIn(true);
-        }
-      } catch (error) {
-      }
-    };
-    fetchCart();
-  }, []);
-
-  useEffect(() => {
     const id = secureLocalStorage.getItem("id");
     setUserId(id);
     if (id) {

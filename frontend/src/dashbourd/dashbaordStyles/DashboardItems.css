@@ -5,7 +5,19 @@
   display: flex;
   justify-content: center;
 }
+.sizePriceItem{
+  display: flex;
+  gap: 5px;
+  width: 100%;
+}
+.sizePriceItemInput {
+  display: flex;
+}
 
+.sizePriceItem button {
+  background-color: #aa0000;
+  color: white;
+}
 .CategoriesContainer {
   width: 90vw;
   display: flex;
@@ -70,7 +82,7 @@
 }
 .dashboardItemInput {
   padding: 5px 5px;
-  width: 94%;
+  width: 100%;
 }
 .itemCardform {
   border: 1px solid;
@@ -100,7 +112,6 @@
 .dashboardItemContent {
   justify-content: center;
 }
-
 
 @media only screen and (max-width: 500px) {
   .Items {

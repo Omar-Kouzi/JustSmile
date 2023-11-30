@@ -6,6 +6,7 @@ import cloudinary from "cloudinary";
 
 const postItem = asyncHandler(async (req, res) => {
   const id = req.user.id;
+  console.log(req.body);
   const user = await User.findById(id);
   if (!user) {
     return res.status(200).json({ message: "User not found", success: false });
@@ -84,10 +85,11 @@ const updateItem = asyncHandler(async (req, res) => {
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  console.log(req.body)
+  console.log(req.body);
   const { title, description, ingredients, flavor, category, available } =
     req.body;
   const sizePrice = JSON.parse(req.body.sizePrice);
+  const parsedIngredients = ingredients.split(/;|,/).map((i) => i.trim());
 
   // Check if there is a new image
   let imageUrl;
@@ -113,11 +115,11 @@ const updateItem = asyncHandler(async (req, res) => {
     flavor,
     sizePrice,
     category,
-    ingredients: ingredients,
+    ingredients: parsedIngredients,
     available,
     ...(imageUrl && { image: imageUrl }),
   };
-
+  console.log(updates);
   const options = { new: true };
   const item = await Item.findByIdAndUpdate(req.body.id, updates, options);
   if (!item) {
