@@ -69,8 +69,6 @@
   width: 95%;
 }
 
-
-
 .show-more {
   cursor: pointer;
   color: #626265;
@@ -92,7 +90,7 @@
     padding-left: 10px;
     padding-right: 10px;
   }
- 
+
   .itemImage {
     width: 150px;
     height: 150px;
@@ -100,15 +98,14 @@
 }
 
 @media only screen and (max-width: 450px) {
- 
- .itemCard {
-  width: 165px;
-}
-.itemImage {
-  height: 142px;
-  padding: 5px;
-  width: 140px;
-}
+  .itemCard {
+    width: 165px;
+  }
+  .itemImage {
+    height: 142px;
+    padding: 5px;
+    width: 140px;
+  }
 }
 @media only screen and (max-width: 350px) {
   .Items {
@@ -121,5 +118,15 @@
   .itemImage {
     width: 120px;
     height: 120px;
+  }
+}
+@media only screen and (max-width: 320px) {
+  .itemCard {
+    width: 120px;
+  }
+}
+@media only screen and (max-width: 300px) {
+  .itemCard {
+    width: 100px;
   }
 }
