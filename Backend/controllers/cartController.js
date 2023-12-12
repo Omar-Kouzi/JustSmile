@@ -135,7 +135,6 @@ const addToCart = async (req, res) => {
     }
 
     const item = (await Offer.findById(id)) || (await Item.findById(id));
-
     if (!item) {
       return res.status(200).json({ message: "Item not found" });
     }

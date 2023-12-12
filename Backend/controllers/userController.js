@@ -6,7 +6,6 @@ import bcrypt from "bcryptjs";
 //============
 const registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password, role, address } = req.body;
-  console.log(req.body);
   if (!name || !email || !password) {
     return res
       .status(200)
@@ -33,7 +32,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
     role: role || "user",
     success: true,
   });
-  console.log(user);
 
   await user.save();
   res.status(200).json({
@@ -94,7 +92,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     return res.status(200).json({ message: "User not found", success: false });
   }
 
-  console.log("body",req.body);
   if (req.body.oldPassword) {
     const isPasswordMatch = await bcrypt.compare(
       req.body.oldPassword,
@@ -118,7 +115,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 
   const updatedUser = await user.save();
-  console.log(updatedUser);
   return res.status(200).json({
     updatedUser: updatedUser,
     token: generateToken(updatedUser._id),

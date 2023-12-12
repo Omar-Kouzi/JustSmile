@@ -23,6 +23,9 @@
   height: 50%;
   width: 40%;
 }
+.aboutImage {
+  width: 300px;
+}
 .recommended {
   height: 60vh;
   display: flex;
@@ -50,7 +53,7 @@
   height: 8px;
 }
 .mostRecommended::-webkit-scrollbar-thumb {
-  background: #f0ea22;
+  background: #efe924;
   border-radius: 10px;
 }
 .mostRecommended::-webkit-scrollbar-track {
@@ -184,7 +187,7 @@
     height: 8px;
   }
   .mostRecommended::-webkit-scrollbar-thumb {
-    background: #f0ea22;
+    background: #efe924;
     border-radius: 10px;
   }
   .mostRecommended::-webkit-scrollbar-track {

@@ -11,7 +11,6 @@ import "../Styles/Header.css";
 import SmMenu from "./menu";
 
 const Header = () => {
-  const [activeClass, setActiveClass] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState("");
   const [userId, setUserId] = useState("");
@@ -52,22 +51,12 @@ const Header = () => {
 
   return (
     <>
-      <section className={`Header ${activeClass ? "anotherClass" : ""}`}>
+      <section className={`Header `}>
         <div className="Header1">
           <h1 className="logo">Just Smile</h1>
-          <h1 onClick={() => setActiveClass(!activeClass)}></h1>
-          <div
-            className={`links ${
-              activeClass ? "active" : "notactive"
-            } headerNavlinks`}
-          >
+          <div className={`links  headerNavlinks`}>
             {isAdmin === "admin" ? (
-              <NavLink
-                to="/dashboard/home"
-                className={`headersNavlink ${
-                  activeClass ? "active" : "notactive"
-                }`}
-              >
+              <NavLink to="/dashboard/home" className={`headersNavlink `}>
                 Dashboard
               </NavLink>
             ) : (

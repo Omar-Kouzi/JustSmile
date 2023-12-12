@@ -124,7 +124,7 @@ const DashboardItems = () => {
     }
 
     try {
-      const response = await axios.post(
+      await axios.post(
         "https://justsmilebackend.onrender.com/items/",
         formData,
         {
@@ -134,9 +134,14 @@ const DashboardItems = () => {
           },
         }
       );
-      console.log(response.data);
       fetchItems();
     } catch (error) {
+      if(error.response.status === 401){
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
       console.log("Error posting item:", error);
     }
   };
@@ -268,10 +273,10 @@ const DashboardItems = () => {
                   />
                 </div>
 
-                <div className="barJuiceItemFormInput-field">
+                <div className="barJuiceItemFormInput-field sizeAndPrice">
                   <p>Size and Price</p>
                   {newItem.sizePrice.map((sizePrice, index) => (
-                    <div key={index}>
+                    <div className="sizePriceItem" key={index}>
                       <input
                         type="text"
                         placeholder="Size"

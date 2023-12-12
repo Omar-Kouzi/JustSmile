@@ -91,7 +91,7 @@ const Home = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching data:", error);
     }
   };
 
@@ -155,26 +155,26 @@ const Home = () => {
             <div className="mostRecommended">
               {barSuppliers.map((supplier, index) => (
                 <div key={index} className="recommendedCard">
-                    <img
-                      src={supplier.image}
-                      alt=""
-                      className="recommendedImage"
-                    />
-                    <div className="recommendedContent">
-                      <h4 className="recommendedName">{supplier.title}</h4>
-                      <div
-                        className="recommendedDescription"
-                        id={`paragraph-${index}`}
-                      >
-                        {supplier.description}
-                      </div>
-                      <button
-                        onClick={() => handleShowMoreSupplier(index)}
-                        className="orderButton"
-                      >
-                        Show more
-                      </button>
+                  <img
+                    src={supplier.image}
+                    alt=""
+                    className="recommendedImage"
+                  />
+                  <div className="recommendedContent">
+                    <h4 className="recommendedName">{supplier.title}</h4>
+                    <div
+                      className="recommendedDescription"
+                      id={`paragraph-${index}`}
+                    >
+                      {supplier.description}
                     </div>
+                    <button
+                      onClick={() => handleShowMoreSupplier(index)}
+                      className="orderButton"
+                    >
+                      Show more
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -188,7 +188,7 @@ const Home = () => {
                     <div className="offerContent">
                       <h2>{offer.title}</h2>
                       <p className="offerDiscription">{offer.description}</p>
-                      <p>Just for the price of: {offer.price}$</p>
+                      <p>Just for the price of:{offer.sizePrice[0].price}$</p>
                       <button onClick={() => handleShowMoreOffer(index)}>
                         show more
                       </button>

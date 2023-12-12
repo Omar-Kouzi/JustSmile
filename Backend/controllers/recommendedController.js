@@ -15,7 +15,6 @@ const postRecommended = asyncHandler(async (req, res) => {
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  console.log(req.body);
   const itemId = req.body.id;
   if (!itemId) {
     return res

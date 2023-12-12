@@ -11,7 +11,7 @@ import Loader from "../components/loader";
 const Offer = () => {
   const [offer, setOffer] = useState("");
   const offerId = useParams();
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState(0);
   const [alert, setAlert] = useState("");
   const [valid, setValid] = useState(false);
   const [addedToCart, setAddedToCart] = useState("");
@@ -39,9 +39,9 @@ const Offer = () => {
       const res = await axios.post(
         "https://justsmilebackend.onrender.com/cart",
         {
-          id: offerId.id,
+          id: offer._id,
           quantity: quantity,
-          userId: secureLocalStorage.getItem("id"),
+          sizeIndex: 0,
         },
         {
           headers: {
@@ -59,8 +59,14 @@ const Offer = () => {
         setValid(true);
         setAlert("Item added to cart successfully");
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
+      if (error.response.status === 401) {
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
     }
   };
   const fetchData = async () => {
@@ -119,13 +125,26 @@ const Offer = () => {
             <h2>{offer.title}</h2>
             <p>{offer.description}</p>
 
-            <p>Price: {offer.price}$</p>
+            <p>Price: {offer.sizePrice[0].price}$</p>
             <div className="quantityAddToCartButtonContainer">
-              <input
-                type="number"
-                placeholder="Quantity"
-                onChange={(value) => setQuantity(value.target.value)}
-              />
+              <div className="quantityContainer">
+                <div>
+                  <div
+                    className="QuantitySubtract"
+                    onClick={() => setQuantity(Math.max(0, quantity - 1))}
+                  >
+                    <p>-</p>
+                  </div>
+
+                  <p className="itemQuantityBox">{quantity}</p>
+                  <div
+                    className="Quantityadd"
+                    onClick={() => setQuantity(quantity + 1)}
+                  >
+                    <p>+</p>
+                  </div>
+                </div>
+              </div>
               <button onClick={() => handleAddToCart()}> Add To cart</button>
             </div>
           </div>

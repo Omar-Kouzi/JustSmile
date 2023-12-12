@@ -60,7 +60,7 @@ textarea {
   height: 8px;
 }
 .barJuiceSupplierFormExample::-webkit-scrollbar-thumb {
-  background: #f0ea22;
+  background: #efe924;
   border-radius: 10px;
 }
 .barJuiceSupplierFormExample::-webkit-scrollbar-track {
@@ -77,7 +77,11 @@ textarea {
 
 
 
-
+.dashboardOffers{
+  height: auto !important;
+  padding: 5px;
+  gap: 5px;
+}
 
 
 .offerFormInputs {

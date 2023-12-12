@@ -77,13 +77,19 @@ const Profile = () => {
         setAlert("User updated successfully");
       }
       fetchUser();
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
+      if (error.response.status === 401) {
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
     }
   };
   const handleDeleteUser = async () => {
     try {
-      const res = await axios.delete(
+      await axios.delete(
         `https://justsmilebackend.onrender.com/user/${userId.id}`,
         {
           headers: {

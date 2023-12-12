@@ -4,7 +4,7 @@
   align-items: center;
   height: 100vh;
   /* background-color: #65ff62; */
-  background-color: #f0ea22;
+  background-color: #efe924;
 }
 .goback {
   position: absolute;
@@ -70,5 +70,5 @@
   padding: 5px;
   border: 1px none;
   border-radius: 2px;
-  background-color: #f0ea22;
+  background-color: #efe924;
 }

@@ -135,8 +135,14 @@ const DashboardItem = () => {
         setValid(true);
         setAlert("Item updated successfully");
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
+      if(error.response.status === 401){
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
     }
   };
 
@@ -211,7 +217,6 @@ const DashboardItem = () => {
                 value={newItem.title || item.title}
                 onChange={(e) => handleItemChange(e)}
                 className="dashboardItemInput"
-
               />
             </div>
             <div>
@@ -221,7 +226,6 @@ const DashboardItem = () => {
                 value={newItem.description || item.description}
                 onChange={(e) => handleItemChange(e)}
                 className="dashboardItemInput"
-
               />
             </div>
             <div>
@@ -231,11 +235,18 @@ const DashboardItem = () => {
                 value={newItem.flavor || item.flavor}
                 onChange={(e) => handleItemChange(e)}
                 className="dashboardItemInput"
-
               />
             </div>
-           
-            <div>
+            <div className="ingredientsContainer">
+              <h4>Ingredients:</h4>
+              <input
+                name="ingredients"
+                value={newItem.ingredients || item.ingredients.join(", ")}
+                onChange={(e) => handleItemChange(e)}
+                className="dashboardItemInput"
+              />
+            </div>
+            <div className="sizeAndPrice">
               <h4>Size & Price</h4>
               {newItem.sizePrice.map((sizePrice, index) => (
                 <div className="sizePriceItem" key={index}>
@@ -269,7 +280,7 @@ const DashboardItem = () => {
               <button type="button" onClick={handleAddSizePrice}>
                 Add Size/Price
               </button>
-            </div>
+            </div>{" "}
             <div>
               <h4>Category</h4>
               <select
@@ -277,7 +288,6 @@ const DashboardItem = () => {
                 value={newItem.category || item.category}
                 onChange={(e) => handleItemChange(e)}
                 className="dashboardItemInput"
-
               >
                 {categories.map((category, index) => (
                   <option key={index} value={category._id}>
@@ -286,16 +296,6 @@ const DashboardItem = () => {
                 ))}
               </select>
             </div>
-            <div className="ingredientsContainer">
-              <h4>Ingredients:</h4>
-              <input
-                name="ingredients"
-                value={newItem.ingredients || item.ingredients.join(", ")}
-                onChange={(e) => handleItemChange(e)}
-                className="dashboardItemInput"
-
-              />
-            </div>
             <div>
               <h4>Available</h4>
               <select
@@ -303,7 +303,6 @@ const DashboardItem = () => {
                 value={newItem.available || item.available}
                 onChange={(e) => handleItemChange(e)}
                 className="dashboardItemInput"
-
               >
                 <option value={true}>True</option>
                 <option value={false}>False</option>

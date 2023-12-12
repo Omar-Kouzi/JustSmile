@@ -9,6 +9,8 @@ import ReactWhatsapp from "react-whatsapp";
 import { CSSTransition } from "react-transition-group";
 import Loader from "../components/loader";
 import { BsTrash } from "react-icons/bs";
+// import { SMTPClient } from "emailjs";
+
 const Cart = () => {
   const [cart, setCart] = useState([]);
   const [cartitems, setCartItems] = useState([]);
@@ -16,7 +18,6 @@ const Cart = () => {
   const [userName, setUserName] = useState([]);
   const [userAddress, setUserAddress] = useState("");
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
-  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [quantity, setNewQuantity] = useState("0");
   const userId = secureLocalStorage.getItem("id");
@@ -58,10 +59,15 @@ const Cart = () => {
           },
         }
       );
-      console.log(response);
       fetchCart();
     } catch (error) {
-      console.log(error);
+      console.log("Error patching data:", error);
+      if(error.response.status === 401){
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
     }
   };
 
@@ -79,7 +85,13 @@ const Cart = () => {
       setShowDeletePopup(false);
       fetchCart();
     } catch (error) {
-      console.log(error);
+      console.log("Error patching data:", error);
+      if(error.response.status === 401){
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
     }
   };
   const handleRemoveItem = async (id) => {
@@ -95,7 +107,13 @@ const Cart = () => {
       );
       fetchCart();
     } catch (error) {
-      console.log(error);
+      console.log("Error patching data:", error);
+      if(error.response.status === 401){
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
     }
   };
 
@@ -116,7 +134,7 @@ const Cart = () => {
       setUserName(response.data.name);
       setUserPhoneNumber(response.data.phoneNumber);
     } catch (error) {
-      console.log("Error fetching data:", error);
+      console.log("Error fetching user:", error);
     }
   };
 
@@ -135,11 +153,8 @@ const Cart = () => {
       ? cartitems
           .map(
             (item, index) =>
-              `${index + 1}. ${item.title} - ${item.sizePrice[0].quantity} x ${
-                item.sizePrice[0].size
-              } - $${item.sizePrice[0].price} USD/Piece\n`
+              `${index + 1}. ${item.title} - \n${item.sizePrice.map((size)=>`${size.size} ${size.quantity} USD/Piece\n`)}`
           )
-          .join("")
       : "Your cart is empty"
   }
     
@@ -175,7 +190,7 @@ const Cart = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching data:", error);
     }
   };
 
@@ -281,12 +296,13 @@ const Cart = () => {
               {cartitems.length > 0 ? (
                 <>
                   {userAddress.trim() !== "" ? (
-                    <button
-                      onClick={() => setShowConfirmationDialog(true)}
-                      className="purchase-button"
+                    <ReactWhatsapp
+                      number="+961 81284452"
+                      message={Form}
+                      className="deletePopupButtons yes"
                     >
-                      ORDER NOW
-                    </button>
+                      Order
+                    </ReactWhatsapp>
                   ) : (
                     <p>
                       Please enter your delivery address before placing an order
@@ -308,30 +324,7 @@ const Cart = () => {
               )}
             </div>
           </div>
-          {showConfirmationDialog ? (
-            <div className="orderPopup">
-              <div className="orderPopupContent">
-                <h3>Are you sure you want to place the order?</h3>
-                <div className="orderPopupButtonsContainer">
-                  <ReactWhatsapp
-                    number="+961 81284452"
-                    message={Form}
-                    className="deletePopupButtons yes"
-                  >
-                    Order
-                  </ReactWhatsapp>
-                  <button
-                    className="deletePopupButtons no"
-                    onClick={() => setShowConfirmationDialog(false)}
-                  >
-                    No
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
+
           <CSSTransition
             in={showDeletePopup}
             timeout={300}

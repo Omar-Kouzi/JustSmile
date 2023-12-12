@@ -15,8 +15,7 @@ const postOffers = asyncHandler(async (req, res) => {
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  console.log(req.body);
-  const { title, description, price } = req.body;
+  const { title, description, price, size } = req.body;
   if (!title || !description || !price) {
     return res
       .status(200)
@@ -40,7 +39,7 @@ const postOffers = asyncHandler(async (req, res) => {
     const offer = new Offers({
       title,
       description,
-      price,
+      sizePrice: { size: size, price: price },
       image: result.secure_url,
     });
 
@@ -71,65 +70,66 @@ const getOfferById = asyncHandler(async (req, res) => {
 
 //============
 
-const updateOffer = asyncHandler(async (req, res) => {
-  const id = req.user.id;
-  const user = await User.findById(id);
+// const updateOffer = asyncHandler(async (req, res) => {
+//   const id = req.user.id;
+//   const user = await User.findById(id);
 
-  if (!user) {
-    return res.status(200).json({ message: "User not found", success: false });
-  }
-  if (user.role !== "admin") {
-    return res
-      .status(200)
-      .json({ message: "You have no access", success: false });
-  }
+//   if (!user) {
+//     return res.status(200).json({ message: "User not found", success: false });
+//   }
+//   if (user.role !== "admin") {
+//     return res
+//       .status(200)
+//       .json({ message: "You have no access", success: false });
+//   }
 
-  const { id: offerId, title, description, price } = req.body;
+//   const { id: offerId, title, description, price } = req.body;
 
-  // Check if there is a new image
-  let imageUrl;
-  if (req.file) {
-    try {
-      cloudinary.v2.config({
-        cloud_name: process.env.CLOUD_NAME,
-        api_key: process.env.API_KEY,
-        api_secret: process.env.API_SECRET,
-      });
+//   // Check if there is a new image
+//   let imageUrl;
+//   if (req.file) {
+//     try {
+//       cloudinary.v2.config({
+//         cloud_name: process.env.CLOUD_NAME,
+//         api_key: process.env.API_KEY,
+//         api_secret: process.env.API_SECRET,
+//       });
 
-      const result = await cloudinary.v2.uploader.upload(req.file.path);
-      imageUrl = result.secure_url;
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  }
+//       const result = await cloudinary.v2.uploader.upload(req.file.path);
+//       imageUrl = result.secure_url;
+//     } catch (error) {
+//       console.error(error);
+//       return res.status(500).json({ message: "Internal server error" });
+//     }
+//   }
 
-  const options = { new: true };
+//   const options = { new: true };
 
-  const updates = {
-    title,
-    description,
-    price,
-    ...(imageUrl && { image: imageUrl }),
-  };
+//   const updates = {
+//     title,
+//     description,
+//     price,
+//     ...(imageUrl && { image: imageUrl }),
+//   };
 
-  const updatedOffer = await Offers.findByIdAndUpdate(
-    offerId,
-    updates,
-    options
-  );
+//   const updatedOffer = await Offers.findByIdAndUpdate(
+//     offerId,
+//     updates,
+//     options
+//   );
 
-  if (!updatedOffer) {
-    return res.status(200).json({ message: "Supplier not found",success:true });
-  }
+//   if (!updatedOffer) {
+//     return res
+//       .status(200)
+//       .json({ message: "Supplier not found", success: true });
+//   }
 
-  return res.status(200).json({ updatedOffer, success: true });
-});
+//   return res.status(200).json({ updatedOffer, success: true });
+// });
 
 const deleteOffer = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const item = await Offers.findByIdAndDelete(id);
-  console.log(id);
   if (item) {
     return res.status(200).json({
       message: `${id} had been deleted successfully`,
@@ -143,6 +143,5 @@ export default {
   postOffers,
   getOffers,
   getOfferById,
-  updateOffer,
   deleteOffer,
 };

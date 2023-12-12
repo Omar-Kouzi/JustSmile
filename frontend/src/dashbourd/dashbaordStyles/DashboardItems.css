@@ -5,7 +5,12 @@
   display: flex;
   justify-content: center;
 }
-.sizePriceItem{
+.sizeAndPrice {
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
+}
+.sizePriceItem {
   display: flex;
   gap: 5px;
   width: 100%;
@@ -82,7 +87,7 @@
 }
 .dashboardItemInput {
   padding: 5px 5px;
-  width: 100%;
+  width: 97%;
 }
 .itemCardform {
   border: 1px solid;
@@ -92,12 +97,12 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 5px;
-  height: 410px;
 }
 .itemFormInputs {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  gap: 5px;
 }
 .ErrorMessageItemUpdate {
   background-color: rgb(210, 119, 119);
@@ -110,6 +115,7 @@
   border-radius: 4px;
 }
 .dashboardItemContent {
+  margin-top: 10px;
   justify-content: center;
 }
 

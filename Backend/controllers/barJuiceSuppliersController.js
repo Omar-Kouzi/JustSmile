@@ -15,7 +15,6 @@ const postBarJuiceSuppliers = asyncHandler(async (req, res) => {
       .status(200)
       .json({ message: "You have no access", success: false });
   }
-  console.log(req.body);
   const { title, description, location } = req.body;
   if (!title || !description || !location) {
     return res
@@ -36,7 +35,6 @@ const postBarJuiceSuppliers = asyncHandler(async (req, res) => {
       api_secret: process.env.API_SECRET,
     });
 
-    console.log(req.body.links);
     const result = await cloudinary.v2.uploader.upload(req.file.path);
     const links = JSON.parse(req.body.links);
 
@@ -47,7 +45,6 @@ const postBarJuiceSuppliers = asyncHandler(async (req, res) => {
       image: result.secure_url,
       location,
     });
-    console.log(barJuiceSuppliers);
     await barJuiceSuppliers.save();
     return res.status(200).json({
       barJuiceSuppliers,
@@ -162,7 +159,6 @@ const updateBarJuiceSupplier = asyncHandler(async (req, res) => {
   }
   const links = JSON.parse(req.body.links);
 
-  console.log(links);
   const options = { new: true };
 
   const updates = {
@@ -189,7 +185,6 @@ const updateBarJuiceSupplier = asyncHandler(async (req, res) => {
 const deleteSupplier = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const item = await BarJuiceSuppliers.findByIdAndDelete(id);
-  console.log(id);
   if (item) {
     return res.status(200).json({
       message: `${id} had been deleted successfully`,

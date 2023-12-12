@@ -36,6 +36,7 @@ const DashboardHome = () => {
     title: "",
     description: "",
     price: "",
+    size: "offer",
     image: null,
   });
 
@@ -50,9 +51,8 @@ const DashboardHome = () => {
     }
   };
   const UpdateAbout = async () => {
-    console.log(secureLocalStorage.getItem("token"));
     try {
-      const res = await axios.patch(
+      await axios.patch(
         "https://justsmilebackend.onrender.com/about/650af04f7e27faca7127717b",
         { about: newAbout, image: aboutImg },
         {
@@ -62,8 +62,14 @@ const DashboardHome = () => {
         }
       );
       fetchAbout();
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
+      if (error.response.status === 401) {
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
     }
   };
 
@@ -93,7 +99,7 @@ const DashboardHome = () => {
   };
   const deleteRecommended = async (id) => {
     try {
-      const response = await axios.delete(
+      await axios.delete(
         `https://justsmilebackend.onrender.com/recommended/${id}`,
         {
           headers: {
@@ -112,7 +118,7 @@ const DashboardHome = () => {
   };
   const handlePostRecommended = async () => {
     try {
-      const res = await axios.post(
+      await axios.post(
         "https://justsmilebackend.onrender.com/recommended",
         { id: selectedItem },
         {
@@ -121,11 +127,15 @@ const DashboardHome = () => {
           },
         }
       );
-      console.log("click");
-      console.log(res);
       fetchRecommended();
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      if (error.response.status === 401) {
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
+      console.error(error);
     }
   };
   const fetchItems = async () => {
@@ -152,7 +162,7 @@ const DashboardHome = () => {
 
   const handleDeleteSupplier = async (id) => {
     try {
-      const response = await axios.delete(
+      await axios.delete(
         `https://justsmilebackend.onrender.com/barSuppliers/${id}`,
         {
           headers: {
@@ -193,7 +203,7 @@ const DashboardHome = () => {
     formData.append("image", newSupplier.image);
 
     try {
-      const response = await axios.post(
+      await axios.post(
         "https://justsmilebackend.onrender.com/barSuppliers/",
         formData,
         {
@@ -203,9 +213,14 @@ const DashboardHome = () => {
           },
         }
       );
-      console.log(response.data);
       fetchBarSupplier();
     } catch (error) {
+      if (error.response.status === 401) {
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
       console.log("Error fetching data:", error);
     }
   };
@@ -223,14 +238,11 @@ const DashboardHome = () => {
 
   const handleDeleteOffer = async (id) => {
     try {
-      const response = await axios.delete(
-        `https://justsmilebackend.onrender.com/offer/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
-          },
-        }
-      );
+      await axios.delete(`https://justsmilebackend.onrender.com/offer/${id}`, {
+        headers: {
+          Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
+        },
+      });
       fetchOffer();
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -259,9 +271,9 @@ const DashboardHome = () => {
     formData.append("description", newOffer.description);
     formData.append("price", newOffer.price);
     formData.append("image", newOffer.image);
-    console.log(formData);
+    formData.append("size", newOffer.size);
     try {
-      const response = await axios.post(
+      await axios.post(
         "https://justsmilebackend.onrender.com/offer/",
         formData,
         {
@@ -271,9 +283,14 @@ const DashboardHome = () => {
           },
         }
       );
-      console.log(response.data);
       fetchOffer();
     } catch (error) {
+      if (error.response.status === 401) {
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
       console.log("Error fetching data:", error);
     }
   };
@@ -307,7 +324,7 @@ const DashboardHome = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching data:", error);
     }
   };
 
@@ -482,10 +499,10 @@ const DashboardHome = () => {
               </div>
             </form>
             <div className="recommended">
-            <h2>We Supply </h2>
-            <div className="mostRecommended">
-              {barSuppliers.map((supplier, index) => (
-                <div key={index} className="recommendedCard">
+              <h2>We Supply </h2>
+              <div className="mostRecommended">
+                {barSuppliers.map((supplier, index) => (
+                  <div key={index} className="recommendedCard">
                     <img
                       src={supplier.image}
                       alt=""
@@ -506,19 +523,18 @@ const DashboardHome = () => {
                         Show more
                       </button>
                       <button
-                      className="recommendedDeleteButton"
-                      onClick={() => handleDeleteSupplier(supplier._id)}
-                    >
-                      Delete
-                    </button>
+                        className="recommendedDeleteButton"
+                        onClick={() => handleDeleteSupplier(supplier._id)}
+                      >
+                        Delete
+                      </button>
                     </div>
-                </div>
-              ))}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-         
-          </div>
-          <div className="offers">
+          <div className="offers dashboardOffers">
             <h2>Offers </h2>{" "}
             <form action="#" className="barJuiceSupplierForm">
               <div className="offerFormInputs">
@@ -583,7 +599,8 @@ const DashboardHome = () => {
                   <div className="offerContent">
                     <h2>{offer.title}</h2>
                     <p className="offerDiscription">{offer.description}</p>
-                    <p>Just for the price of: {offer.price}$</p>
+                    <p>Just for the price of: {offer.sizePrice[0].price}$</p>
+
                     <button onClick={() => handleShowMoreOffer(index)}>
                       show more
                     </button>

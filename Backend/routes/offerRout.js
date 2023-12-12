@@ -13,9 +13,9 @@ router.route("/").get(OfferController.getOffers);
 
 router.route("/:id").get(OfferController.getOfferById);
 
-router
-  .route("/")
-  .patch(protect, upload.single("image"), OfferController.updateOffer);
+// router
+//   .route("/")
+//   .patch(protect, upload.single("image"), OfferController.updateOffer);
 
 router.route("/:id").delete(protect, OfferController.deleteOffer);
 

@@ -33,7 +33,6 @@ const Item = () => {
 
   const handleAddToCart = async () => {
     if (!secureLocalStorage.getItem("token")) {
-      console.log(!secureLocalStorage.getItem("token"));
       navigate("/login");
     }
     try {
@@ -60,8 +59,14 @@ const Item = () => {
         setValid(true);
         setAlert("Item added to cart successfully");
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      if (error.response.status === 401) {
+        secureLocalStorage.removeItem("token");
+        secureLocalStorage.removeItem("id");
+        secureLocalStorage.setItem("loggedIn", false);
+        window.location.reload();
+      }
+      console.error(error);
     }
   };
 
@@ -150,27 +155,21 @@ const Item = () => {
             </select>
 
             <div className="quantityAddToCartButtonContainer">
-              <div>
-                <div className="quantityContainer">
-                  <div>
-                    <div
-                      className="QuantitySubtract"
-                      onClick={() => setQuantity(Math.max(0, quantity - 1))}
-                    >
-                      <p>-</p>
-                    </div>
-                    {/* <input
-                      type="number"
-                      value={quantity}
-                      onChange={(value) => setQuantity(value.target.value)}
-                    /> */}
-                    <p className="itemQuantityBox">{quantity}</p>
-                    <div
-                      className="Quantityadd"
-                      onClick={() => setQuantity(quantity + 1)}
-                    >
-                      <p>+</p>
-                    </div>
+              <div className="quantityContainer">
+                <div>
+                  <div
+                    className="QuantitySubtract"
+                    onClick={() => setQuantity(Math.max(0, quantity - 1))}
+                  >
+                    <p>-</p>
+                  </div>
+                
+                  <p className="itemQuantityBox">{quantity}</p>
+                  <div
+                    className="Quantityadd"
+                    onClick={() => setQuantity(quantity + 1)}
+                  >
+                    <p>+</p>
                   </div>
                 </div>
               </div>

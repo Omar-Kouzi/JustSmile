@@ -29,7 +29,6 @@ const postAbout = asyncHandler(async (req, res) => {
   });
 
   const result = (await cloudinary.uploader.upload(req.file.path)) || "";
-  console.log(result);
 
   const newAbout = new About({
     about,
