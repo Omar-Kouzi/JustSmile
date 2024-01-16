@@ -255,7 +255,7 @@ const DashboardItem = () => {
                       type="text"
                       placeholder="Size"
                       name={`size${index}`}
-                      value={sizePrice.size}
+                      defaultValue={sizePrice.size}
                       onChange={(e) => handleItemChange(e, index)}
                       className="dashboardItemInput"
                     />
@@ -263,7 +263,7 @@ const DashboardItem = () => {
                       type="text"
                       placeholder="Price"
                       name={`price${index}`}
-                      value={sizePrice.price}
+                      defaultValue={sizePrice.price}
                       onChange={(e) => handleItemChange(e, index)}
                       className="dashboardItemInput"
                     />

@@ -1,10 +1,4 @@
-.CategoriesBar {
-  border-top: 1px solid rgb(0, 0, 0);
-  border-bottom: 1px solid rgb(0, 0, 0);
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-}
+
 .sizeAndPrice {
   gap: 5px;
   display: flex;
@@ -23,32 +17,10 @@
   background-color: #aa0000;
   color: white;
 }
-.CategoriesContainer {
-  width: 90vw;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 10px;
-  overflow-y: scroll;
-}
 
-.Category {
-  text-decoration: none;
-  color: rgb(0, 0, 0);
-  font-size: 20px;
-  padding: 10px;
-  border: 2px solid;
-  border-radius: 20px;
-}
-.Category:hover {
-  color: rgb(255, 255, 255);
-  border: 2px solid rgb(255, 255, 255);
-  cursor: pointer;
-  background-color: rgb(0, 0, 0);
-}
-.CategoriesContainer::-webkit-scrollbar {
-  display: none;
-}
+
+
+
 
 .Items {
   height: fit-content;

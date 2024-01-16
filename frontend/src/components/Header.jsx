@@ -99,16 +99,7 @@ const Header = () => {
             </NavLink>
 
             <div className="respociveNavIcons">
-              {/* {isLoggedIn ? (
-                <>
-                  <NavLink to={`/profile/${userId}`} className="">
-                    <CgProfile className="headerIcon" />
-                  </NavLink>
-                
-                </>
-              ) : (
-                ""
-              )} */}
+           
               <SmMenu className="headerIcon" />
             </div>
           </div>
