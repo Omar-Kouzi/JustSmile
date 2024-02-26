@@ -54,6 +54,32 @@ const DashboardItem = () => {
     }
   };
 
+  // const handleItemChange = (e, index) => {
+  //   if (e.target.name === "image" && e.target.files.length > 0) {
+  //     setNewItem({
+  //       ...newItem,
+  //       [e.target.name]: e.target.files[0],
+  //     });
+  //   } else {
+  //     const { name, value } = e.target;
+
+  //     if (name.startsWith("size") || name.startsWith("price")) {
+  //       const updatedSizes = [...newItem.sizePrice];
+  //       updatedSizes[index][name] = value;
+  //       console.log(updatedSizes,value);
+  //       setNewItem({
+  //         ...newItem,
+  //         sizePrice: updatedSizes,
+  //       });
+  //       console.log(name)
+  //     } else {
+  //       setNewItem({
+  //         ...newItem,
+  //         [name]: value,
+  //       });
+  //     }
+  //   }
+  // };
   const handleItemChange = (e, index) => {
     if (e.target.name === "image" && e.target.files.length > 0) {
       setNewItem({
@@ -62,11 +88,17 @@ const DashboardItem = () => {
       });
     } else {
       const { name, value } = e.target;
-
-      if (name.startsWith("size") || name.startsWith("price")) {
+  
+      if (name.startsWith("size")) {
         const updatedSizes = [...newItem.sizePrice];
-        updatedSizes[index][name] = value;
-
+        updatedSizes[index].size = value;
+        setNewItem({
+          ...newItem,
+          sizePrice: updatedSizes,
+        });
+      } else if (name.startsWith("price")) {
+        const updatedSizes = [...newItem.sizePrice];
+        updatedSizes[index].price = value;
         setNewItem({
           ...newItem,
           sizePrice: updatedSizes,
@@ -137,7 +169,7 @@ const DashboardItem = () => {
       }
     } catch (error) {
       console.error(error);
-      if(error.response.status === 401){
+      if (error.response.status === 401) {
         secureLocalStorage.removeItem("token");
         secureLocalStorage.removeItem("id");
         secureLocalStorage.setItem("loggedIn", false);
