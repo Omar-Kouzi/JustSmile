@@ -3,14 +3,14 @@
   border-bottom: 1px solid rgb(0, 0, 0);
   padding: 10px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 }
 
 .CategoriesContainer {
-  width: 90vw;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
   gap: 10px;
   overflow-y: scroll;
 }
@@ -22,6 +22,25 @@
   padding: 10px;
   border: 2px solid;
   border-radius: 20px;
+}
+.categories {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.SortContainer {
+  display: flex;
+  gap: 5px;
+}
+.closedFilter {
+  display: none;
+}
+.filtericon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
 }
 .Category:hover {
   color: rgb(255, 255, 255);
@@ -60,6 +79,11 @@
   height: 150px;
   border-radius: 50%;
 }
+.itemCardTitlePrice {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
 
 .content {
   display: flex;
@@ -94,6 +118,9 @@
   .itemImage {
     width: 150px;
     height: 150px;
+  }
+  .filtericon {
+    width: 95%;
   }
 }
 

@@ -98,17 +98,7 @@ const Header = () => {
               <h1 className="logo">Just Smile</h1>
             </NavLink>
 
-            <div className="respociveNavIcons">
-              {/* {isLoggedIn ? (
-                <>
-                  <NavLink to={`/profile/${userId}`} className="">
-                    <CgProfile className="headerIcon" />
-                  </NavLink>
-                
-                </>
-              ) : (
-                ""
-              )} */}
+            <div className="respociveNavIcons">           
               <SmMenu className="headerIcon" />
             </div>
           </div>

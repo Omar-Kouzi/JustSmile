@@ -353,7 +353,7 @@ const DashboardHome = () => {
               <button onClick={UpdateAbout}>Update About</button>
             </section>{" "}
             <div className="aboutdashboardimage">
-              <img src={about.image} alt="" />
+              <img src={about.image} alt="" width="200px" />
               <input type="file" onChange={handleImgChange} />
             </div>
           </div>

@@ -6,11 +6,17 @@ import Footer from "../components/Footer";
 import "../Styles/Items.css";
 import { useNavigate } from "react-router";
 import Loader from "../components/loader";
+import { FaFilter } from "react-icons/fa6";
+import { CiFilter } from "react-icons/ci";
 
 const Items = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [sortBy, setSortBy] = useState("default"); // "default", "lowToHigh", "highToLow"
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,6 +31,23 @@ const Items = () => {
     }
   };
 
+  const handleSortChange = (sortType) => {
+    setSortBy(sortType);
+  };
+
+  const sortedItemsByPrice = () => {
+    if (sortBy === "lowToHigh") {
+      return sortedItems.sort(
+        (a, b) => a.sizePrice[0].price - b.sizePrice[0].price
+      );
+    } else if (sortBy === "highToLow") {
+      return sortedItems.sort(
+        (a, b) => b.sizePrice[0].price - a.sizePrice[0].price
+      );
+    } else {
+      return sortedItems;
+    }
+  };
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
@@ -36,8 +59,6 @@ const Items = () => {
     }
   };
 
-
-
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     secureLocalStorage.setItem("selectedCategory", category);
@@ -48,6 +69,10 @@ const Items = () => {
       ? items
       : items.filter((item) => item.category === selectedCategory);
 
+  // Sort items with available ones first
+  const sortedItems = [...filteredItems].sort((a, b) =>
+    a.available && !b.available ? -1 : b.available && !a.available ? 1 : 0
+  );
   const handleItemClick = (ItemId) => {
     navigate(`/items/${ItemId}`);
   };
@@ -78,6 +103,14 @@ const Items = () => {
     }
     fetchData();
   }, []);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
     <>
       <Header />
@@ -88,38 +121,73 @@ const Items = () => {
       ) : (
         <div>
           <section className="CategoriesBar">
-            <div className="CategoriesContainer">
-              <p
-                onClick={() => handleCategoryChange("all")}
-                className={
-                  selectedCategory === "all" ? "Category active" : "Category"
-                }
-              >
-                All
-              </p>
-              {categories.map((category, key) => (
+            <div onClick={toggleMenu} className="filtericon">
+              {isOpen ? (
+                <>
+                  {" "}
+                  <b>filter</b> <CiFilter />
+                </>
+              ) : (
+                <>
+                  <b>filter</b> <FaFilter />
+                </>
+              )}
+            </div>
+            <div className={isOpen ? "categories" : "closedFilter"}>
+              <b>Category :</b>
+              <div className="CategoriesContainer">
+                {" "}
                 <p
-                  key={key}
-                  onClick={() => handleCategoryChange(category._id)}
+                  onClick={() => handleCategoryChange("all")}
                   className={
-                    selectedCategory === category._id
-                      ? "Category active"
-                      : "Category"
+                    selectedCategory === "all" ? "Category active" : "Category"
                   }
                 >
-                  {category.title}
+                  All
                 </p>
-              ))}
+                {categories.map((category, key) => (
+                  <p
+                    key={key}
+                    onClick={() => handleCategoryChange(category._id)}
+                    className={
+                      selectedCategory === category._id
+                        ? "Category active"
+                        : "Category"
+                    }
+                  >
+                    {category.title}
+                  </p>
+                ))}
+              </div>
+
+              <div className="SortContainer">
+                <label htmlFor="sortBy">
+                  <b> Sort By:</b>
+                </label>
+                <select
+                  id="sortBy"
+                  value={sortBy}
+                  onChange={(e) => handleSortChange(e.target.value)}
+                  className="SortSelect"
+                >
+                  <option value="default">Default</option>
+                  <option value="lowToHigh">Price Low to High</option>
+                  <option value="highToLow">Price High to Low</option>
+                </select>
+              </div>
             </div>
           </section>
           <section className="Items">
-            {filteredItems.map((item, index) => (
+            {sortedItemsByPrice().map((item, index) => (
               <div key={index} className="itemCard">
                 <img src={item.image} alt={item.title} className="itemImage" />
 
                 <div className="content">
                   {" "}
-                  <h4 className="itemName">{item.title}</h4>
+                  <div className="itemCardTitlePrice">
+                    <h4 className="itemName">{item.title} </h4>
+                    <h4>{item.sizePrice[0].price} $</h4>
+                  </div>
                   <div className="recommendedDescription">
                     {item.description}
                   </div>

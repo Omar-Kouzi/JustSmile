@@ -1,4 +1,10 @@
-
+.CategoriesBar {
+  border-top: 1px solid rgb(0, 0, 0);
+  border-bottom: 1px solid rgb(0, 0, 0);
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
 .sizeAndPrice {
   gap: 5px;
   display: flex;
